@@ -1,0 +1,27 @@
+action:
+  owner:
+    save: "Persist new owner"
+    update: "Update existing owner"
+    delete: "Delete existing owner"
+    parties:
+      employee: "employee"
+      owner: "owner"
+
+
+  building:
+    save: "Persist new building"
+    update: "Update existing building"
+    delete: "Delete existing building"
+    parties:
+      employee: "employee"
+      owner: "owner"
+
+  tenant:
+    save: "Persist new tenant"
+    update: "Update existing tenant"
+    delete: "Delete existing tenant"
+    parties:
+      employee: "employee"
+      owner: "owner"
+      building: "building"
+      tenant: "tenant"

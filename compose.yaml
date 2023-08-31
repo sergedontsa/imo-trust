@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: db-imogestion
+    hostname: imogestion
+    environment:
+      - 'POSTGRES_DB=imogestion'
+      - 'POSTGRES_PASSWORD=imogestion'
+      - 'POSTGRES_USER=imogestion'
+    ports:
+      - '5432:5432'
+
+  sql_pad:
+    container_name: imo-gestion-sql-pad
+    image: sqlpad/sqlpad:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - SQLPAD_ADMIN=admin@sqlpad.com
+      - SQLPAD_ADMIN_PASSWORD=admin

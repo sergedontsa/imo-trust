@@ -68,6 +68,7 @@ public class OwnerPersistence {
 
         return this.mapper.toDto(saved);
     }
+
     public void deleteById(String id) {
         this.findById(id).ifPresent(repository::delete);
     }

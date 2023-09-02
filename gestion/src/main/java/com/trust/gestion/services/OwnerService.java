@@ -8,6 +8,7 @@ import com.trust.gestion.services.entities.OwnerEntity;
 import com.trust.gestion.services.handlers.OwnerHandler;
 import com.trust.gestion.services.mappers.OwnerMapper;
 import com.trust.gestion.services.pages.OwnerPageResponse;
+import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.persistence.OwnerPersistence;
 import com.trust.gestion.services.repositories.OwnerAddressRepository;
 import com.trust.gestion.services.repositories.OwnerRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Optional.empty;
@@ -31,9 +33,10 @@ public class OwnerService {
     private final OwnerMapper mapper;
     private final OwnerPersistence persistence;
 
-    public OwnerPageResponse getById(String id) {
-        OwnerEntity entity = findById(id);
-        return this.mapper.toPageResponse(entity);
+    public PageResponse<OwnerDto> getById(String id) {
+        PageResponse<OwnerDto> pageResponse = new PageResponse<>();
+        return pageResponse.toBuilder().content(List.of(this.mapper.toDto(this.findById(id)))).build();
+
     }
     public OwnerPageResponse getAll(Integer page, Integer size){
         Page<OwnerEntity> entities = this.repository.findAll(PageRequest.of(page, size));

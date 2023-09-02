@@ -5,6 +5,7 @@
 package com.trust.gestion.services.domain;
 
 
+import com.trust.gestion.enums.AddressType;
 import com.trust.gestion.services.entities.OwnerAddressEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class OwnerAddressDto implements Serializable {
     String province;
     String postalCode;
     String country;
-    String type;
+    AddressType type;
     Instant registrationDate;
     Instant lastUpdated;
 }

@@ -5,14 +5,18 @@
 package com.trust.gestion.services.entities;
 
 
+import com.trust.gestion.enums.AddressType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Table;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.Instant;
@@ -72,7 +75,8 @@ public class OwnerAddressEntity {
 
     @NotNull
     @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private AddressType type;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

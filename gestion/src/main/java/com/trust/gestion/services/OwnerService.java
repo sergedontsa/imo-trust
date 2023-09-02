@@ -45,23 +45,12 @@ public class OwnerService {
                 .number(entities.getNumber())
                 .build();
     }
-    public OwnerPageResponse create(OwnerResource resource) {
+    public void create(OwnerResource resource) {
         OwnerHandler handler = new OwnerHandler();
         OwnerDto dto = handler.handle(resource, empty());
+        this.persistence.saved(dto);
 
-        OwnerDto saved = this.persistence.saved(dto);
-        //get address
-        //get contact
-        //get information
-        //get identification
 
-        return OwnerPageResponse.builder()
-                .content(List.of(saved))
-                .totalPages(1)
-                .number(1)
-                .size(1)
-                .totalElements(1)
-                .build();
     }
 
     public OwnerPageResponse update(String id, OwnerResource resource) {

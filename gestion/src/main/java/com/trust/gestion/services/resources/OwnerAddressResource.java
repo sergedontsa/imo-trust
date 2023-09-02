@@ -4,16 +4,20 @@
 
 package com.trust.gestion.services.resources;
 
+import com.trust.gestion.enums.AddressType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 
 import java.time.Instant;
-@Value
+
 @Getter
 @Setter
 @Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class OwnerAddressResource {
     Integer id;
     String civicNumber;
@@ -23,7 +27,7 @@ public class OwnerAddressResource {
     String province;
     String postalCode;
     String country;
-    String type;
+    AddressType type;
     Instant registrationDate;
     Instant lastUpdated;
 }

@@ -5,7 +5,7 @@
 package com.trust.gestion.services.mappers;
 
 
-import com.trust.gestion.services.domain.TenantContactEntityDto;
+import com.trust.gestion.services.domain.TenantContactDto;
 import com.trust.gestion.services.entities.TenantContactEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -16,10 +16,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TenantContactEntityMapper {
-    TenantContactEntity toEntity(TenantContactEntityDto tenantContactEntityDto);
+    TenantContactEntity toEntity(TenantContactDto tenantContactDto);
 
-    TenantContactEntityDto toDto(TenantContactEntity tenantContactEntity);
+    TenantContactDto toDto(TenantContactEntity tenantContactEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    TenantContactEntity partialUpdate(TenantContactEntityDto tenantContactEntityDto, @MappingTarget TenantContactEntity tenantContactEntity);
+    TenantContactEntity partialUpdate(TenantContactDto tenantContactDto, @MappingTarget TenantContactEntity tenantContactEntity);
 }

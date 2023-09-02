@@ -29,7 +29,7 @@ spring:
 
     hibernate:
       driver-class-name: org.postgresql.Driver
-      ddl-auto: none
+      ddl-auto: update
       format_sql: true
       dialect: org.hibernate.dialect.PostgreSQLDialect
       show_sql: true

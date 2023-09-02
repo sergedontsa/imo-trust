@@ -22,7 +22,7 @@ public enum ActionType implements EnumBase{
     public String getValue() {
         return this.value;
     }
-    public ActionType getEnum(String value) {
+    public ActionType getAction(String value) {
         for(ActionType v : values())
             if(v.getValue().equalsIgnoreCase(value)) return v;
         throw new IllegalArgumentException();

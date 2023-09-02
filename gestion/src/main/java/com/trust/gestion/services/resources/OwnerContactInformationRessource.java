@@ -7,7 +7,11 @@ package com.trust.gestion.services.resources;
 
 import com.trust.gestion.services.entities.OwnerContactInformationEntity;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Value;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -17,7 +21,10 @@ import java.time.Instant;
 /**
  * DTO for {@link OwnerContactInformationEntity}
  */
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
 public class OwnerContactInformationRessource implements Serializable {
     Integer id;

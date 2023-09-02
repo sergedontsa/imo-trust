@@ -4,6 +4,7 @@
 
 package com.trust.gestion.services.resources;
 
+import com.trust.gestion.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class OwnerResource {
     String firstName;
     String middleName;
     String lastName;
-    String gender;
+    Gender gender;
     Instant registrationDate;
     Instant lastUpdated;
     List<OwnerAddressResource> address = new ArrayList<>();

@@ -17,7 +17,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "action")
-public class Action {
+public class ActionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

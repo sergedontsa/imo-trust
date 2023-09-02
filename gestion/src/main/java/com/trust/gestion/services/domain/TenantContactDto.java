@@ -23,7 +23,7 @@ import java.time.Instant;
 @Setter
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class TenantContactEntityDto implements Serializable {
+public class TenantContactDto implements Serializable {
     @Size(max = 20)
     String id;
     @NotNull

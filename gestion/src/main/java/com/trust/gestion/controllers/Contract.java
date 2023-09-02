@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public interface Contract <T>{
+public interface Contract <T, K>{
     ResponseEntity<PageResponse<T>> getById(@PathVariable String id);
     ResponseEntity<PageResponse<T>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                            @RequestParam(required = false, defaultValue = "10") Integer size);
-    ResponseEntity<Void> create();
+    ResponseEntity<Void> create(K k);
     ResponseEntity<Void> update(@NotNull String id);
 
     ResponseEntity<Void> delete(@NotNull String id);

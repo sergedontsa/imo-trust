@@ -1,12 +1,6 @@
-/*
- * Copyright (c) 2023.  - Serge G. Dontsa
- */
+package com.trust.gestion.services.domain;
 
-package com.trust.gestion.services.resources;
-
-
-
-import com.trust.gestion.services.entities.OwnerInformationEntity;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,30 +8,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Value;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDate;
 
 /**
- * DTO for {@link OwnerInformationEntity}
+ * DTO for {@link com.trust.gestion.services.entities.ActionEntity}
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class OwnerInformationResource implements Serializable {
+public class ActionDto implements Serializable {
     Integer id;
     @NotNull
-    LocalDate dateOfBirth;
+    @Size(max = 50)
+    String title;
     @NotNull
     @Size(max = 50)
-    String nationality;
+    String parties;
     @NotNull
-    @Size(max = 50)
-    String countryOfBirth;
+    @Size(max = 20)
+    String partiesId;
+    @NotNull
+    @Size(max = 250)
+    String description;
     @NotNull
     Instant registrationDate;
     @NotNull

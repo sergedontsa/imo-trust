@@ -3,6 +3,7 @@ package com.trust.gestion.controllers;
 
 import com.trust.gestion.services.domain.ApartmentDto;
 import com.trust.gestion.services.pages.PageResponse;
+import com.trust.gestion.services.resources.ApartmentResource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/apartments")
 @AllArgsConstructor
-public class ApartmentController implements Contract<ApartmentDto> {
+public class ApartmentController implements Contract<ApartmentDto, ApartmentResource> {
     /**
      * @return
      */
@@ -42,7 +43,7 @@ public class ApartmentController implements Contract<ApartmentDto> {
      */
     @Override
     @PostMapping( value = "", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> create() {
+    public ResponseEntity<Void> create(ApartmentResource resource) {
         return null;
     }
 

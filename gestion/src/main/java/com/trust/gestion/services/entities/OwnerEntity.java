@@ -6,9 +6,11 @@ package com.trust.gestion.services.entities;
 
 
 
-import jakarta.persistence.CascadeType;
+import com.trust.gestion.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -56,7 +58,8 @@ public class OwnerEntity {
     @Size(max = 10)
     @NotNull
     @Column(name = "gender", nullable = false, length = 10)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @NotNull
     @Column(name = "registration_date", nullable = false)
@@ -66,19 +69,19 @@ public class OwnerEntity {
     @Column(name = "last_updated", nullable = false)
     private Instant lastUpdated;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @ToString.Exclude
     private List<OwnerAddressEntity> address = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @ToString.Exclude
     private List<OwnerInformationEntity> information = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @ToString.Exclude
     private List<OwnerContactInformationEntity> contacts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @ToString.Exclude
     private List<OwnerIdentificationEntity> identifications = new ArrayList<>();
 

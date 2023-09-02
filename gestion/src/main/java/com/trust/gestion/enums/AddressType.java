@@ -15,7 +15,7 @@ public enum AddressType implements EnumBase{
     public String getValue() {
         return this.value;
     }
-    public AddressType getAddressType(String value) {
+    public AddressType fromValue(String value) {
         for(AddressType v : values())
             if(v.getValue().equalsIgnoreCase(value)) return v;
         throw new IllegalArgumentException();

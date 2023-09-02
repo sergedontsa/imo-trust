@@ -217,7 +217,7 @@ public enum Country implements EnumBase{
         public String getValue() {
         return this.value;
         }
-        public Country getValue(String value) {
+        public static Country fromValue(String value) {
             return Arrays.stream(Country.values())
                     .filter(country -> country.getValue().equals(value))
                     .findFirst()

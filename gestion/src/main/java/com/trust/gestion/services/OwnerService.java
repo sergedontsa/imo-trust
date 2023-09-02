@@ -1,7 +1,6 @@
 package com.trust.gestion.services;
 
 
-
 import com.trust.gestion.exception.OwnerNotFoundException;
 import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.OwnerEntity;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Optional.empty;

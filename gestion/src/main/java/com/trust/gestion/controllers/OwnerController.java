@@ -25,7 +25,7 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
     @Override
     @GetMapping( value = "/{id}", produces = "application/json")
     public ResponseEntity<PageResponse<OwnerDto>> getById(@PathVariable String id) {
-        return null;
+        return ResponseEntity.ok().body(this.service.getById(id));
     }
 
     @Override

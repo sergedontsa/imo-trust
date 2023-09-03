@@ -8,11 +8,13 @@ package com.trust.gestion.services.domain;
 
 import com.trust.gestion.services.entities.OwnerInformationEntity;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -25,6 +27,7 @@ import java.time.LocalDate;
 @Setter
 @Builder(toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class OwnerInformationDto implements Serializable {
     Integer id;
     @NotNull

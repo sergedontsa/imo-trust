@@ -10,6 +10,7 @@ import com.trust.gestion.services.entities.OwnerAddressEntity;
 import com.trust.gestion.services.resources.OwnerAddressResource;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
@@ -21,6 +22,8 @@ import org.mapstruct.ReportingPolicy;
 public interface OwnerAddressMapper {
     OwnerAddressEntity toEntity(OwnerAddressDto ownerAddressDto);
 
+    @Mapping(target = "registrationDate", ignore = true)
+    @Mapping(target = "lastUpdated", ignore = true)
     OwnerAddressDto fromResourceToDto(OwnerAddressResource resource);
     OwnerAddressDto toDto(OwnerAddressEntity ownerAddressEntity);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

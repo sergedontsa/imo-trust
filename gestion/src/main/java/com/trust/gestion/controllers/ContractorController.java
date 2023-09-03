@@ -52,7 +52,7 @@ public class ContractorController implements Contract<ContractorDto, ContractorR
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id) {
+    public ResponseEntity<Void> update(@PathVariable String id, ContractorResource resource) {
         return null;
     }
 

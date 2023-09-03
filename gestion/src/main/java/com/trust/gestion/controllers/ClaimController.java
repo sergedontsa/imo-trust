@@ -52,7 +52,7 @@ public class ClaimController implements Contract<ClaimDto, ClaimResource> {
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id) {
+    public ResponseEntity<Void> update(@PathVariable String id, ClaimResource resource) {
         return null;
     }
 

@@ -44,8 +44,9 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
 
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(String id) {
-        return null;
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody OwnerResource resource) {
+        service.update(id, resource);
+        return ResponseEntity.ok().build();
     }
 
     @Override

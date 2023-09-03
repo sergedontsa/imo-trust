@@ -52,7 +52,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id) {
+    public ResponseEntity<Void> update(@PathVariable String id, BuildingResource resource) {
         return null;
     }
 

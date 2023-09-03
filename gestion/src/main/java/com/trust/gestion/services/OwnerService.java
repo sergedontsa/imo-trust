@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 @Service
 @RequiredArgsConstructor
@@ -50,23 +51,15 @@ public class OwnerService {
         OwnerHandler handler = new OwnerHandler();
         OwnerDto dto = handler.handle(resource, empty());
         this.persistence.saved(dto);
-
-
     }
 
     public OwnerPageResponse update(String id, OwnerResource resource) {
         OwnerEntity entity = findById(id);
         OwnerHandler handler = new OwnerHandler();
-        OwnerDto dto = handler.handle(resource, java.util.Optional.of(entity));
-        OwnerEntity updated = this.repository.save(this.mapper.toEntity(dto));
+        OwnerDto dto = handler.handle(resource, of(entity));
+        this.persistence.saved(dto);
 
-        return OwnerPageResponse.builder()
-                .content(List.of(this.mapper.toDto(updated)))
-                .totalPages(1)
-                .number(1)
-                .size(1)
-                .totalElements(1)
-                .build();
+        return null;
     }
 
     public void delete(String id) {

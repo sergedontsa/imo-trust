@@ -7,10 +7,11 @@ package com.trust.gestion.services.domain;
 
 import com.trust.gestion.enums.AddressType;
 import com.trust.gestion.services.entities.OwnerAddressEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -18,7 +19,8 @@ import java.time.Instant;
 /**
  * DTO for {@link OwnerAddressEntity}
  */
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
 @Getter
 @Setter

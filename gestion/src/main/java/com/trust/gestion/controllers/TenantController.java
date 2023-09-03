@@ -51,7 +51,7 @@ public class TenantController implements Contract<TenantDto, TenantResource> {
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id) {
+    public ResponseEntity<Void> update(@PathVariable String id, TenantResource resource) {
         return null;
     }
 

@@ -46,73 +46,76 @@ public class OwnerPersistence {
     private final OwnerIdentificationMapper identificationMapper;
     private final ActionPersistence actionPersistence;
     public OwnerDto saved(OwnerDto dto) {
-        Optional<OwnerEntity> entityOptional = this.findById(dto.getId());
-        if (entityOptional.isPresent()){
-            log.error("Owner already exist");
-            throw new IllegalArgumentException("Owner already exist");
-        }else {
-            OwnerEntity savedInBd = this.saveOwnerInBd(this.mapper.toEntity(dto));
+        if (this.findById(dto.getId()).isPresent()){
+            OwnerEntity savedInBd = this.saveOwnerInBd(ActionTitle.OWNER_UPDATE, this.mapper.toEntity(dto));
 
-            this.saveOwnerAddress(dto, savedInBd);
-            this.saveOwnerInformation(dto, savedInBd);
-            this.saveContactInformation(dto, savedInBd);
-            this.saveOwnerIdenfication(dto, savedInBd);
+            this.saveOwnerAddress(ActionTitle.OWNER_ADDRESS_UPDATE, dto, savedInBd);
+            this.saveOwnerInformation(ActionTitle.OWNER_INFORMATION_UPDATE, dto, savedInBd);
+            this.saveContactInformation(ActionTitle.OWNER_CONTACT_UPDATE, dto, savedInBd);
+            this.saveOwnerIdenfication(ActionTitle.OWNER_IDENTIFICATION_UPDATE, dto, savedInBd);
+
+            return this.mapper.toDto(savedInBd);
+
+        }else {
+            OwnerEntity savedInBd = this.saveOwnerInBd(ActionTitle.OWNER_CREATE, this.mapper.toEntity(dto));
+
+            this.saveOwnerAddress(ActionTitle.OWNER_ADDRESS_CREATE, dto, savedInBd);
+            this.saveOwnerInformation(ActionTitle.OWNER_INFORMATION_CREATE, dto, savedInBd);
+            this.saveContactInformation(ActionTitle.OWNER_CONTACT_CREATE, dto, savedInBd);
+            this.saveOwnerIdenfication(ActionTitle.OWNER_IDENTIFICATION_CREATE, dto, savedInBd);
 
             return this.mapper.toDto(savedInBd);
         }
     }
-    private OwnerEntity saveOwnerInBd(OwnerEntity entity) {
+    private OwnerEntity saveOwnerInBd(ActionTitle actionTitle, OwnerEntity entity) {
         OwnerEntity saved = this.repository.save(entity);
-        actionPersistence.createAction(ActionTitle.OWNER_CREATE);
+        actionPersistence.createAction(actionTitle);
         return saved;
     }
-    private void saveOwnerAddress(OwnerDto dto, OwnerEntity entity){
+    private void saveOwnerAddress(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
         if (CollectionUtils.isNotEmpty(dto.getAddress())) {
             List<OwnerAddressEntity> addressEntities = dto.getAddress()
                     .stream().map(this.addressMapper::toEntity).toList();
             addressEntities.forEach(addressEntity -> addressEntity.setOwner(entity));
             addressRepository.saveAll(addressEntities);
-            actionPersistence.createAction(ActionTitle.OWNER_ADDRESS_CREATE);
+            actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner address is empty");
         }
     }
-    private void saveOwnerInformation(OwnerDto dto, OwnerEntity entity){
+    private void saveOwnerInformation(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
         if (CollectionUtils.isNotEmpty(dto.getInformation())) {
             List<OwnerInformationEntity> informationEntities = dto.getInformation()
                     .stream().map(this.informationMapper::toEntity).toList();
             informationEntities.forEach(informationEntity -> informationEntity.setOwner(entity));
             informationRepository.saveAll(informationEntities);
-            actionPersistence.createAction(ActionTitle.OWNER_INFORMATION_CREATE);
+            actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner information is empty");
         }
     }
-    private void saveContactInformation(OwnerDto dto, OwnerEntity entity){
+    private void saveContactInformation(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
         if (CollectionUtils.isNotEmpty(dto.getContacts())) {
             List<OwnerContactInformationEntity> contactInformationEntities = dto.getContacts()
                     .stream().map(this.contactInformationMapper::toEntity).toList();
             contactInformationEntities.forEach(contactInformationEntity -> contactInformationEntity.setOwner(entity));
             contactInformationRepository.saveAll(contactInformationEntities);
-            actionPersistence.createAction(ActionTitle.OWNER_CONTACT_CREATE);
+            actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner contact information is empty");
         }
     }
-    private void saveOwnerIdenfication(OwnerDto dto, OwnerEntity entity){
+    private void saveOwnerIdenfication(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
         if (CollectionUtils.isNotEmpty(dto.getIdentifications())) {
 
             List<OwnerIdentificationEntity> identificationEntities = dto.getIdentifications()
                     .stream().map(this.identificationMapper::toEntity).toList();
             identificationEntities.forEach(identificationEntity -> identificationEntity.setOwner(entity));
             identificationRepository.saveAll(identificationEntities);
-            actionPersistence.createAction(ActionTitle.OWNER_IDENTIFICATION_CREATE);
+            actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner identification is empty");
         }
-    }
-    public void deleteById(String id) {
-        this.findById(id).ifPresent(repository::delete);
     }
     private Optional<OwnerEntity> findById(String id) {
         return this.repository.findById(id);

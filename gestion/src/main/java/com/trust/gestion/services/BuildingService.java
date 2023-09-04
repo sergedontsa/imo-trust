@@ -15,6 +15,8 @@ import com.trust.gestion.services.repositories.BuildingRepository;
 import com.trust.gestion.services.resources.BuildingResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,19 @@ public class BuildingService {
         BuildingMapper mapper = new BuildingMapperImpl();
         PageResponse<BuildingDto> pageResponse = new PageResponse<>();
         return pageResponse.toBuilder().content(List.of(mapper.toDto(this.findById(id)))).build();
+    }
+
+    public PageResponse<BuildingDto> getAll(Integer page, Integer size){
+        BuildingMapper mapper = new BuildingMapperImpl();
+        Page<BuildingEntity> entities = this.repository.findAll(PageRequest.of(page, size));
+        PageResponse<BuildingDto> contents = new PageResponse<>();
+        return contents.toBuilder()
+                .content(entities.getContent().stream().map(mapper::toDto).toList())
+                .totalPages(entities.getTotalPages())
+                .totalElements(entities.getTotalElements())
+                .size(entities.getSize())
+                .number(entities.getNumber())
+                .build();
     }
     public void create(BuildingResource resource) {
         BuildingHandler handler = new BuildingHandler();

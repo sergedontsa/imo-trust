@@ -38,7 +38,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
     @GetMapping( value = "/page", produces = "application/json")
     public ResponseEntity<PageResponse<BuildingDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                             @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return null;
+        return ResponseEntity.ok().body(this.service.getAll(page, size));
     }
 
     /**

@@ -4,7 +4,6 @@
 
 package com.trust.gestion.services.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -64,7 +63,7 @@ public class BuildingEntity {
     @Column(name = "last_updated", nullable = false)
     private Instant lastUpdated;
 
-    @OneToMany(mappedBy = "buildingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "building", orphanRemoval = true)
     private List<ApartmentEntity> apartments = new ArrayList<>();
 
 }

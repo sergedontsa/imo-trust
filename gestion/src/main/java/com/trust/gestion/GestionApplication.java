@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.trust.gestion.*")
 @EntityScan(basePackages = "com.trust.gestion.*")
 @EnableScheduling
 @EnableTransactionManagement
+@SpringBootApplication
 public class GestionApplication {
 
     public static void main(String[] args) {

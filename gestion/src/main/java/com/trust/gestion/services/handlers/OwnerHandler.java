@@ -22,6 +22,8 @@ import com.trust.gestion.services.resources.OwnerContactInformationRessource;
 import com.trust.gestion.services.resources.OwnerIdentificationRessource;
 import com.trust.gestion.services.resources.OwnerInformationResource;
 import com.trust.gestion.services.resources.OwnerResource;
+import com.trust.gestion.utilities.Utilities;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
@@ -38,8 +40,47 @@ public class OwnerHandler {
     private OwnerDto create(OwnerResource resource) {
         OwnerMapper mapper = new OwnerMapperImpl();
         OwnerDto dto = mapper.fromResourceToDto(resource);
-        return dto.toBuilder().registrationDate(Instant.now()).lastUpdated(Instant.now()).build();
+        return dto.toBuilder().id(Utilities.getManagerId())
+                .registrationDate(Instant.now())
+                .lastUpdated(Instant.now())
+                .address(this.setOwnerAddressDateOnCreate(dto.getAddress()))
+                .information(this.setInformationDateOnCreate(dto.getInformation()))
+                .identifications(this.setIdentificationDateOnCreate(dto.getIdentifications()))
+                .contacts(this.setContactInformationDateOnCreate(dto.getContacts()))
+                .build();
 
+    }
+    private List<OwnerAddressDto> setOwnerAddressDateOnCreate(List<OwnerAddressDto> dtos){
+        return dtos.stream()
+                .map(dto -> dto.toBuilder()
+                        .registrationDate(Instant.now())
+                        .lastUpdated(Instant.now())
+                        .build())
+                .toList();
+    }
+    private List<OwnerInformationDto> setInformationDateOnCreate(List<OwnerInformationDto> dtos){
+        return dtos.stream()
+                .map(dto -> dto.toBuilder()
+                        .registrationDate(Instant.now())
+                        .lastUpdated(Instant.now())
+                        .build())
+                .toList();
+    }
+    private List<OwnerIdentificationDto> setIdentificationDateOnCreate(List<OwnerIdentificationDto> dtos){
+        return dtos.stream()
+                .map(dto -> dto.toBuilder()
+                        .registrationDate(Instant.now())
+                        .lastUpdated(Instant.now())
+                        .build())
+                .toList();
+    }
+    private List<OwnerContactInformationDto> setContactInformationDateOnCreate(List<OwnerContactInformationDto> dtos){
+        return dtos.stream()
+                .map(dto -> dto.toBuilder()
+                        .registrationDate(Instant.now())
+                        .lastUpdated(Instant.now())
+                        .build())
+                .toList();
     }
 
     private OwnerDto update(OwnerResource resource, OwnerEntity entity) {
@@ -51,11 +92,7 @@ public class OwnerHandler {
         List<OwnerIdentificationDto> updateIdentification = this.updateOwnerIdentification(resource, entity);
         List<OwnerContactInformationDto> updateContact = this.updateOwnerContactInformation(resource, entity);
 
-        dto = dto.toBuilder()
-                .registrationDate(entity.getRegistrationDate())
-                .lastUpdated(Instant.now())
-                .id(entity.getId())
-                .build();
+        dto = dto.toBuilder().registrationDate(entity.getRegistrationDate()).lastUpdated(Instant.now()).id(entity.getId()).build();
 
         OwnerDto update = mapper.toDto(mapper.update(dto, entity));
         return update.toBuilder().address(updatedAddress).information(updateInformation).identifications(updateIdentification).contacts(updateContact).build();

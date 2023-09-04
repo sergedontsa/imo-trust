@@ -6,9 +6,9 @@ package com.trust.gestion.services.domain;
 import com.trust.gestion.enums.StatusType;
 import com.trust.gestion.enums.SubjectType;
 import com.trust.gestion.services.entities.Claim;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

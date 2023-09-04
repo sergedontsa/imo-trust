@@ -6,7 +6,6 @@ import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.OwnerEntity;
 import com.trust.gestion.services.handlers.OwnerHandler;
 import com.trust.gestion.services.mappers.OwnerMapper;
-import com.trust.gestion.services.pages.OwnerPageResponse;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.persistence.OwnerPersistence;
 import com.trust.gestion.services.repositories.OwnerAddressRepository;
@@ -28,7 +27,6 @@ import static java.util.Optional.of;
 @Transactional
 public class OwnerService {
     private final OwnerRepository repository;
-    private final OwnerAddressRepository addressRepository;
     private final OwnerMapper mapper;
     private final OwnerPersistence persistence;
 
@@ -37,15 +35,17 @@ public class OwnerService {
         return pageResponse.toBuilder().content(List.of(this.mapper.toDto(this.findById(id)))).build();
 
     }
-    public OwnerPageResponse getAll(Integer page, Integer size){
+    public PageResponse<OwnerDto> getAll(Integer page, Integer size){
         Page<OwnerEntity> entities = this.repository.findAll(PageRequest.of(page, size));
-        return OwnerPageResponse.builder()
+        PageResponse<OwnerDto> contents = new PageResponse<>();
+        return contents.toBuilder()
                 .content(entities.getContent().stream().map(this.mapper::toDto).toList())
                 .totalPages(entities.getTotalPages())
-                .totalElements((int) entities.getTotalElements())
+                .totalElements(entities.getTotalElements())
                 .size(entities.getSize())
                 .number(entities.getNumber())
                 .build();
+
     }
     public void create(OwnerResource resource) {
         OwnerHandler handler = new OwnerHandler();
@@ -53,7 +53,7 @@ public class OwnerService {
         this.persistence.saved(dto);
     }
 
-    public OwnerPageResponse update(String id, OwnerResource resource) {
+    public PageResponse<OwnerDto> update(String id, OwnerResource resource) {
         OwnerEntity entity = findById(id);
         OwnerHandler handler = new OwnerHandler();
         OwnerDto dto = handler.handle(resource, of(entity));

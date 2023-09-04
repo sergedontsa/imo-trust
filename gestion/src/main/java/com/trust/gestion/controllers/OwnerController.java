@@ -32,7 +32,7 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
     @GetMapping( value = "/page", produces = "application/json")
     public ResponseEntity<PageResponse<OwnerDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                          @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return null;
+        return ResponseEntity.ok().body(service.getAll(page, size));
     }
 
     @Override

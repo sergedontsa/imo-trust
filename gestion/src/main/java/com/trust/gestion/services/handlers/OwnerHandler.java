@@ -92,10 +92,19 @@ public class OwnerHandler {
         List<OwnerIdentificationDto> updateIdentification = this.updateOwnerIdentification(resource, entity);
         List<OwnerContactInformationDto> updateContact = this.updateOwnerContactInformation(resource, entity);
 
-        dto = dto.toBuilder().registrationDate(entity.getRegistrationDate()).lastUpdated(Instant.now()).id(entity.getId()).build();
+        dto = dto.toBuilder()
+                .registrationDate(entity.getRegistrationDate())
+                .lastUpdated(Instant.now())
+                .id(entity.getId())
+                .build();
+
 
         OwnerDto update = mapper.toDto(mapper.update(dto, entity));
-        return update.toBuilder().address(updatedAddress).information(updateInformation).identifications(updateIdentification).contacts(updateContact).build();
+        return update.toBuilder()
+                .address(updatedAddress)
+                .information(updateInformation)
+                .identifications(updateIdentification)
+                .contacts(updateContact).build();
     }
 
     private List<OwnerAddressDto> updatedOwnerAddress(OwnerResource resource, OwnerEntity entity) {

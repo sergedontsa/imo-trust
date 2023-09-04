@@ -7,18 +7,18 @@ package com.trust.gestion.services;
 import com.trust.gestion.services.domain.BuildingDto;
 import com.trust.gestion.services.entities.BuildingEntity;
 import com.trust.gestion.services.handlers.BuildingHandler;
+import com.trust.gestion.services.mappers.BuildingMapper;
 import com.trust.gestion.services.mappers.BuildingMapperImpl;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.persistence.BuildingPersistence;
+import com.trust.gestion.services.repositories.BuildingRepository;
 import com.trust.gestion.services.resources.BuildingResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.trust.gestion.services.mappers.BuildingMapper;
-import com.trust.gestion.services.repositories.BuildingRepository;
-
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Optional.empty;
 
@@ -38,6 +38,15 @@ public class BuildingService {
         BuildingHandler handler = new BuildingHandler();
         BuildingDto dto = handler.handle(resource,empty());
         this.persistence.save(dto);
+    }
+
+
+    public void update(BuildingResource resource, String id) {
+
+        BuildingEntity entityInBd = this.findById(id);
+        BuildingHandler handler = new BuildingHandler();
+        BuildingDto dto = handler.handle(resource, Optional.of(entityInBd));
+        persistence.save(dto);
     }
 
     private BuildingEntity findById(String id) {

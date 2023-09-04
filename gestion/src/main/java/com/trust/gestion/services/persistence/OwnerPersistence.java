@@ -45,6 +45,10 @@ public class OwnerPersistence {
     private final OwnerIdentificationRepository identificationRepository;
     private final OwnerIdentificationMapper identificationMapper;
     private final ActionPersistence actionPersistence;
+    private final OwnerAddressPersistence addressPersistence;
+    private final OwnerInformationPersistence informationPersistence;
+    private final OwnerContactInformationPersistence contactInformationPersistence;
+    private final OwnerIdentificationPersistence identificationPersistence;
     public OwnerDto saved(OwnerDto dto) {
         if (this.findById(dto.getId()).isPresent()){
             OwnerEntity savedInBd = this.saveOwnerInBd(ActionTitle.OWNER_UPDATE, this.mapper.toEntity(dto));
@@ -52,7 +56,7 @@ public class OwnerPersistence {
             this.saveOwnerAddress(ActionTitle.OWNER_ADDRESS_UPDATE, dto, savedInBd);
             this.saveOwnerInformation(ActionTitle.OWNER_INFORMATION_UPDATE, dto, savedInBd);
             this.saveContactInformation(ActionTitle.OWNER_CONTACT_UPDATE, dto, savedInBd);
-            this.saveOwnerIdenfication(ActionTitle.OWNER_IDENTIFICATION_UPDATE, dto, savedInBd);
+            this.saveOwnerIdentification(ActionTitle.OWNER_IDENTIFICATION_UPDATE, dto, savedInBd);
 
             return this.mapper.toDto(savedInBd);
 
@@ -62,7 +66,7 @@ public class OwnerPersistence {
             this.saveOwnerAddress(ActionTitle.OWNER_ADDRESS_CREATE, dto, savedInBd);
             this.saveOwnerInformation(ActionTitle.OWNER_INFORMATION_CREATE, dto, savedInBd);
             this.saveContactInformation(ActionTitle.OWNER_CONTACT_CREATE, dto, savedInBd);
-            this.saveOwnerIdenfication(ActionTitle.OWNER_IDENTIFICATION_CREATE, dto, savedInBd);
+            this.saveOwnerIdentification(ActionTitle.OWNER_IDENTIFICATION_CREATE, dto, savedInBd);
 
             return this.mapper.toDto(savedInBd);
         }
@@ -77,7 +81,7 @@ public class OwnerPersistence {
             List<OwnerAddressEntity> addressEntities = dto.getAddress()
                     .stream().map(this.addressMapper::toEntity).toList();
             addressEntities.forEach(addressEntity -> addressEntity.setOwner(entity));
-            addressRepository.saveAll(addressEntities);
+           this.addressRepository.saveAll(addressEntities);
             actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner address is empty");
@@ -88,7 +92,7 @@ public class OwnerPersistence {
             List<OwnerInformationEntity> informationEntities = dto.getInformation()
                     .stream().map(this.informationMapper::toEntity).toList();
             informationEntities.forEach(informationEntity -> informationEntity.setOwner(entity));
-            informationRepository.saveAll(informationEntities);
+            this.informationRepository.saveAll(informationEntities);
             actionPersistence.createAction(actionTitle);
         }else {
             log.warn("Owner information is empty");
@@ -105,7 +109,7 @@ public class OwnerPersistence {
             log.warn("Owner contact information is empty");
         }
     }
-    private void saveOwnerIdenfication(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
+    private void saveOwnerIdentification(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
         if (CollectionUtils.isNotEmpty(dto.getIdentifications())) {
 
             List<OwnerIdentificationEntity> identificationEntities = dto.getIdentifications()

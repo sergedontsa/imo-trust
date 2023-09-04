@@ -20,7 +20,7 @@ import java.util.List;
 public class PageResponse <T>{
     private List<T> content;
     private int totalPages;
-    private int totalElements;
+    private long totalElements;
     private int size;
     private int number;
 }

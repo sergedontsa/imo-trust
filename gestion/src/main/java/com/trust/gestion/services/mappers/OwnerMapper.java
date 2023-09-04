@@ -7,7 +7,6 @@ package com.trust.gestion.services.mappers;
 
 import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.OwnerEntity;
-import com.trust.gestion.services.pages.OwnerPageResponse;
 import com.trust.gestion.services.resources.OwnerResource;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -31,7 +30,7 @@ public interface OwnerMapper {
 
     OwnerDto resourceToDto(OwnerResource resource);
 
-    OwnerPageResponse toPageResponse(OwnerEntity entity);
+
 
 
 

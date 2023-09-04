@@ -6,12 +6,12 @@ package com.trust.gestion.services.domain;
 
 
 import com.trust.gestion.services.entities.BuildingEntity;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;

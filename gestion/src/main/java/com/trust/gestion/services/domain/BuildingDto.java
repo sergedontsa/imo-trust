@@ -1,28 +1,25 @@
-/*
- * Copyright (c) 2023.  - Serge G. Dontsa
- */
-
 package com.trust.gestion.services.domain;
 
-
-import com.trust.gestion.services.entities.BuildingEntity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 /**
- * DTO for {@link BuildingEntity}
+ * DTO for {@link com.trust.gestion.services.entities.BuildingEntity}
  */
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder(toBuilder = true)
 public class BuildingDto implements Serializable {
     @Size(max = 50)
     String id;
@@ -41,4 +38,5 @@ public class BuildingDto implements Serializable {
     Instant registrationDate;
     @NotNull
     Instant lastUpdated;
+    private List<ApartmentDto> apartments;
 }

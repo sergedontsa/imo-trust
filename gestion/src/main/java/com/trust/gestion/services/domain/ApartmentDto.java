@@ -7,14 +7,17 @@ package com.trust.gestion.services.domain;
 
 
 import com.trust.gestion.services.entities.ApartmentEntity;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 /**
  * DTO for {@link ApartmentEntity}
@@ -23,6 +26,7 @@ import java.math.BigDecimal;
 @Setter
 @Builder(toBuilder = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApartmentDto implements Serializable {
     Integer id;
     @Size(max = 20)
@@ -34,4 +38,8 @@ public class ApartmentDto implements Serializable {
     String description;
     @Size(max = 20)
     String availabilityStatus;
+    @NotNull
+    Instant registrationDate;
+    @NotNull
+    Instant lastUpdated;
 }

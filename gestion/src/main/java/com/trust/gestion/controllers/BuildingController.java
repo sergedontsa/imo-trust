@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BuildingController implements Contract<BuildingDto, BuildingResource> {
     private final BuildingService service;
     /**
-     * @return
+     * @return dto from bd
      */
     @Override
     @GetMapping(value = "/{id}", produces = "application/json")
@@ -32,7 +32,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
     }
 
     /**
-     * @return
+     * @return void
      */
     @Override
     @GetMapping( value = "/page", produces = "application/json")
@@ -42,7 +42,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
     }
 
     /**
-     * @return
+     * @return void
      */
     @Override
     @PostMapping( value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -52,16 +52,17 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
     }
 
     /**
-     * @return
+     * @return void
      */
     @Override
-    @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id, BuildingResource resource) {
-        return null;
+    @PatchMapping(value = "/{id}", produces =MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody BuildingResource resource) {
+        this.service.update(resource, id);
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * @return
+     * @return void
      */
     @Override
     @DeleteMapping(value = "/owners/{id}", produces = "application/json")

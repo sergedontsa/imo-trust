@@ -2,7 +2,9 @@ package com.trust.gestion.controllers;
 
 import com.trust.gestion.services.OwnerService;
 import com.trust.gestion.services.domain.OwnerDto;
+import com.trust.gestion.services.pages.OwnerLinkResponse;
 import com.trust.gestion.services.pages.PageResponse;
+import com.trust.gestion.services.resources.OwnerLinkResource;
 import com.trust.gestion.services.resources.OwnerResource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -53,5 +55,10 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
     @DeleteMapping(value = "/owners/{id}", produces = "application/json")
     public ResponseEntity<Void>  delete(@PathVariable String id) {
         return null;
+    }
+
+    @PostMapping(value = "/link", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OwnerLinkResponse> linkOwnerToBuilding(@RequestBody OwnerLinkResource resource) {
+        return ResponseEntity.ok().body(service.linkOwnerToBuilding(resource));
     }
 }

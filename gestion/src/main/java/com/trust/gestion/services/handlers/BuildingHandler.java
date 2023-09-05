@@ -45,6 +45,7 @@ public class BuildingHandler {
                                 .toList()
                 )
         .id(Utilities.getBuildingID())
+                .assigned(Boolean.FALSE)
         .registrationDate(Instant.now())
         .lastUpdated(Instant.now())
         .build();

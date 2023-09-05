@@ -48,6 +48,9 @@ public class BuildingEntity {
     private String category;
 
     @NotNull
+    private Boolean assigned;
+
+    @NotNull
     @Column(name = "construction_year", nullable = false)
     private Integer constructionYear;
 

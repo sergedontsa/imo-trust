@@ -31,6 +31,8 @@ public class BuildingDto implements Serializable {
     @Size(max = 250)
     String category;
     @NotNull
+    Boolean assigned;
+    @NotNull
     Integer constructionYear;
     @NotNull
     Integer numberOfFloors;

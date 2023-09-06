@@ -5,6 +5,7 @@
 package com.trust.gestion.services.domain;
 
 
+import com.trust.gestion.enums.Status;
 import com.trust.gestion.services.entities.TenantEntity;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ public class TenantDto implements Serializable {
     String gender;
     @NotNull
     @Size(max = 20)
-    String status;
+    Status status;
     @NotNull
     LocalDate dateOfBirth;
     @NotNull

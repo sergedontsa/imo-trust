@@ -6,6 +6,7 @@ package com.trust.gestion.services.domain;
 
 
 
+import com.trust.gestion.enums.Status;
 import com.trust.gestion.services.entities.ApartmentEntity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -36,10 +37,10 @@ public class ApartmentDto implements Serializable {
     BigDecimal rentAmount;
     @Size(max = 250)
     String description;
-    @Size(max = 20)
-    String availabilityStatus;
+
     @NotNull
     Instant registrationDate;
     @NotNull
     Instant lastUpdated;
+    Status status;
 }

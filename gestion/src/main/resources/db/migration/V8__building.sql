@@ -19,6 +19,6 @@ CREATE TABLE apartments
     square_footage      DECIMAL(10, 2),
     rent_amount         DECIMAL(10, 2),
     description         VARCHAR(250),
-    availability_status VARCHAR(20),
+    status              VARCHAR(20) NOT NULL DEFAULT 'AVAILABLE',
     FOREIGN KEY (building_id) REFERENCES building (id)
 );

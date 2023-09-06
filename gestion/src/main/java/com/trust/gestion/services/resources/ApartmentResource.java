@@ -5,6 +5,7 @@
 package com.trust.gestion.services.resources;
 
 
+import com.trust.gestion.enums.Status;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,5 @@ public class ApartmentResource {
     @Size(max = 250)
     String description;
     @Size(max = 20)
-    String availabilityStatus;
+    Status status;
 }

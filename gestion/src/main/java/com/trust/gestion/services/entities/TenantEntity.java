@@ -4,8 +4,11 @@
 
 package com.trust.gestion.services.entities;
 
+import com.trust.gestion.enums.Gender;
+import com.trust.gestion.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -50,12 +53,14 @@ public class TenantEntity {
     @Size(max = 20)
     @NotNull
     @Column(name = "gender", nullable = false, length = 20)
-    private String gender;
+    @Enumerated
+    private Gender gender;
 
     @Size(max = 20)
     @NotNull
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    @Enumerated
+    private Status status;
 
     @NotNull
     @Column(name = "date_of_birth", nullable = false)

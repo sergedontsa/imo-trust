@@ -4,6 +4,7 @@
 
 package com.trust.gestion.services.entities;
 
+import com.trust.gestion.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -61,6 +62,6 @@ public class ApartmentEntity {
 
     @Size(max = 20)
     @Column(name = "availability_status", length = 20)
-    private String availabilityStatus;
+    private Status status;
 
 }

@@ -6,7 +6,9 @@ import com.trust.gestion.services.pages.OwnerLinkResponse;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.resources.OwnerLinkResource;
 import com.trust.gestion.services.resources.OwnerResource;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/owners")
 @AllArgsConstructor
+@Slf4j
 public class OwnerController implements Contract<OwnerDto, OwnerResource> {
     private final OwnerService service;
     @Override
@@ -39,7 +42,7 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
 
     @Override
     @PostMapping( value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestBody OwnerResource resource) {
+    public ResponseEntity<Void> create(@Valid @RequestBody OwnerResource resource) {
         service.create(resource);
         return ResponseEntity.ok().build();
     }
@@ -61,4 +64,6 @@ public class OwnerController implements Contract<OwnerDto, OwnerResource> {
     public ResponseEntity<OwnerLinkResponse> linkOwnerToBuilding(@RequestBody OwnerLinkResource resource) {
         return ResponseEntity.ok().body(service.linkOwnerToBuilding(resource));
     }
+
+
 }

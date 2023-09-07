@@ -1,7 +1,8 @@
 package com.trust.gestion.services;
 
 
-import com.trust.gestion.exception.OwnerNotFoundException;
+import com.trust.gestion.exception.NoSuchElementFoundException;
+import com.trust.gestion.exception.validators.OwnerOnCreatValidation;
 import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.BuildingEntity;
 import com.trust.gestion.services.entities.OwnerBuildingLinkEntity;
@@ -59,6 +60,8 @@ public class OwnerService {
 
     }
     public void create(OwnerResource resource) {
+        OwnerOnCreatValidation validation = new OwnerOnCreatValidation();
+        validation.validate(resource, empty());
         OwnerHandler handler = new OwnerHandler();
         OwnerDto dto = handler.handle(resource, empty());
         this.persistence.saved(dto);
@@ -85,7 +88,7 @@ public class OwnerService {
         if (building.getAssigned().equals(Boolean.TRUE)){
             List<OwnerBuildingLinkEntity> entities = this.linkRepository.findAllByBuildingAndOwner(building, owner);
             if (CollectionUtils.isNotEmpty(entities) && entities.get(0).getOwner().getId().equals(owner.getId())) {
-                throw new OwnerNotFoundException("Building already assigned");
+                throw new NoSuchElementFoundException("Building already assigned");
             }else {
                 OwnerBuildingLinkEntity newEntity = OwnerBuildingLinkEntity.builder()
                         .registrationDate(Instant.now())
@@ -110,9 +113,9 @@ public class OwnerService {
         return null;
     }
     private BuildingEntity findBuildingById(String id) {
-        return this.buildingRepository.findById(id).orElseThrow(() -> new OwnerNotFoundException("Building not found"));
+        return this.buildingRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Building not found"));
     }
     private OwnerEntity findById(String id) {
-        return this.repository.findById(id).orElseThrow(() -> new OwnerNotFoundException("Owner not found"));
+        return this.repository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Owner not found"));
     }
 }

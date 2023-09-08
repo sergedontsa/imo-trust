@@ -428,7 +428,13 @@ public class Handler {
     }
 
     private TenantDto updateTenant(TenantResource resource, TenantEntity entity) {
-        return null;
+        TenantMapper mapper = new TenantMapperImpl();
+        TenantDto dto = mapper.fromResourceToDto(resource);
+        TenantEntity updatedEntity = mapper.partialUpdate(dto, entity);
+        return mapper.toDto(updatedEntity)
+                .toBuilder()
+                .lastUpdated(Instant.now())
+                .build();
 
     }
 }

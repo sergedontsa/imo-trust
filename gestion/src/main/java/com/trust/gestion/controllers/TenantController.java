@@ -4,6 +4,8 @@ import com.trust.gestion.services.TenantService;
 import com.trust.gestion.services.domain.TenantDto;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.resources.TenantResource;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +57,7 @@ public class TenantController implements Contract<TenantDto, TenantResource> {
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id, TenantResource resource) {
+    public ResponseEntity<Void> update(@NotNull @PathVariable String id, @Valid  @RequestBody TenantResource resource) {
         service.update(resource, id);
         return ResponseEntity.ok().build();
     }

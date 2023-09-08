@@ -7,11 +7,11 @@ import com.trust.gestion.services.resources.OwnerResource;
 
 import java.util.Optional;
 
-public class OwnerOnModifiedValidation implements OwnerValidation{
+public class OwnerOnModifiedValidation implements Validation<OwnerResource, OwnerEntity> {
     @Override
     public void validate(OwnerResource resource, Optional<OwnerEntity> existingOwner) throws OwnerValidException {
-        OwnerCommonValidation commonValidation = new OwnerCommonValidation();
-        commonValidation.validate(resource, existingOwner);
+        OwnerCommonValidation ownerCommonValidation = new OwnerCommonValidation();
+        ownerCommonValidation.validate(resource, existingOwner);
 
     }
 }

@@ -1,5 +1,7 @@
 package com.trust.gestion.enums;
 
+import static java.util.Arrays.stream;
+
 public enum ActionTitle implements EnumBase{
     OWNER_CREATE("OWNER_CREATE"),
     OWNER_UPDATE("OWNER_UPDATE"),
@@ -31,9 +33,10 @@ public enum ActionTitle implements EnumBase{
     public String getValue() {
         return this.value;
     }
-    public ActionTitle fromValue(String value) {
-        for(ActionTitle v : values())
-            if(v.getValue().equalsIgnoreCase(value)) return v;
-        throw new IllegalArgumentException();
+    public ActionTitle of(String value) {
+      return stream(values())
+              .filter(actionTitle -> actionTitle.getValue().equals(value))
+              .findFirst()
+              .orElseThrow(IllegalArgumentException::new);
     }
 }

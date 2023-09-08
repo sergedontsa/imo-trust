@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class OwnerOnCreatValidation implements OwnerValidation {
+public class OwnerOnCreatValidation implements Validation<OwnerResource, OwnerEntity> {
 
     @Override
     public void validate(OwnerResource resource, Optional<OwnerEntity> existingOwner) throws OwnerValidException {
-        OwnerCommonValidation commonValidation = new OwnerCommonValidation();
-        commonValidation.validate(resource, existingOwner);
+        OwnerCommonValidation ownerCommonValidation = new OwnerCommonValidation();
+        ownerCommonValidation.validate(resource, existingOwner);
         this.validateAddress(resource);
         this.validateInformation(resource);
         this.validateContact(resource);

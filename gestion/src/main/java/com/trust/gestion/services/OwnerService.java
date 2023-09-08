@@ -3,11 +3,12 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.validators.OwnerOnCreatValidation;
+import com.trust.gestion.exception.validators.OwnerOnModifiedValidation;
 import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.BuildingEntity;
 import com.trust.gestion.services.entities.OwnerBuildingLinkEntity;
 import com.trust.gestion.services.entities.OwnerEntity;
-import com.trust.gestion.services.handlers.OwnerHandler;
+import com.trust.gestion.services.handlers.Handler;
 import com.trust.gestion.services.mappers.OwnerMapper;
 import com.trust.gestion.services.mappers.OwnerMapperImpl;
 import com.trust.gestion.services.pages.OwnerLinkResponse;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -62,15 +64,18 @@ public class OwnerService {
     public void create(OwnerResource resource) {
         OwnerOnCreatValidation validation = new OwnerOnCreatValidation();
         validation.validate(resource, empty());
-        OwnerHandler handler = new OwnerHandler();
-        OwnerDto dto = handler.handle(resource, empty());
+        Handler handler = new Handler();
+        OwnerDto dto = handler.ownerHandler(resource, empty());
         this.persistence.saved(dto);
     }
 
     public PageResponse<OwnerDto> update(String id, OwnerResource resource) {
+        OwnerOnModifiedValidation validation = new OwnerOnModifiedValidation();
+
         OwnerEntity entity = findById(id);
-        OwnerHandler handler = new OwnerHandler();
-        OwnerDto dto = handler.handle(resource, of(entity));
+        validation.validate(resource, Optional.of(entity));
+        Handler handler = new Handler();
+        OwnerDto dto = handler.ownerHandler(resource, of(entity));
         this.persistence.saved(dto);
 
         return null;

@@ -6,7 +6,7 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.services.domain.BuildingDto;
 import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.handlers.BuildingHandler;
+import com.trust.gestion.services.handlers.Handler;
 import com.trust.gestion.services.mappers.BuildingMapper;
 import com.trust.gestion.services.mappers.BuildingMapperImpl;
 import com.trust.gestion.services.pages.PageResponse;
@@ -50,8 +50,8 @@ public class BuildingService {
                 .build();
     }
     public void create(BuildingResource resource) {
-        BuildingHandler handler = new BuildingHandler();
-        BuildingDto dto = handler.handle(resource,empty());
+        Handler handler = new Handler();
+        BuildingDto dto = handler.buildingHandler(resource,empty());
         this.persistence.save(dto);
     }
 
@@ -59,8 +59,8 @@ public class BuildingService {
     public void update(BuildingResource resource, String id) {
 
         BuildingEntity entityInBd = this.findById(id);
-        BuildingHandler handler = new BuildingHandler();
-        BuildingDto dto = handler.handle(resource, Optional.of(entityInBd));
+        Handler handler = new Handler();
+        BuildingDto dto = handler.buildingHandler(resource, Optional.of(entityInBd));
         persistence.save(dto);
     }
 

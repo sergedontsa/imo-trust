@@ -6,7 +6,7 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.services.domain.TenantDto;
 import com.trust.gestion.services.entities.TenantEntity;
-import com.trust.gestion.services.handlers.TenantHandler;
+import com.trust.gestion.services.handlers.Handler;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.persistence.TenantPersistence;
 import com.trust.gestion.services.repositories.ApartmentRepository;
@@ -29,13 +29,13 @@ public class TenantService {
     private final TenantPersistence persistence;
 
     public void create(TenantResource resource) {
-        TenantHandler handler = new TenantHandler();
-        TenantDto dto = handler.handle(resource, empty());
+        Handler handler = new Handler();
+        TenantDto dto = handler.tenantHandler(resource, empty());
         this.persistence.create(dto);
     }
     public void update(TenantResource resource, String id) {
-        TenantHandler handler = new TenantHandler();
-        TenantDto dto = handler.handle(resource, Optional.of(this.findById(id)));
+        Handler handler = new Handler();
+        TenantDto dto = handler.tenantHandler(resource, Optional.of(this.findById(id)));
         this.persistence.create(dto);
     }
     private TenantEntity findById(String id) {

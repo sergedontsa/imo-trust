@@ -4,6 +4,7 @@
 
 package com.trust.gestion.services;
 
+import com.trust.gestion.exception.validators.TenantOnCreationValidation;
 import com.trust.gestion.services.domain.TenantDto;
 import com.trust.gestion.services.entities.TenantEntity;
 import com.trust.gestion.services.handlers.Handler;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +31,21 @@ public class TenantService {
     private final TenantPersistence persistence;
 
     public void create(TenantResource resource) {
+        TenantOnCreationValidation validation = new TenantOnCreationValidation();
+        validation.validate(resource, empty());
         Handler handler = new Handler();
         TenantDto dto = handler.tenantHandler(resource, empty());
         this.persistence.create(dto);
     }
     public void update(TenantResource resource, String id) {
         Handler handler = new Handler();
-        TenantDto dto = handler.tenantHandler(resource, Optional.of(this.findById(id)));
+        TenantEntity entity = this.findById(id).orElseThrow(()->
+                new RuntimeException("Tenant with id " + id + " not found"));
+        TenantDto dto = handler.tenantHandler(resource, of(entity));
         this.persistence.create(dto);
     }
-    private TenantEntity findById(String id) {
-        return this.repository.findById(id).orElseThrow(()-> new RuntimeException("Tenant not found"));
+    private Optional<TenantEntity> findById(String id) {
+        return this.repository.findById(id);
     }
 
     public PageResponse<TenantDto> getById(String id) {

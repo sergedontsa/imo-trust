@@ -6,7 +6,7 @@ import com.trust.gestion.services.resources.OwnerResource;
 
 import java.util.Optional;
 
-public interface OwnerValidation {
-    void validate(OwnerResource resource, Optional<OwnerEntity> existingOwner) throws OwnerValidException;
+public interface Validation<R, E> {
+    void validate(R resource, Optional<E> existingEntity) throws OwnerValidException;
 
 }

@@ -29,6 +29,7 @@ public interface BuildingMapper {
     @Mapping(target = "apartments", ignore = true)
     BuildingDto fromResourceToDto(BuildingResource resource);
 
+    @Mapping(target = "apartments", ignore = true)
     BuildingEntity toEntity(BuildingDto buildingDto);
 
     BuildingDto toDto(BuildingEntity buildingEntity);

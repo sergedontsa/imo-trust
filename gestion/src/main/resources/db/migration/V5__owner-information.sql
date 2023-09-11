@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS owner_information
 (
-    id                serial PRIMARY KEY,
+    id                SERIAL PRIMARY KEY,
     owner_id          VARCHAR(20) REFERENCES owner (id) NOT NULL,
     date_of_birth     DATE                              NOT NULL,
     nationality       VARCHAR(50)                       NOT NULL,

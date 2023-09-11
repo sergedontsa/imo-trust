@@ -60,7 +60,7 @@ import static java.util.Optional.empty;
 @Slf4j
 public class Handler {
     public BuildingDto buildingHandler(BuildingResource resource, Optional<BuildingEntity> optionalEntity) {
-        return optionalEntity.isPresent() ? updateBuilding(resource, optionalEntity.get()) : createBuilding(resource);
+        return optionalEntity.isPresent() ? this.updateBuilding(resource, optionalEntity.get()) : this.createBuilding(resource);
     }
 
     public OwnerDto ownerHandler(OwnerResource resource, Optional<OwnerEntity> optionalEntity) {
@@ -87,7 +87,6 @@ public class Handler {
     public TenantDto tenantHandler(TenantResource resource, Optional<TenantEntity> optionalEntity) {
         return optionalEntity.isPresent() ? this.updateTenant(resource, optionalEntity.get()) : this.createTenant(resource);
     }
-
 
     //BUILDING
     private BuildingDto createBuilding(BuildingResource resource) {
@@ -130,7 +129,7 @@ public class Handler {
 
     private List<ApartmentDto> updateApartments(List<ApartmentResource> resources, BuildingEntity entity) {
 
-        List<Integer> ids = resources.stream().map(ApartmentResource::getId).toList()
+        List<String> ids = resources.stream().map(ApartmentResource::getId).toList()
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .toList();
@@ -154,14 +153,14 @@ public class Handler {
         }
     }
 
-    private ApartmentResource findApartmentResource(Integer id, List<ApartmentResource> resources) {
+    private ApartmentResource findApartmentResource(String id, List<ApartmentResource> resources) {
         return resources.stream()
                 .filter(resource -> resource.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    private ApartmentEntity findApartmentById(Integer id, BuildingEntity entity) {
+    private ApartmentEntity findApartmentById(String id, BuildingEntity entity) {
         return entity.getApartments()
                 .stream()
                 .filter(apartmentEntity -> apartmentEntity.getId().equals(id))
@@ -177,6 +176,8 @@ public class Handler {
         ApartmentMapper mapper = new ApartmentMapperImpl();
         ApartmentDto dto = mapper.fromResourceToDto(resource);
         return dto.toBuilder()
+                .status(Status.PENDING_INSPECTION)
+                .id(Utilities.getApartmentID())
                 .registrationDate(Instant.now())
                 .lastUpdated(Instant.now())
                 .build();

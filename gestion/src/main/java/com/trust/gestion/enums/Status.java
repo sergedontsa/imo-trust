@@ -1,5 +1,8 @@
 package com.trust.gestion.enums;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum Status implements EnumBase{
     AVAILABLE("AVAILABLE"),
     OCCUPIED("OCCUPIED"),
@@ -9,6 +12,7 @@ public enum Status implements EnumBase{
     CLOSED("CLOSED"),
     REJECTED("REJECTED"),
     PENDING("PENDING"),
+    PENDING_INSPECTION("PENDING_INSPECTION"),
     ACTIVE("ACTIVE"),
     HOLD("HOLD"),
     INACTIVE("INACTIVE");
@@ -29,5 +33,8 @@ public enum Status implements EnumBase{
             }
         }
         throw new IllegalArgumentException();
+    }
+    public static Set<Status> apartmentNotAvailable(){
+        return EnumSet.of(OCCUPIED, RESERVED, SUSPENDED, PENDING_INSPECTION);
     }
 }

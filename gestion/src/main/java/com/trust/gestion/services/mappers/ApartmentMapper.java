@@ -27,7 +27,7 @@ public interface ApartmentMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ApartmentEntity partialUpdate(ApartmentDto apartmentDto, @MappingTarget ApartmentEntity apartmentEntity);
 
-    @Mapping(target = "registrationDate", ignore = true)
-    @Mapping(target = "lastUpdated", ignore = true)
+//    @Mapping(target = "registrationDate", ignore = true)
+//    @Mapping(target = "lastUpdated", ignore = true)
     ApartmentDto fromResourceToDto(ApartmentResource resource);
 }

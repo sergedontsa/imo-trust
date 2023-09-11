@@ -1,15 +1,10 @@
-/*
- * Copyright (c) 2023.  - Serge G. Dontsa
- */
-
 package com.trust.gestion.services.entities;
 
-import com.trust.gestion.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,47 +17,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "apartments")
+@Table(name = "tenant_apartment")
 @Builder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
-public class ApartmentEntity {
+@NoArgsConstructor
+public class TenantApartmentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private String id;
-
-    @Size(max = 20)
-    @Column(name = "apartment_number", length = 20)
-    private String apartmentNumber;
+    private Integer id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "building_id", nullable = false)
-    private BuildingEntity building;
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private TenantEntity tenant;
 
-    @Column(name = "num_bedrooms")
-    private Integer numBedrooms;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "apartment_id", nullable = false)
+    private ApartmentEntity apartment;
 
-    @Column(name = "square_footage", precision = 10, scale = 2)
-    private BigDecimal squareFootage;
-
-    @Column(name = "rent_amount", precision = 10, scale = 2)
-    private BigDecimal rentAmount;
-
-    @Size(max = 250)
-    @Column(name = "description", length = 250)
+    @Size(max = 255)
+    @Column(name = "description")
     private String description;
-
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
     @NotNull
     @Column(name = "registration_date", nullable = false)

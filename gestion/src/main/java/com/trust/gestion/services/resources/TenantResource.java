@@ -20,38 +20,40 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class TenantResource {
     @Size(max = 20)
-    String id;
+    private String id;
     @NotNull
     @Size(max = 20)
-    String firstName;
+    private String firstName;
     @NotNull
     @Size(max = 20)
-    String middleName;
+    private String middleName;
     @NotNull
     @Size(max = 20)
-    String lastName;
+    private String lastName;
     @NotNull
     @Size(max = 20)
-    Gender gender;
+    private Gender gender;
     @NotNull
     @Size(max = 20)
-    Status status;
+    private Status status;
     @NotNull
-    LocalDate dateOfBirth;
-    @NotNull
-    @Size(max = 20)
-    String countryOfOrigin;
+    private LocalDate dateOfBirth;
     @NotNull
     @Size(max = 20)
-    String cityOfOrigin;
+    private String countryOfOrigin;
+    @NotNull
+    @Size(max = 20)
+    private String cityOfOrigin;
     @NotNull
     @Size(max = 250)
-    String description;
+    private String description;
     @NotNull
     @Size(max = 20)
-    String contactType;
+    private String contactType;
     @NotNull
-    Instant registrationDate;
+    private Instant registrationDate;
     @NotNull
-    Instant lastUpdated;
+    private Instant lastUpdated;
+    @NotNull
+    private String apartmentId;
 }

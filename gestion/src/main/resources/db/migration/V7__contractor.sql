@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS contractorEntity
 (
-    id                VARCHAR(50) PRIMARY KEY,
+    id                VARCHAR(20) PRIMARY KEY,
     first_name        VARCHAR(20)  NOT NULL,
     middle_name       VARCHAR(20),
     last_name         VARCHAR(20)  NOT NULL,

@@ -28,13 +28,13 @@ public class BuildingPersistence {
     public BuildingDto save(BuildingDto dto) {
            return this.findById(dto.getId()).isPresent() ? this.savedInBd(ActionTitle.BUILDING_UPDATE, dto)
                 : this.savedInBd(ActionTitle.BUILDING_CREATE, dto);
-
     }
     private BuildingDto savedInBd(ActionTitle actionTitle, BuildingDto dto){
         BuildingMapper mapper = new BuildingMapperImpl();
         List<ApartmentDto> apartments = CollectionUtils.emptyIfNull(dto.getApartments()).stream().toList();
 
-        BuildingEntity saved = this.repository.save(mapper.toEntity(dto));
+        BuildingEntity toSave = mapper.toEntity(dto);
+        BuildingEntity saved = this.repository.save(toSave);
         this.saveApartment(apartments, saved);
         actionPersistence.createAction(actionTitle);
         return mapper.toDto(saved);

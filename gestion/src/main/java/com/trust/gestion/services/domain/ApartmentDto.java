@@ -8,6 +8,7 @@ package com.trust.gestion.services.domain;
 
 import com.trust.gestion.enums.Status;
 import com.trust.gestion.services.entities.ApartmentEntity;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApartmentDto implements Serializable {
-    Integer id;
+    String id;
     @Size(max = 20)
     String apartmentNumber;
     Integer numBedrooms;
@@ -43,4 +44,5 @@ public class ApartmentDto implements Serializable {
     @NotNull
     Instant lastUpdated;
     Status status;
+
 }

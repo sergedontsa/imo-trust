@@ -1,6 +1,8 @@
 package com.trust.gestion.services.persistence;
 
 import com.trust.gestion.services.domain.TenantDto;
+import com.trust.gestion.services.entities.TenantEntity;
+import com.trust.gestion.services.mappers.TenantMapper;
 import com.trust.gestion.services.mappers.TenantMapperImpl;
 import com.trust.gestion.services.repositories.TenantRepository;
 import lombok.AllArgsConstructor;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Component;
 public class TenantPersistence {
     private final TenantRepository repository;
 
-    public void create(TenantDto dto) {
-        this.repository.save((new TenantMapperImpl()).toEntity(dto));
+    public TenantDto create(TenantDto dto) {
+        TenantMapper mapper = new TenantMapperImpl();
+        TenantEntity entity = mapper.toEntity(dto);
+        return mapper.toDto(this.repository.save(entity));
     }
 }

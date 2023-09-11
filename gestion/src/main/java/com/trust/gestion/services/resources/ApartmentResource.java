@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ApartmentResource {
-    Integer id;
+    String id;
     @Size(max = 20)
     String apartmentNumber;
     Integer numBedrooms;

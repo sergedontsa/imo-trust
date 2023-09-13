@@ -12,7 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class QueryCriteria {
+
     private String key;
     private String operation;
     private Object value;
+    private String dataOption;
 }

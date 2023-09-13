@@ -46,7 +46,9 @@ public class BuildingPersistence {
                     .map(mapper::toEntity)
                     .toList();
             apartmentEntities.forEach(ap -> ap.setBuilding(entity));
-            apartmentEntities.forEach(this.apartmentPersistence::save);
+            apartmentEntities.stream()
+                             .map(mapper::toDto)
+                             .forEach(this.apartmentPersistence::save);
             this.actionPersistence.createAction(ActionTitle.APARTMENT_CREATE);
             this.actionPersistence.createAction(ActionTitle.BUILDING_UPDATE);
         }

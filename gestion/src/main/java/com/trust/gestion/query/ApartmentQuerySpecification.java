@@ -9,19 +9,15 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ApartmentQuerySpecification implements Specification<ApartmentEntity> {
     private QueryCriteria criteria;
-    @Override
-    public Specification<ApartmentEntity> and(Specification<ApartmentEntity> other) {
-        return Specification.super.and(other);
+    public ApartmentQuerySpecification(QueryCriteria criteria) {
+        super();
+        this.criteria = criteria;
     }
 
-    @Override
-    public Specification<ApartmentEntity> or(Specification<ApartmentEntity> other) {
-        return Specification.super.or(other);
-    }
 
     @Override
     public Predicate toPredicate(Root<ApartmentEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        if (criteria.getKey().equalsIgnoreCase("=")){
+        if (criteria.getOperation().equalsIgnoreCase("=")){
             return builder.equal(root.get(criteria.getKey()), criteria.getValue().toString());
         }
 

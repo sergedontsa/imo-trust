@@ -19,6 +19,7 @@ CREATE TABLE apartments
     square_footage    DECIMAL(10, 2),
     rent_amount       DECIMAL(10, 2),
     description       VARCHAR(250),
+    occupant          INT NOT NULL,
     status            VARCHAR(20) NOT NULL,
     registration_date TIMESTAMP   NOT NULL,
     last_updated      TIMESTAMP   NOT NULL,

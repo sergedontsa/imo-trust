@@ -64,6 +64,9 @@ public class ApartmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "occupant", nullable = false)
+    private Integer occupant;
+
     @NotNull
     @Column(name = "registration_date", nullable = false)
     private Instant registrationDate;

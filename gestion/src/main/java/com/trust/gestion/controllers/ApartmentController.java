@@ -1,9 +1,13 @@
 package com.trust.gestion.controllers;
 
 
+import com.trust.gestion.enums.Status;
+import com.trust.gestion.services.ApartmentServices;
 import com.trust.gestion.services.StatusChangeService;
 import com.trust.gestion.services.domain.ApartmentDto;
+import com.trust.gestion.services.handlers.Handler;
 import com.trust.gestion.services.pages.PageResponse;
+import com.trust.gestion.services.persistence.ApartmentPersistence;
 import com.trust.gestion.services.resources.ApartmentResource;
 import com.trust.gestion.services.resources.StatusChangeRequestResource;
 import jakarta.validation.Valid;
@@ -19,18 +23,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+
 @RestController
 @RequestMapping("/api/v1/apartments")
 @AllArgsConstructor
 public class ApartmentController implements Contract<ApartmentDto, ApartmentResource> {
-    private StatusChangeService statusChangeService;
+    private final StatusChangeService statusChangeService;
+    private final ApartmentServices services;
     /**
      * @return
      */
     @Override
     @GetMapping( value = "/{id}", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getById(@PathVariable String id) {
-        return null;
+        return ResponseEntity.ok().body(this.services.getById(id));
     }
 
     /**
@@ -40,7 +49,7 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     @GetMapping( value = "/page", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return null;
+        return ResponseEntity.ok().body(services.getAll(page, size));
     }
 
     /**
@@ -49,7 +58,8 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     @Override
     @PostMapping( value = "", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Void> create(ApartmentResource resource) {
-        return null;
+        this.services.create(resource);
+        return ResponseEntity.ok().build();
     }
 
     /**

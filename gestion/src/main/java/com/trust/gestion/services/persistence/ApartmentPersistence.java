@@ -15,8 +15,9 @@ public class ApartmentPersistence {
     private final ApartmentRepository repository;
     private final ActionPersistence actionPersistence;
 
-    public ApartmentDto save(ApartmentEntity entity) {
+    public ApartmentDto save(ApartmentDto dto) {
         ApartmentMapper mapper = new ApartmentMapperImpl();
+        ApartmentEntity entity = mapper.toEntity(dto);
         return mapper.toDto(this.saveInBd(ActionTitle.APARTMENT_CREATE, entity));
     }
     private ApartmentEntity saveInBd(ActionTitle actionTitle,ApartmentEntity entity){

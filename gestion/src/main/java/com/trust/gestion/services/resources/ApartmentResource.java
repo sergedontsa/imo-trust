@@ -32,4 +32,5 @@ public class ApartmentResource {
     private String description;
     @Size(max = 20)
     private Status status;
+    private String buildingId;
 }

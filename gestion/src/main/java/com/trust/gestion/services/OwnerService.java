@@ -51,8 +51,7 @@ public class OwnerService {
     public PageResponse<OwnerDto> getAll(Integer page, Integer size){
         OwnerMapper mapper = new OwnerMapperImpl();
         Page<OwnerEntity> entities = this.repository.findAll(PageRequest.of(page, size));
-        PageResponse<OwnerDto> contents = new PageResponse<>();
-        return contents.toBuilder()
+        return (new PageResponse<OwnerDto>()).toBuilder()
                 .content(entities.getContent().stream().map(mapper::toDto).toList())
                 .totalPages(entities.getTotalPages())
                 .totalElements(entities.getTotalElements())

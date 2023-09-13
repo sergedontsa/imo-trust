@@ -46,7 +46,9 @@ public class TenantService {
 
         if (Status.apartmentNotAvailable().contains(apartmentEntity.getStatus())){
             throw new RuntimeException("Apartment with id " + resource.getApartmentId() + " is not available");
-        }else {
+        } else if (apartmentEntity.getOccupant() > 2 || apartmentEntity.getOccupant().compareTo(2) == 0) {
+            throw new RuntimeException("Apartment with id " + resource.getApartmentId() + " is full");
+        } else {
 
             Handler handler = new Handler();
             TenantDto dto = handler.tenantHandler(resource, empty());
@@ -56,6 +58,7 @@ public class TenantService {
 
             ApartmentEntity updated = apartmentEntity.toBuilder()
                     .status(Status.RESERVED)
+                    .occupant(apartmentEntity.getOccupant() + 1)
                     .build();
             this.apartmentRepository.save(updated);
             this.tenantApartmentRepository.save(TenantApartmentEntity.builder()
@@ -64,8 +67,6 @@ public class TenantService {
                     .lastUpdated(Instant.now())
                     .registrationDate(Instant.now())
                     .build());
-
-
         }
     }
     public void update(TenantResource resource, String id) {

@@ -176,6 +176,7 @@ public class Handler {
         ApartmentMapper mapper = new ApartmentMapperImpl();
         ApartmentDto dto = mapper.fromResourceToDto(resource);
         return dto.toBuilder()
+                .occupant(0)
                 .status(Status.PENDING_INSPECTION)
                 .id(Utilities.getApartmentID())
                 .registrationDate(Instant.now())

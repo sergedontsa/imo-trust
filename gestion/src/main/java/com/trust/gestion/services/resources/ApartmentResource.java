@@ -21,14 +21,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ApartmentResource {
-    String id;
+    private String id;
     @Size(max = 20)
-    String apartmentNumber;
-    Integer numBedrooms;
-    BigDecimal squareFootage;
-    BigDecimal rentAmount;
+    private String apartmentNumber;
+    private Integer numBedrooms;
+    private BigDecimal squareFootage;
+    private BigDecimal rentAmount;
+    private Integer occupant;
     @Size(max = 250)
-    String description;
+    private String description;
     @Size(max = 20)
-    Status status;
+    private Status status;
 }

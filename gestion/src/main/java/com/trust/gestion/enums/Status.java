@@ -35,6 +35,12 @@ public enum Status implements EnumBase{
         throw new IllegalArgumentException();
     }
     public static Set<Status> apartmentNotAvailable(){
-        return EnumSet.of(OCCUPIED, RESERVED, SUSPENDED, PENDING_INSPECTION);
+        return EnumSet.of(SUSPENDED, PENDING_INSPECTION);
+    }
+    public static Set<Status> validApartmentStatus(){
+        return EnumSet.of(OCCUPIED, RESERVED, SUSPENDED, PENDING_INSPECTION, AVAILABLE );
+    }
+    public static Set<Status> reservedApartment(){
+        return EnumSet.of(OCCUPIED, RESERVED);
     }
 }

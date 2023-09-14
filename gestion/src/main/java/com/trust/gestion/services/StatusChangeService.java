@@ -7,6 +7,7 @@ package com.trust.gestion.services;
 import com.trust.gestion.enums.Status;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.services.entities.ApartmentEntity;
+import com.trust.gestion.services.entities.TenantEntity;
 import com.trust.gestion.services.repositories.ApartmentRepository;
 import com.trust.gestion.services.repositories.TenantApartmentRepository;
 import com.trust.gestion.services.repositories.TenantRepository;
@@ -69,9 +70,19 @@ public class StatusChangeService {
 
     /**
      *
-     * @param resource
+     * @param resource resource
      */
     private void updateTenantStatus(StatusChangeRequestResource resource) {
+        if (!Status.validTenantStatus().contains(resource.getStatus())){
+            throw new IllegalArgumentException("Invalid status");
+        }
+        tenantRepository.findById(resource.getId()).orElseThrow(
+                () -> new NoSuchElementFoundException("Invalid tenant id")
+        );
+        TenantEntity entity = this.tenantRepository.findById(resource.getId())
+                .orElseThrow(() -> new NoSuchElementFoundException("Invalid tenant id"));
+
+        tenantRepository.save(entity.toBuilder().status(resource.getStatus()).lastUpdated(Instant.now()).build());
 
     }
 

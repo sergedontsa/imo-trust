@@ -1,4 +1,4 @@
-CREATE TABLE claim
+CREATE TABLE IF NOT EXISTS claim
 (
     id                VARCHAR(20) PRIMARY KEY,
     tile              VARCHAR(20) NOT NULL,

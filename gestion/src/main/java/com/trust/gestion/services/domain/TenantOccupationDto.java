@@ -23,12 +23,19 @@ import java.time.Instant;
 @Setter
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class TenantOccupationEntityDto implements Serializable {
+public class TenantOccupationDto implements Serializable {
     @Size(max = 20)
     String id;
     @NotNull
     @Size(max = 20)
     String occupation;
+    @NotNull
+    private String employerName;
+    @NotNull
+    private String employeeAddress;
+    @NotNull
+    private String employeePhone;
+
     @NotNull
     @Size(max = 250)
     String description;

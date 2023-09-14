@@ -1,13 +1,10 @@
 package com.trust.gestion.controllers;
 
 
-import com.trust.gestion.enums.Status;
 import com.trust.gestion.services.ApartmentServices;
 import com.trust.gestion.services.StatusChangeService;
 import com.trust.gestion.services.domain.ApartmentDto;
-import com.trust.gestion.services.handlers.Handler;
 import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.persistence.ApartmentPersistence;
 import com.trust.gestion.services.resources.ApartmentResource;
 import com.trust.gestion.services.resources.StatusChangeRequestResource;
 import jakarta.validation.Valid;
@@ -22,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
-
-import static java.util.Optional.empty;
 
 @RestController
 @RequestMapping("/api/v1/apartments")

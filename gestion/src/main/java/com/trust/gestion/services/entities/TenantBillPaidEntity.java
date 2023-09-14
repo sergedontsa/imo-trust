@@ -3,8 +3,6 @@ package com.trust.gestion.services.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,20 +15,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "tenant_apartment")
+@Table(name = "tenant_bill_paid")
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TenantApartmentEntity {
+public class TenantBillPaidEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Size(max = 20)
+    @Column(name = "id", nullable = false, length = 20)
+    private String id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -39,11 +39,25 @@ public class TenantApartmentEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "apartment_id", nullable = false)
-    private ApartmentEntity apartment;
+    @JoinColumn(name = "bill_id", nullable = false)
+    private TenantBillingEntity bill;
 
-    @Size(max = 255)
-    @Column(name = "description")
+    @Size(max = 20)
+    @NotNull
+    @Column(name = "amount_paid", nullable = false, length = 20)
+    private BigDecimal amountPaid;
+
+    @NotNull
+    @Column(name = "payment_date", nullable = false)
+    private LocalDate paymentDate;
+
+    @Size(max = 20)
+    @Column(name = "payment_method", length = 20)
+    private String paymentMethod;
+
+    @Size(max = 250)
+    @NotNull
+    @Column(name = "description", nullable = false, length = 250)
     private String description;
 
     @NotNull

@@ -5,7 +5,7 @@
 package com.trust.gestion.services.mappers;
 
 
-import com.trust.gestion.services.domain.TenantOccupationEntityDto;
+import com.trust.gestion.services.domain.TenantOccupationDto;
 import com.trust.gestion.services.entities.TenantOccupationEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -18,10 +18,10 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface TenantOccupationEntityMapper {
-    TenantOccupationEntity toEntity(TenantOccupationEntityDto tenantOccupationEntityDto);
+    TenantOccupationEntity toEntity(TenantOccupationDto tenantOccupationDto);
 
-    TenantOccupationEntityDto toDto(TenantOccupationEntity tenantOccupationEntity);
+    TenantOccupationDto toDto(TenantOccupationEntity tenantOccupationEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    TenantOccupationEntity partialUpdate(TenantOccupationEntityDto tenantOccupationEntityDto, @MappingTarget TenantOccupationEntity tenantOccupationEntity);
+    TenantOccupationEntity partialUpdate(TenantOccupationDto tenantOccupationDto, @MappingTarget TenantOccupationEntity tenantOccupationEntity);
 }

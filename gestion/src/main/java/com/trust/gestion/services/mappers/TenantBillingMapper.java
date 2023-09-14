@@ -6,7 +6,7 @@ package com.trust.gestion.services.mappers;
 
 
 import com.trust.gestion.services.domain.TenantBillingDto;
-import com.trust.gestion.services.entities.TenantBilling;
+import com.trust.gestion.services.entities.TenantBillingEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -18,10 +18,10 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface TenantBillingMapper {
-    TenantBilling toEntity(TenantBillingDto tenantBillingDto);
+    TenantBillingEntity toEntity(TenantBillingDto tenantBillingDto);
 
-    TenantBillingDto toDto(TenantBilling tenantBilling);
+    TenantBillingDto toDto(TenantBillingEntity tenantBillingEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    TenantBilling partialUpdate(TenantBillingDto tenantBillingDto, @MappingTarget TenantBilling tenantBilling);
+    TenantBillingEntity partialUpdate(TenantBillingDto tenantBillingDto, @MappingTarget TenantBillingEntity tenantBillingEntity);
 }

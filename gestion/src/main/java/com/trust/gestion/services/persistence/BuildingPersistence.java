@@ -45,10 +45,10 @@ public class BuildingPersistence {
             List<ApartmentEntity> apartmentEntities = dtos.stream()
                     .map(mapper::toEntity)
                     .toList();
-            apartmentEntities.forEach(ap -> ap.setBuilding(entity));
+            //apartmentEntities.forEach(ap -> ap.setBuilding(entity));
             apartmentEntities.stream()
                              .map(mapper::toDto)
-                             .forEach(this.apartmentPersistence::save);
+                             .forEach(ap -> this.apartmentPersistence.save(ap, entity));
             this.actionPersistence.createAction(ActionTitle.APARTMENT_CREATE);
             this.actionPersistence.createAction(ActionTitle.BUILDING_UPDATE);
         }

@@ -1,4 +1,4 @@
-CREATE TABLE building
+CREATE TABLE IF NOT EXISTS building
 (
     id                VARCHAR(20)  NOT NULL PRIMARY KEY,
     designation       VARCHAR(250),
@@ -10,7 +10,7 @@ CREATE TABLE building
     registration_date TIMESTAMP    NOT NULL,
     last_updated      TIMESTAMP    NOT NULL
 );
-CREATE TABLE apartments
+CREATE TABLE IF NOT EXISTS apartments
 (
     id                VARCHAR(20) PRIMARY KEY,
     apartment_number  VARCHAR(20),

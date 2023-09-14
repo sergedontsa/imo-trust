@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/api/v1/buildings")
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      * @return dto from bd
      */
     @Override
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<BuildingDto>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.getById(id));
     }
@@ -35,7 +37,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      * @return void
      */
     @Override
-    @GetMapping( value = "/page", produces = "application/json")
+    @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<BuildingDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                             @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(this.service.getAll(page, size));
@@ -45,7 +47,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      * @return void
      */
     @Override
-    @PostMapping( value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping( value = "", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody BuildingResource resource) {
         this.service.create(resource);
         return ResponseEntity.ok().build();
@@ -55,7 +57,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      * @return void
      */
     @Override
-    @PatchMapping(value = "/{id}", produces =MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody BuildingResource resource) {
         this.service.update(resource, id);
         return ResponseEntity.ok().build();
@@ -65,7 +67,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      * @return void
      */
     @Override
-    @DeleteMapping(value = "/owners/{id}", produces = "application/json")
+    @DeleteMapping(value = "/owners/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         return null;
     }

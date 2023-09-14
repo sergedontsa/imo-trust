@@ -10,6 +10,8 @@ public enum Status implements EnumBase{
     SUSPENDED("SUSPENDED"),
     OPEN("OPEN"),
     CLOSED("CLOSED"),
+    PAID("PAID"),
+    UNPAID("UNPAID"),
     REJECTED("REJECTED"),
     PENDING("PENDING"),
     PENDING_INSPECTION("PENDING_INSPECTION"),
@@ -22,6 +24,9 @@ public enum Status implements EnumBase{
     Status(String value){
         this.value = value;
     }
+
+
+
     @Override
     public String getValue() {
         return this.value;
@@ -42,5 +47,9 @@ public enum Status implements EnumBase{
     }
     public static Set<Status> reservedApartment(){
         return EnumSet.of(OCCUPIED, RESERVED);
+    }
+
+    public static Set<Status> validTenantStatus() {
+        return EnumSet.of(ACTIVE, INACTIVE, HOLD, SUSPENDED);
     }
 }

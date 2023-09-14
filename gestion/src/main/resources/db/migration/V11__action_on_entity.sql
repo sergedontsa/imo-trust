@@ -1,4 +1,4 @@
-CREATE TABLE action
+CREATE TABLE IF NOT EXISTS action
 (
     id                SERIAL PRIMARY KEY,
     title             VARCHAR(50)  NOT NULL,

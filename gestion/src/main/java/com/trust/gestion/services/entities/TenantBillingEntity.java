@@ -4,8 +4,10 @@
 
 package com.trust.gestion.services.entities;
 
+import com.trust.gestion.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -19,8 +21,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Getter
 @Setter
@@ -29,16 +34,21 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TenantBilling {
+public class TenantBillingEntity {
     @Id
     @Size(max = 20)
     @Column(name = "id", nullable = false, length = 20)
     private String id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "tenant_id", nullable = false)
     private TenantEntity tenant;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "apartment_id", nullable = false)
+    private ApartmentEntity apartment;
 
     @Size(max = 20)
     @NotNull
@@ -48,7 +58,7 @@ public class TenantBilling {
     @Size(max = 20)
     @NotNull
     @Column(name = "billing_amount", nullable = false, length = 20)
-    private String billingAmount;
+    private BigDecimal billingAmount;
 
     @NotNull
     @Column(name = "bill_from", nullable = false)
@@ -61,6 +71,11 @@ public class TenantBilling {
     @NotNull
     @Column(name = "bill_due_date", nullable = false)
     private LocalDate billDueDate;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    @Enumerated(STRING)
+    private Status status;
 
     @Size(max = 250)
     @NotNull

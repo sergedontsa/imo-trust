@@ -5,7 +5,7 @@
 package com.trust.gestion.services.domain;
 
 
-import com.trust.gestion.services.entities.TenantBilling;
+import com.trust.gestion.services.entities.TenantBillingEntity;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 /**
- * DTO for {@link TenantBilling}
+ * DTO for {@link TenantBillingEntity}
  */
 @Getter
 @Setter

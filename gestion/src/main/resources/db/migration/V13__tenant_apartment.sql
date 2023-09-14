@@ -1,4 +1,4 @@
-create table tenant_apartment
+CREATE TABLE IF NOT EXISTS tenant_apartment
 (
     id                SERIAL PRIMARY KEY,
     tenant_id         VARCHAR(20) NOT NULL REFERENCES tenant (id),

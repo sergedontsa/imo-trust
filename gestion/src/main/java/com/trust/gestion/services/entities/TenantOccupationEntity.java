@@ -44,6 +44,18 @@ public class TenantOccupationEntity {
     @Column(name = "occupation", nullable = false, length = 20)
     private String occupation;
 
+    @NotNull
+    @Column(name = "employer_name", nullable = false)
+    private String employerName;
+
+    @NotNull
+    @Column(name = "employee_address", nullable = false)
+    private String employeeAddress;
+
+    @NotNull
+    @Column(name = "employee_phone", nullable = false)
+    private String employeePhone;
+
     @Size(max = 250)
     @NotNull
     @Column(name = "description", nullable = false, length = 250)

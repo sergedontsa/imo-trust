@@ -1,4 +1,4 @@
-CREATE TABLE building_owner
+CREATE TABLE IF NOT EXISTS building_owner
 (
     id                serial      NOT NULL,
     building_id       VARCHAR(50) NOT NULL,

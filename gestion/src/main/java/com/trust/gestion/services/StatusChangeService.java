@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+import static com.trust.gestion.enums.Status.ACTIVE;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -76,15 +78,17 @@ public class StatusChangeService {
         if (!Status.validTenantStatus().contains(resource.getStatus())){
             throw new IllegalArgumentException("Invalid status");
         }
-        tenantRepository.findById(resource.getId()).orElseThrow(
+        TenantEntity tenant  = tenantRepository.findById(resource.getId()).orElseThrow(
                 () -> new NoSuchElementFoundException("Invalid tenant id")
         );
         TenantEntity entity = this.tenantRepository.findById(resource.getId())
                 .orElseThrow(() -> new NoSuchElementFoundException("Invalid tenant id"));
-
-        tenantRepository.save(entity.toBuilder().status(resource.getStatus()).lastUpdated(Instant.now()).build());
+        if (resource.getStatus() == ACTIVE) {
+            tenantRepository.save(entity.toBuilder().status(resource.getStatus()).lastUpdated(Instant.now()).build());
+        }
 
     }
+
 
     /**
      *

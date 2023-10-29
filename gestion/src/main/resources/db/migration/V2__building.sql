@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS building
     category          VARCHAR(250) NOT NULL,
     construction_year INTEGER      NOT NULL,
     number_of_floors  INTEGER      NOT NULL,
+    number_of_units   INTEGER      NOT NULL,
     assigned          BOOLEAN      NOT NULL,
     registration_date TIMESTAMP    NOT NULL,
     last_updated      TIMESTAMP    NOT NULL

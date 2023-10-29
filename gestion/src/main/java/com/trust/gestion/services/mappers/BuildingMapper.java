@@ -8,8 +8,6 @@ package com.trust.gestion.services.mappers;
 import com.trust.gestion.services.domain.BuildingDto;
 import com.trust.gestion.services.entities.BuildingEntity;
 import com.trust.gestion.services.resources.BuildingResource;
-
-import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -35,11 +33,7 @@ public interface BuildingMapper {
     BuildingDto toDto(BuildingEntity buildingEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "apartments", ignore = true)
     BuildingEntity partialUpdate(BuildingDto buildingDto, @MappingTarget BuildingEntity buildingEntity);
 
-
-//    @AfterMapping
-//    default void linkApartments(@MappingTarget BuildingEntity buildingEntity) {
-//        buildingEntity.getApartments().forEach(apartment -> apartment.setBuildingEntity(buildingEntity));
-//    }buildingEntity
 }

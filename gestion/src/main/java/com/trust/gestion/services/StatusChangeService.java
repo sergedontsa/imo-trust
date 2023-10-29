@@ -89,7 +89,6 @@ public class StatusChangeService {
 
     }
 
-
     /**
      *
      * @param resource
@@ -105,8 +104,7 @@ public class StatusChangeService {
             throw new IllegalArgumentException("Cannot change status of occupied apartment");
         }
         ApartmentEntity updated = entityInBd.toBuilder().status(resource.getStatus()).lastUpdated(Instant.now()).build();
-        ApartmentEntity saved = repository.save(updated);
-        System.out.println(saved);
+        repository.save(updated);
     }
 
 }

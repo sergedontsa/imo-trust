@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class ApartmentController implements Contract<ApartmentDto, ApartmentResource> {
     private final StatusChangeService statusChangeService;
-    private final ApartmentServices services;
+    private final ApartmentServices service;
     /**
      * @return
      */
     @Override
     @GetMapping( value = "/{id}", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getById(@PathVariable String id) {
-        return ResponseEntity.ok().body(this.services.getById(id));
+        return ResponseEntity.ok().body(this.service.getById(id));
     }
 
     /**
@@ -42,7 +42,7 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     @GetMapping( value = "/page", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return ResponseEntity.ok().body(services.getAll(page, size));
+        return ResponseEntity.ok().body(service.getAll(page, size));
     }
 
     /**
@@ -50,18 +50,20 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
      */
     @Override
     @PostMapping( value = "", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> create(ApartmentResource resource) {
-        this.services.create(resource);
+    public ResponseEntity<Void> create(@RequestBody @Valid ApartmentResource resource) {
+        this.service.create(resource);
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * @return
      */
     @Override
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> update(@PathVariable String id, ApartmentResource resource) {
-        return null;
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody @Valid ApartmentResource resource) {
+        this.service.update(id, resource);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -70,7 +72,8 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     @Override
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        return null;
+        this.service.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping(value = "/status", produces = "application/json", consumes = "application/json")

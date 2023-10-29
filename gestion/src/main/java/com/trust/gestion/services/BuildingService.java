@@ -6,7 +6,7 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.services.domain.BuildingDto;
 import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.handlers.Handler;
+import com.trust.gestion.services.handlers.BuildingHandler;
 import com.trust.gestion.services.mappers.BuildingMapper;
 import com.trust.gestion.services.mappers.BuildingMapperImpl;
 import com.trust.gestion.services.pages.PageResponse;
@@ -19,7 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 
 import static java.util.Optional.empty;
@@ -34,7 +34,10 @@ public class BuildingService {
     public PageResponse<BuildingDto> getById(String id) {
         BuildingMapper mapper = new BuildingMapperImpl();
         PageResponse<BuildingDto> pageResponse = new PageResponse<>();
-        return pageResponse.toBuilder().content(List.of(mapper.toDto(this.findById(id)))).build();
+        return pageResponse
+                .toBuilder()
+                .content(Collections.singletonList(mapper.toDto(this.findById(id))))
+                .build();
     }
 
     public PageResponse<BuildingDto> getAll(Integer page, Integer size){
@@ -50,18 +53,15 @@ public class BuildingService {
                 .build();
     }
     public void create(BuildingResource resource) {
-        Handler handler = new Handler();
-        BuildingDto dto = handler.buildingHandler(resource,empty());
-        this.persistence.save(dto);
+        this.persistence.save((new BuildingHandler().buildingHandler(resource, empty())));
     }
 
 
     public void update(BuildingResource resource, String id) {
-
         BuildingEntity entityInBd = this.findById(id);
-        Handler handler = new Handler();
-        BuildingDto dto = handler.buildingHandler(resource, Optional.of(entityInBd));
-        persistence.save(dto);
+        BuildingHandler handler = new BuildingHandler();
+        BuildingEntity entity = handler.buildingHandler(resource, Optional.of(entityInBd));
+        persistence.save(entity);
     }
 
     private BuildingEntity findById(String id) {

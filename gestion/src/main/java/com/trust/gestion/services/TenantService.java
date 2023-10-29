@@ -13,6 +13,7 @@ import com.trust.gestion.services.entities.TenantBillPaidEntity;
 import com.trust.gestion.services.entities.TenantBillingEntity;
 import com.trust.gestion.services.entities.TenantEntity;
 import com.trust.gestion.services.handlers.Handler;
+import com.trust.gestion.services.mappers.TenantMapperImpl;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.persistence.TenantPersistence;
 import com.trust.gestion.services.repositories.ApartmentRepository;
@@ -26,12 +27,13 @@ import com.trust.gestion.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -49,51 +51,31 @@ public class TenantService {
     private final TenantBillPaidRepository billPaidRepository;
 
     public void create(TenantResource resource) {
-        TenantOnCreationValidation validation = new TenantOnCreationValidation();
-        validation.validate(resource, empty());
-        ApartmentEntity apartmentEntity = this.apartmentRepository.findById(resource.getApartmentId())
-                .orElseThrow(() -> new RuntimeException("Apartment with id " + resource.getApartmentId() + " not found"));
 
-        if (Status.apartmentNotAvailable().contains(apartmentEntity.getStatus())){
-            throw new RuntimeException("Apartment with id " + resource.getApartmentId() + " is not available");
-        } else if (apartmentEntity.getOccupant() > 2 || apartmentEntity.getOccupant().compareTo(2) == 0) {
-            throw new RuntimeException("Apartment with id " + resource.getApartmentId() + " is full");
-        } else {
-
-            Handler handler = new Handler();
-            TenantDto dto = handler.tenantHandler(resource, empty());
-            TenantDto saved = this.persistence.create(dto);
-            TenantEntity entityFromBd = this.repository.findById(saved.getId())
-                    .orElseThrow(() -> new RuntimeException("Tenant with id " + saved.getId() + " not found"));
-
-            ApartmentEntity updated = apartmentEntity.toBuilder()
-                    .status(Status.RESERVED)
-                    .occupant(apartmentEntity.getOccupant() + 1)
-                    .build();
-            this.apartmentRepository.save(updated);
-            this.tenantApartmentRepository.save(TenantApartmentEntity.builder()
-                    .tenant(entityFromBd)
-                    .apartment(apartmentEntity)
-                    .lastUpdated(Instant.now())
-                    .registrationDate(Instant.now())
-                    .build());
-        }
     }
     public void update(TenantResource resource, String id) {
-        Handler handler = new Handler();
-        TenantEntity entity = this.findById(id).orElseThrow(()->
-                new RuntimeException("Tenant with id " + id + " not found"));
-        TenantDto dto = handler.tenantHandler(resource, of(entity));
-        this.persistence.create(dto);
     }
-    private Optional<TenantEntity> findById(String id) {
-        return this.repository.findById(id);
+    private TenantEntity findById(String id) {
+        return this.repository.findById(id).orElseThrow(()->
+                new RuntimeException("Tenant with id " + id + " not found"));
     }
 
     public PageResponse<TenantDto> getById(String id) {
-        return null;
+        PageResponse<TenantDto> pageResponse = new PageResponse<>();
+         return pageResponse.toBuilder()
+                 .content(List.of(this.mapEntityToDto(this.findById(id))))
+                 .build();
     }
-
+    public PageResponse<TenantDto> getAll(Integer page, Integer size) {
+        Page<TenantEntity> entities = this.repository.findAll(PageRequest.of(page, size));
+        return (new PageResponse<TenantDto>()).toBuilder()
+                .content(entities.getContent().stream().map(this::mapEntityToDto).toList())
+                .totalPages(entities.getTotalPages())
+                .totalElements(entities.getTotalElements())
+                .size(entities.getSize())
+                .number(entities.getNumber())
+                .build();
+    }
     public void payBill(BillPayResource resource) {
         TenantEntity tenantEntity = this.repository.findById(resource.getTenantId())
                 .orElseThrow(() -> new RuntimeException("Tenant with id " + resource.getTenantId() + " not found"));
@@ -101,7 +83,6 @@ public class TenantService {
                 .orElseThrow(() -> new RuntimeException("Apartment with id " + resource.getApartmentId() + " not found"));
         TenantBillingEntity billingEntity = this.billingRepository.findByApartmentAndTenantAndId(apartmentEntity, tenantEntity, resource.getBilId());
 
-        List<TenantApartmentEntity> tenantApartmentEntities = this.tenantApartmentRepository.findAllByTenantAndApartment(tenantEntity, apartmentEntity);
 
         if (apartmentEntity.getRentAmount().equals(resource.getAmountPaid()) && billingEntity.getBillingAmount().equals(resource.getAmountPaid())){
 
@@ -122,9 +103,15 @@ public class TenantService {
                     .status(Status.PAID)
                     .build());
         }else {
-            throw new RuntimeException("Amount paid does not match bill amount");
+            log.error("Amount paid is not equal to the rent amount");
         }
 
 
     }
+
+    private TenantDto mapEntityToDto(TenantEntity entity) {
+        return (new TenantMapperImpl()).toDto(entity);
+    }
+
+
 }

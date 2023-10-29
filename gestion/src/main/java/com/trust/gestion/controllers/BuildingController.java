@@ -4,8 +4,7 @@ import com.trust.gestion.services.BuildingService;
 import com.trust.gestion.services.domain.BuildingDto;
 import com.trust.gestion.services.pages.PageResponse;
 import com.trust.gestion.services.resources.BuildingResource;
-import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/api/v1/buildings")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BuildingController implements Contract<BuildingDto, BuildingResource> {
     private final BuildingService service;
     /**

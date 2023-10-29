@@ -5,17 +5,16 @@
 package com.trust.gestion.services.resources;
 
 
+import com.trust.gestion.enums.BuildingStatus;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,21 +23,24 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class BuildingResource {
     @Size(max = 50)
-    String id;
+    private String id;
     @Size(max = 250)
-    String designation;
+    private String designation;
     @Size(max = 250)
-    String description;
+    private String description;
     @NotNull
     @Size(max = 250)
-    String category;
+    private String category;
+    private Boolean assigned;
+
+    private BuildingStatus status;
     @NotNull
-    Integer constructionYear;
+    private Integer constructionYear;
     @NotNull
-    Integer numberOfFloors;
-    List<ApartmentResource> apartments = new ArrayList<>();
+    private Integer numberOfFloors;
+    private Integer numberOfUnits;
     @NotNull
-    Instant registrationDate;
+    private Instant registrationDate;
     @NotNull
-    Instant lastUpdated;
+    private Instant lastUpdated;
 }

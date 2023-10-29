@@ -4,8 +4,11 @@
 
 package com.trust.gestion.services.entities;
 
+import com.trust.gestion.enums.BuildingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -47,6 +50,12 @@ public class BuildingEntity {
     @Column(name = "category", nullable = false, length = 250)
     private String category;
 
+    @Size(max = 20)
+    @NotNull
+    @Column(name = "status", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private BuildingStatus status;
+
     @NotNull
     private Boolean assigned;
 
@@ -59,6 +68,10 @@ public class BuildingEntity {
     private Integer numberOfFloors;
 
     @NotNull
+    @Column(name = "number_of_units", nullable = false)
+    private Integer numberOfUnits;
+
+    @NotNull
     @Column(name = "registration_date", nullable = false)
     private Instant registrationDate;
 
@@ -68,5 +81,8 @@ public class BuildingEntity {
 
     @OneToMany(mappedBy = "building", orphanRemoval = true)
     private List<ApartmentEntity> apartments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "building", orphanRemoval = true)
+    private List<OwnerEntity> owners = new ArrayList<>();
 
 }

@@ -24,6 +24,7 @@ public interface OwnerMapper {
     @Mapping(target = "registrationDate", ignore = true)
     @Mapping(target = "lastUpdated", ignore = true)
     OwnerDto fromResourceToDto(OwnerResource resource);
+
     OwnerEntity toEntity(OwnerDto ownerDto);
     OwnerDto toDto(OwnerEntity ownerEntity);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

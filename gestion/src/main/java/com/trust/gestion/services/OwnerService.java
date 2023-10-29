@@ -2,14 +2,10 @@ package com.trust.gestion.services;
 
 
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.exception.validators.OwnerOnCreatValidation;
-import com.trust.gestion.exception.validators.OwnerOnModifiedValidation;
 import com.trust.gestion.services.domain.OwnerDto;
 import com.trust.gestion.services.entities.BuildingEntity;
 import com.trust.gestion.services.entities.OwnerBuildingLinkEntity;
 import com.trust.gestion.services.entities.OwnerEntity;
-import com.trust.gestion.services.handlers.Handler;
-import com.trust.gestion.services.mappers.OwnerMapper;
 import com.trust.gestion.services.mappers.OwnerMapperImpl;
 import com.trust.gestion.services.pages.OwnerLinkResponse;
 import com.trust.gestion.services.pages.PageResponse;
@@ -28,10 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 @Service
 @RequiredArgsConstructor
@@ -43,16 +35,15 @@ public class OwnerService {
     private final OwnerBuildingLinkRepository linkRepository;
 
     public PageResponse<OwnerDto> getById(String id) {
-        OwnerMapper mapper = new OwnerMapperImpl();
+
         PageResponse<OwnerDto> pageResponse = new PageResponse<>();
-        return pageResponse.toBuilder().content(List.of(mapper.toDto(this.findById(id)))).build();
+        return pageResponse.toBuilder().content(List.of(this.mapEntityToDto(this.findById(id)))).build();
 
     }
     public PageResponse<OwnerDto> getAll(Integer page, Integer size){
-        OwnerMapper mapper = new OwnerMapperImpl();
         Page<OwnerEntity> entities = this.repository.findAll(PageRequest.of(page, size));
         return (new PageResponse<OwnerDto>()).toBuilder()
-                .content(entities.getContent().stream().map(mapper::toDto).toList())
+                .content(entities.getContent().stream().map(this::mapEntityToDto).toList())
                 .totalPages(entities.getTotalPages())
                 .totalElements(entities.getTotalElements())
                 .size(entities.getSize())
@@ -61,21 +52,10 @@ public class OwnerService {
 
     }
     public void create(OwnerResource resource) {
-        OwnerOnCreatValidation validation = new OwnerOnCreatValidation();
-        validation.validate(resource, empty());
-        Handler handler = new Handler();
-        OwnerDto dto = handler.ownerHandler(resource, empty());
-        this.persistence.saved(dto);
+
     }
 
     public PageResponse<OwnerDto> update(String id, OwnerResource resource) {
-        OwnerOnModifiedValidation validation = new OwnerOnModifiedValidation();
-
-        OwnerEntity entity = findById(id);
-        validation.validate(resource, Optional.of(entity));
-        Handler handler = new Handler();
-        OwnerDto dto = handler.ownerHandler(resource, of(entity));
-        this.persistence.saved(dto);
 
         return null;
     }
@@ -121,5 +101,8 @@ public class OwnerService {
     }
     private OwnerEntity findById(String id) {
         return this.repository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Owner not found"));
+    }
+    private OwnerDto mapEntityToDto(OwnerEntity entity){
+        return (new OwnerMapperImpl()).toDto(entity);
     }
 }

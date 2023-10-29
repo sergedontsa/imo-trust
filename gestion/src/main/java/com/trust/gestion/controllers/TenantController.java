@@ -45,7 +45,7 @@ public class TenantController implements Contract<TenantDto, TenantResource> {
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<TenantDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                           @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return null;
+        return ResponseEntity.ok().body(this.service.getAll(page, size));
     }
 
     /**

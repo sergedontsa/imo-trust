@@ -1,5 +1,6 @@
 package com.trust.gestion.services.domain;
 
+import com.trust.gestion.enums.BuildingStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -22,23 +23,26 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class BuildingDto implements Serializable {
     @Size(max = 50)
-    String id;
+    private String id;
     @Size(max = 250)
-    String designation;
+    private String designation;
     @Size(max = 250)
-    String description;
+    private String description;
     @NotNull
     @Size(max = 250)
-    String category;
+    private String category;
+    private BuildingStatus status;
     @NotNull
-    Boolean assigned;
+    private Boolean assigned;
     @NotNull
-    Integer constructionYear;
+    private Integer constructionYear;
     @NotNull
-    Integer numberOfFloors;
+    private Integer numberOfFloors;
     @NotNull
-    Instant registrationDate;
+    private Integer numberOfUnits;
     @NotNull
-    Instant lastUpdated;
+    private Instant registrationDate;
+    @NotNull
+    private Instant lastUpdated;
     private List<ApartmentDto> apartments;
 }

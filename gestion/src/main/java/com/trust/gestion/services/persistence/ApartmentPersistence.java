@@ -1,13 +1,10 @@
 package com.trust.gestion.services.persistence;
 
 import com.trust.gestion.enums.ActionTitle;
-import com.trust.gestion.services.domain.ApartmentDto;
 import com.trust.gestion.services.entities.ApartmentEntity;
-import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.mappers.ApartmentMapper;
-import com.trust.gestion.services.mappers.ApartmentMapperImpl;
 import com.trust.gestion.services.repositories.ApartmentRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,15 +13,14 @@ public class ApartmentPersistence {
     private final ApartmentRepository repository;
     private final ActionPersistence actionPersistence;
 
-    public ApartmentDto save(ApartmentDto dto, BuildingEntity building) {
-        ApartmentMapper mapper = new ApartmentMapperImpl();
-        ApartmentEntity entity = mapper.toEntity(dto);
-        entity.setBuilding(building);
-        return mapper.toDto(this.saveInBd(ActionTitle.APARTMENT_CREATE, entity));
+    public void save(ApartmentEntity entity) {
+               this.saveInBd(entity);
     }
-    private ApartmentEntity saveInBd(ActionTitle actionTitle,ApartmentEntity entity){
+    private void saveInBd(ApartmentEntity entity){
         ApartmentEntity saved = this.repository.save(entity);
-        actionPersistence.createAction(actionTitle);
-        return saved;
+        if (ObjectUtils.allNotNull(saved)){
+            actionPersistence.createAction(ActionTitle.APARTMENT_CREATE);
+        }
+
     }
 }

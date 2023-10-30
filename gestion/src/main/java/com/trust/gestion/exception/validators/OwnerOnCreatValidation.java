@@ -2,10 +2,9 @@ package com.trust.gestion.exception.validators;
 
 
 import com.trust.gestion.exception.OwnerValidException;
-import com.trust.gestion.services.entities.OwnerEntity;
-import com.trust.gestion.services.resources.OwnerResource;
+import com.trust.gestion.entities.OwnerEntity;
+import com.trust.gestion.resources.OwnerResource;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -24,19 +23,13 @@ public class OwnerOnCreatValidation implements Validation<OwnerResource, OwnerEn
     }
 
     private void validateAddress(OwnerResource resource){
-        if (CollectionUtils.isEmpty(resource.getAddress())){
-            throw new OwnerValidException("Address is mandatory");
-        }
+
     }
     private void validateContact(OwnerResource resource){
-        if (CollectionUtils.isEmpty(resource.getContacts())){
-            throw new OwnerValidException("Contact is mandatory");
-        }
+
     }
     private void validateInformation(OwnerResource resource){
-        if (CollectionUtils.isEmpty(resource.getInformation())){
-            throw new OwnerValidException("Information is mandatory");
-        }
+
     }
 
 }

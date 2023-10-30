@@ -2,19 +2,20 @@ package com.trust.gestion.services;
 
 
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.services.domain.OwnerDto;
-import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.entities.OwnerBuildingLinkEntity;
-import com.trust.gestion.services.entities.OwnerEntity;
+import com.trust.gestion.domain.OwnerDto;
+import com.trust.gestion.entities.BuildingEntity;
+import com.trust.gestion.entities.OwnerBuildingLinkEntity;
+import com.trust.gestion.entities.OwnerEntity;
+import com.trust.gestion.handlers.OwnerHandler;
 import com.trust.gestion.services.mappers.OwnerMapperImpl;
-import com.trust.gestion.services.pages.OwnerLinkResponse;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.persistence.OwnerPersistence;
-import com.trust.gestion.services.repositories.BuildingRepository;
-import com.trust.gestion.services.repositories.OwnerBuildingLinkRepository;
-import com.trust.gestion.services.repositories.OwnerRepository;
-import com.trust.gestion.services.resources.OwnerLinkResource;
-import com.trust.gestion.services.resources.OwnerResource;
+import com.trust.gestion.pages.OwnerLinkResponse;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.persistence.OwnerPersistence;
+import com.trust.gestion.repositories.BuildingRepository;
+import com.trust.gestion.repositories.OwnerBuildingLinkRepository;
+import com.trust.gestion.repositories.OwnerRepository;
+import com.trust.gestion.resources.OwnerLinkResource;
+import com.trust.gestion.resources.OwnerResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+
+import static java.util.Optional.empty;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +54,14 @@ public class OwnerService {
                 .build();
 
     }
-    public void create(OwnerResource resource) {
 
+    public void create(OwnerResource resource) {
+        BuildingEntity building = this.findBuildingById(resource.getBuildingId());
+        this.validateBuilding(resource.getBuildingId());
+        OwnerEntity entity = (new OwnerHandler()).ownerHandler(resource, empty());
+        entity.setBuilding(building);
+        building.setAssigned(Boolean.TRUE);
+        this.persistence.saved(entity);
     }
 
     public PageResponse<OwnerDto> update(String id, OwnerResource resource) {
@@ -104,5 +113,9 @@ public class OwnerService {
     }
     private OwnerDto mapEntityToDto(OwnerEntity entity){
         return (new OwnerMapperImpl()).toDto(entity);
+    }
+    private void validateBuilding(String id) {
+        this.findBuildingById(id);
+
     }
 }

@@ -1,6 +1,6 @@
 package com.trust.gestion.controllers;
 
-import com.trust.gestion.services.pages.PageResponse;
+import com.trust.gestion.pages.PageResponse;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

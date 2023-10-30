@@ -6,12 +6,12 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.enums.Status;
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.services.entities.ApartmentEntity;
-import com.trust.gestion.services.entities.TenantEntity;
-import com.trust.gestion.services.repositories.ApartmentRepository;
-import com.trust.gestion.services.repositories.TenantApartmentRepository;
-import com.trust.gestion.services.repositories.TenantRepository;
-import com.trust.gestion.services.resources.StatusChangeRequestResource;
+import com.trust.gestion.entities.ApartmentEntity;
+import com.trust.gestion.entities.TenantEntity;
+import com.trust.gestion.repositories.ApartmentRepository;
+import com.trust.gestion.repositories.TenantApartmentRepository;
+import com.trust.gestion.repositories.TenantRepository;
+import com.trust.gestion.resources.StatusChangeRequestResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

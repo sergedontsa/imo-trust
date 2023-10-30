@@ -1,22 +1,21 @@
 package com.trust.gestion.services;
 
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.services.domain.ApartmentDto;
-import com.trust.gestion.services.entities.ApartmentEntity;
-import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.handlers.ApartmentHandler;
-import com.trust.gestion.services.mappers.ApartmentMapper;
+import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.entities.ApartmentEntity;
+import com.trust.gestion.entities.BuildingEntity;
+import com.trust.gestion.handlers.ApartmentHandler;
+import com.trust.gestion.mappers.ApartmentMapper;
 import com.trust.gestion.services.mappers.ApartmentMapperImpl;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.persistence.ApartmentPersistence;
-import com.trust.gestion.services.repositories.ApartmentRepository;
-import com.trust.gestion.services.repositories.BuildingRepository;
-import com.trust.gestion.services.resources.ApartmentResource;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.persistence.ApartmentPersistence;
+import com.trust.gestion.repositories.ApartmentRepository;
+import com.trust.gestion.repositories.BuildingRepository;
+import com.trust.gestion.resources.ApartmentResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

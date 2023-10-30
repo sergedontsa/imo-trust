@@ -1,11 +1,11 @@
 package com.trust.gestion.controllers;
 
 import com.trust.gestion.services.OwnerService;
-import com.trust.gestion.services.domain.OwnerDto;
-import com.trust.gestion.services.pages.OwnerLinkResponse;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.resources.OwnerLinkResource;
-import com.trust.gestion.services.resources.OwnerResource;
+import com.trust.gestion.domain.OwnerDto;
+import com.trust.gestion.pages.OwnerLinkResponse;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.OwnerLinkResource;
+import com.trust.gestion.resources.OwnerResource;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

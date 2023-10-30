@@ -2,11 +2,11 @@ package com.trust.gestion.controllers;
 
 import com.trust.gestion.services.StatusChangeService;
 import com.trust.gestion.services.TenantService;
-import com.trust.gestion.services.domain.TenantDto;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.resources.BillPayResource;
-import com.trust.gestion.services.resources.StatusChangeRequestResource;
-import com.trust.gestion.services.resources.TenantResource;
+import com.trust.gestion.domain.TenantDto;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.BillPayResource;
+import com.trust.gestion.resources.StatusChangeRequestResource;
+import com.trust.gestion.resources.TenantResource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

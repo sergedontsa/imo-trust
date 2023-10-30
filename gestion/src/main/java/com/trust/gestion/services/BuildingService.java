@@ -4,15 +4,15 @@
 
 package com.trust.gestion.services;
 
-import com.trust.gestion.services.domain.BuildingDto;
-import com.trust.gestion.services.entities.BuildingEntity;
-import com.trust.gestion.services.handlers.BuildingHandler;
-import com.trust.gestion.services.mappers.BuildingMapper;
+import com.trust.gestion.domain.BuildingDto;
+import com.trust.gestion.entities.BuildingEntity;
+import com.trust.gestion.handlers.BuildingHandler;
+import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.services.mappers.BuildingMapperImpl;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.persistence.BuildingPersistence;
-import com.trust.gestion.services.repositories.BuildingRepository;
-import com.trust.gestion.services.resources.BuildingResource;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.persistence.BuildingPersistence;
+import com.trust.gestion.repositories.BuildingRepository;
+import com.trust.gestion.resources.BuildingResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

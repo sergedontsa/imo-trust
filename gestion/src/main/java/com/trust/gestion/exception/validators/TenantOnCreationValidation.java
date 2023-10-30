@@ -1,8 +1,8 @@
 package com.trust.gestion.exception.validators;
 
 import com.trust.gestion.exception.OwnerValidException;
-import com.trust.gestion.services.entities.TenantEntity;
-import com.trust.gestion.services.resources.TenantResource;
+import com.trust.gestion.entities.TenantEntity;
+import com.trust.gestion.resources.TenantResource;
 
 import java.util.Optional;
 

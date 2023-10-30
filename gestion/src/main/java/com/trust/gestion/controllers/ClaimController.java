@@ -1,9 +1,9 @@
 package com.trust.gestion.controllers;
 
 
-import com.trust.gestion.services.domain.ClaimDto;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.resources.ClaimResource;
+import com.trust.gestion.domain.ClaimDto;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.ClaimResource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

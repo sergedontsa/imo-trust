@@ -1,7 +1,7 @@
 package com.trust.gestion.exception.validators;
 
 import com.trust.gestion.enums.Gender;
-import com.trust.gestion.services.resources.OwnerResource;
+import com.trust.gestion.resources.OwnerResource;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;

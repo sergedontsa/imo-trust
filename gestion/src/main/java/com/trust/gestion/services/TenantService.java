@@ -5,24 +5,21 @@
 package com.trust.gestion.services;
 
 import com.trust.gestion.enums.Status;
-import com.trust.gestion.exception.validators.TenantOnCreationValidation;
-import com.trust.gestion.services.domain.TenantDto;
-import com.trust.gestion.services.entities.ApartmentEntity;
-import com.trust.gestion.services.entities.TenantApartmentEntity;
-import com.trust.gestion.services.entities.TenantBillPaidEntity;
-import com.trust.gestion.services.entities.TenantBillingEntity;
-import com.trust.gestion.services.entities.TenantEntity;
-import com.trust.gestion.services.handlers.Handler;
+import com.trust.gestion.domain.TenantDto;
+import com.trust.gestion.entities.ApartmentEntity;
+import com.trust.gestion.entities.TenantBillPaidEntity;
+import com.trust.gestion.entities.TenantBillingEntity;
+import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.services.mappers.TenantMapperImpl;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.persistence.TenantPersistence;
-import com.trust.gestion.services.repositories.ApartmentRepository;
-import com.trust.gestion.services.repositories.TenantApartmentRepository;
-import com.trust.gestion.services.repositories.TenantBillPaidRepository;
-import com.trust.gestion.services.repositories.TenantBillingRepository;
-import com.trust.gestion.services.repositories.TenantRepository;
-import com.trust.gestion.services.resources.BillPayResource;
-import com.trust.gestion.services.resources.TenantResource;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.persistence.TenantPersistence;
+import com.trust.gestion.repositories.ApartmentRepository;
+import com.trust.gestion.repositories.TenantApartmentRepository;
+import com.trust.gestion.repositories.TenantBillPaidRepository;
+import com.trust.gestion.repositories.TenantBillingRepository;
+import com.trust.gestion.repositories.TenantRepository;
+import com.trust.gestion.resources.BillPayResource;
+import com.trust.gestion.resources.TenantResource;
 import com.trust.gestion.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +31,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 @Service
 @RequiredArgsConstructor

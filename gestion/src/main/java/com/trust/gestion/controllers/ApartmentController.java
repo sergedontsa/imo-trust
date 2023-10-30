@@ -3,10 +3,10 @@ package com.trust.gestion.controllers;
 
 import com.trust.gestion.services.ApartmentServices;
 import com.trust.gestion.services.StatusChangeService;
-import com.trust.gestion.services.domain.ApartmentDto;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.resources.ApartmentResource;
-import com.trust.gestion.services.resources.StatusChangeRequestResource;
+import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.ApartmentResource;
+import com.trust.gestion.resources.StatusChangeRequestResource;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

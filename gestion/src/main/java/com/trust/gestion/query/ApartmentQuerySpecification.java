@@ -1,6 +1,6 @@
 package com.trust.gestion.query;
 
-import com.trust.gestion.services.entities.ApartmentEntity;
+import com.trust.gestion.entities.ApartmentEntity;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

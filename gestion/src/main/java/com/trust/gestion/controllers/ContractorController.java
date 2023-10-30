@@ -1,9 +1,9 @@
 package com.trust.gestion.controllers;
 
 
-import com.trust.gestion.services.domain.ContractorDto;
-import com.trust.gestion.services.pages.PageResponse;
-import com.trust.gestion.services.resources.ContractorResource;
+import com.trust.gestion.domain.ContractorDto;
+import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.ContractorResource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

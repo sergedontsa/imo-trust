@@ -5,11 +5,9 @@ CREATE TABLE IF NOT EXISTS owner
     middle_name       VARCHAR(20),
     last_name         VARCHAR(20)             NOT NULL,
     gender            VARCHAR(10)             NOT NULL,
-    building_id       VARCHAR(20)             NOT NULL,
     registration_date timestamp               NOT NULL,
-    last_updated      timestamp               NOT NULL,
-    FOREIGN KEY (building_id) REFERENCES building(id)
-);
+    last_updated      timestamp               NOT NULL
+   );
 
 CREATE OR REPLACE FUNCTION update_last_updated_column()
     RETURNS TRIGGER AS

@@ -3,7 +3,7 @@ package com.trust.gestion.persistence;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.mappers.TenantMapper;
-import com.trust.gestion.services.mappers.TenantMapperImpl;
+import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.repositories.TenantRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

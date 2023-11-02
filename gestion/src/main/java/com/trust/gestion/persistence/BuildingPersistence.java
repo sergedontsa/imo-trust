@@ -4,7 +4,7 @@ import com.trust.gestion.enums.ActionTitle;
 import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.mappers.BuildingMapper;
-import com.trust.gestion.services.mappers.BuildingMapperImpl;
+import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.repositories.BuildingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

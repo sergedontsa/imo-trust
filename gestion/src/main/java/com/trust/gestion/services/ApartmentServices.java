@@ -1,17 +1,18 @@
 package com.trust.gestion.services;
 
-import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.BuildingEntity;
+import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.handlers.ApartmentHandler;
 import com.trust.gestion.mappers.ApartmentMapper;
-import com.trust.gestion.services.mappers.ApartmentMapperImpl;
+import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
 import com.trust.gestion.repositories.ApartmentRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.resources.ApartmentResource;
+import com.trust.gestion.utilities.BuildingUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,37 +51,23 @@ public class ApartmentServices  {
                 .build();
 
     }
-    public void create(ApartmentResource resource) {
-        BuildingEntity buildingEntity = this.findBuildingById(resource.getBuildingId());
+    public void create(List<ApartmentResource> resources, String buildingId) {
+        BuildingEntity building = this.findBuildingById(buildingId);
 
-        this.validateApartmentNumber(buildingEntity.getApartments(), resource.getApartmentNumber());
-        this.validateNumberOfUnit(buildingEntity);
-        this.validateDateBuildingOwner(buildingEntity);
+        BuildingUtils.validateBuildingOwner(building);
+        BuildingUtils.validateNumberOfUnit(building);
+        BuildingUtils.validateListOfApartment(building, resources);
 
-        ApartmentEntity entity = (new ApartmentHandler()).apartmentHandle(resource, empty());
-        entity.setBuilding(buildingEntity);
-        this.persistence.save(entity);
+        ApartmentHandler handler = new ApartmentHandler();
+        List<ApartmentEntity> entity = resources.stream()
+                .map(resource -> handler.apartmentHandle(resource, empty()))
+                .toList();
 
+        entity.forEach(apartment -> apartment.setBuilding(building));
+        entity.forEach(this.persistence::save);
     }
-
-    private void validateDateBuildingOwner(BuildingEntity entity) {
-
-    }
-
     private BuildingEntity findBuildingById(String id) {
         return this.buildingRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("No such element found"));
-    }
-    private void validateNumberOfUnit(BuildingEntity building) {
-        if (building.getNumberOfUnits() == building.getApartments().size()) {
-            throw new RuntimeException("Building is full");
-        }
-    }
-    private void validateApartmentNumber(List<ApartmentEntity> apartments, String apartmentNumber){
-        apartments.forEach(apartment -> {
-            if (apartment.getApartmentNumber().equals(apartmentNumber)) {
-                throw new RuntimeException("Apartment number already exist");
-            }
-        });
     }
 
     public void update(String id, ApartmentResource resource) {

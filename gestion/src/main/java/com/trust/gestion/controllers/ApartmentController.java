@@ -20,16 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/apartments")
 @AllArgsConstructor
-public class ApartmentController implements Contract<ApartmentDto, ApartmentResource> {
+public class ApartmentController {
     private final StatusChangeService statusChangeService;
     private final ApartmentServices service;
     /**
      * @return
      */
-    @Override
+
     @GetMapping( value = "/{id}", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(this.service.getById(id));
@@ -38,7 +40,7 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     /**
      * @return
      */
-    @Override
+
     @GetMapping( value = "/page", produces = "application/json")
     public ResponseEntity<PageResponse<ApartmentDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(required = false, defaultValue = "10") Integer size) {
@@ -48,10 +50,10 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     /**
      * @return
      */
-    @Override
-    @PostMapping( value = "", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Void> create(@RequestBody @Valid ApartmentResource resource) {
-        this.service.create(resource);
+
+    @PostMapping( value = "/{buildingId}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<Void> create(@RequestBody @Valid List<ApartmentResource> resources, @PathVariable String buildingId) {
+        this.service.create(resources, buildingId);
         return ResponseEntity.ok().build();
     }
 
@@ -59,7 +61,7 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     /**
      * @return
      */
-    @Override
+
     @PatchMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody @Valid ApartmentResource resource) {
         this.service.update(id, resource);
@@ -69,7 +71,7 @@ public class ApartmentController implements Contract<ApartmentDto, ApartmentReso
     /**
      * @return
      */
-    @Override
+
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         this.service.delete(id);

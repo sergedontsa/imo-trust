@@ -6,18 +6,17 @@ import com.trust.gestion.domain.OwnerContactInformationDto;
 import com.trust.gestion.domain.OwnerIdentificationDto;
 import com.trust.gestion.domain.OwnerInformationDto;
 import com.trust.gestion.mappers.OwnerAddressMapper;
+import com.trust.gestion.mappers.OwnerAddressMapperImpl;
 import com.trust.gestion.mappers.OwnerContactInformationMapper;
+import com.trust.gestion.mappers.OwnerContactInformationMapperImpl;
 import com.trust.gestion.mappers.OwnerIdentificationMapper;
+import com.trust.gestion.mappers.OwnerIdentificationMapperImpl;
 import com.trust.gestion.mappers.OwnerInformationMapper;
+import com.trust.gestion.mappers.OwnerInformationMapperImpl;
 import com.trust.gestion.resources.OwnerAddressResource;
 import com.trust.gestion.resources.OwnerContactInformationRessource;
 import com.trust.gestion.resources.OwnerIdentificationRessource;
 import com.trust.gestion.resources.OwnerInformationResource;
-import com.trust.gestion.services.mappers.OwnerAddressMapperImpl;
-import com.trust.gestion.services.mappers.OwnerContactInformationMapperImpl;
-import com.trust.gestion.services.mappers.OwnerIdentificationMapperImpl;
-import com.trust.gestion.services.mappers.OwnerInformationMapperImpl;
-
 import java.time.Instant;
 import java.util.List;
 

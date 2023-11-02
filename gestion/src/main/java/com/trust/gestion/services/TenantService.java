@@ -10,7 +10,7 @@ import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.TenantBillPaidEntity;
 import com.trust.gestion.entities.TenantBillingEntity;
 import com.trust.gestion.entities.TenantEntity;
-import com.trust.gestion.services.mappers.TenantMapperImpl;
+import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.TenantPersistence;
 import com.trust.gestion.repositories.ApartmentRepository;

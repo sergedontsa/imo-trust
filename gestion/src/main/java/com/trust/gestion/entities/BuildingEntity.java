@@ -5,12 +5,10 @@
 package com.trust.gestion.entities;
 
 import com.trust.gestion.enums.BuildingStatus;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -84,7 +82,5 @@ public class BuildingEntity {
     @OneToMany(mappedBy = "building", orphanRemoval = true)
     private List<ApartmentEntity> apartments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "building", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<OwnerEntity> owners = new ArrayList<>();
 
 }

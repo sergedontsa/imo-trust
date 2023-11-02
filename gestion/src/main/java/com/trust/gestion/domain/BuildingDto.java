@@ -46,4 +46,5 @@ public class BuildingDto implements Serializable {
     @NotNull
     private Instant lastUpdated;
     private List<ApartmentDto> apartments;
+    private List<OwnerDto> owners;
 }

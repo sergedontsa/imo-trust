@@ -1,16 +1,18 @@
 package com.trust.gestion.services;
 
 
+import com.trust.gestion.entities.BuildingOwnerEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.OwnerBuildingLinkEntity;
 import com.trust.gestion.entities.OwnerEntity;
 import com.trust.gestion.handlers.OwnerHandler;
-import com.trust.gestion.services.mappers.OwnerMapperImpl;
+import com.trust.gestion.mappers.OwnerMapperImpl;
 import com.trust.gestion.pages.OwnerLinkResponse;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.OwnerPersistence;
+import com.trust.gestion.repositories.BuildingOwnerRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.OwnerBuildingLinkRepository;
 import com.trust.gestion.repositories.OwnerRepository;
@@ -36,6 +38,7 @@ public class OwnerService {
     private final BuildingRepository buildingRepository;
     private final OwnerPersistence persistence;
     private final OwnerBuildingLinkRepository linkRepository;
+    private final BuildingOwnerRepository buildingOwnerRepository;
 
     public PageResponse<OwnerDto> getById(String id) {
 
@@ -59,13 +62,18 @@ public class OwnerService {
         BuildingEntity building = this.findBuildingById(resource.getBuildingId());
         this.validateBuilding(resource.getBuildingId());
         OwnerEntity entity = (new OwnerHandler()).ownerHandler(resource, empty());
-        entity.setBuilding(building);
         building.setAssigned(Boolean.TRUE);
+        this.buildingRepository.save(building);
         this.persistence.saved(entity);
+
+        BuildingOwnerEntity buildingOwnerEntity = this.getBuildingOwnerEntity()
+                .owner(entity)
+                .building(building)
+                .build();
+        this.buildingOwnerRepository.save(buildingOwnerEntity);
     }
 
     public PageResponse<OwnerDto> update(String id, OwnerResource resource) {
-
         return null;
     }
 
@@ -73,8 +81,11 @@ public class OwnerService {
         // TODO will work on this
     }
 
-
-    @Transactional
+    private BuildingOwnerEntity.BuildingOwnerEntityBuilder getBuildingOwnerEntity() {
+        return BuildingOwnerEntity.builder()
+                .registrationDate(Instant.now())
+                .lastUpdated(Instant.now());
+    }
     public OwnerLinkResponse linkOwnerToBuilding(OwnerLinkResource resource) {
         BuildingEntity building = this.findBuildingById(resource.getBuildingId());
         OwnerEntity owner = this.findById(resource.getOwnerId());

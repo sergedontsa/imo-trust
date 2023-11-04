@@ -8,6 +8,8 @@ import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.BuildingOwnerEntity;
+import com.trust.gestion.exception.NoSuchElementFoundException;
+import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.BuildingHandler;
 import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.mappers.BuildingMapperImpl;
@@ -39,7 +41,7 @@ public class BuildingService {
     private final BuildingPersistence persistence;
     private final BuildingOwnerRepository buildingOwnerRepository;
 
-    public PageResponse<BuildingDto> getById(String id) {
+    public PageResponse<BuildingDto> getById(String id) throws TrustImoException {
         BuildingMapper mapper = new BuildingMapperImpl();
 
         BuildingEntity entity = this.findById(id);
@@ -75,7 +77,7 @@ public class BuildingService {
         this.persistence.save((new BuildingHandler().buildingHandler(resource, empty())));
     }
 
-    public void update(BuildingResource resource, String id) {
+    public void update(BuildingResource resource, String id) throws TrustImoException {
         BuildingEntity entityInBd = this.findById(id);
         BuildingHandler handler = new BuildingHandler();
         BuildingEntity entity = handler.buildingHandler(resource, Optional.of(entityInBd));
@@ -109,7 +111,7 @@ public class BuildingService {
 
 
     private BuildingEntity findById(String id) {
-        return this.repository.findById(id).orElseThrow(() -> new RuntimeException("Building not found"));
+        return this.repository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Building not found"));
     }
     private List<OwnerDto> getBuildingOwner(BuildingEntity entity) {
         OwnerMapper ownerMapper = new OwnerMapperImpl();

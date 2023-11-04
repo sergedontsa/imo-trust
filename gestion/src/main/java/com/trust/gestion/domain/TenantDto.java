@@ -5,18 +5,17 @@
 package com.trust.gestion.domain;
 
 
-import com.trust.gestion.enums.Status;
 import com.trust.gestion.entities.TenantEntity;
-import jakarta.validation.constraints.Size;
+import com.trust.gestion.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * DTO for {@link TenantEntity}
@@ -26,39 +25,19 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class TenantDto implements Serializable {
-    @Size(max = 20)
-    String id;
-    @NotNull
-    @Size(max = 20)
-    String firstName;
-    @NotNull
-    @Size(max = 20)
-    String middleName;
-    @NotNull
-    @Size(max = 20)
-    String lastName;
-    @NotNull
-    @Size(max = 20)
-    String gender;
-    @NotNull
-    @Size(max = 20)
-    Status status;
-    @NotNull
-    LocalDate dateOfBirth;
-    @NotNull
-    @Size(max = 20)
-    String countryOfOrigin;
-    @NotNull
-    @Size(max = 20)
-    String cityOfOrigin;
-    @NotNull
-    @Size(max = 250)
-    String description;
-    @NotNull
-    @Size(max = 20)
-    String contactType;
-    @NotNull
-    Instant registrationDate;
-    @NotNull
-    Instant lastUpdated;
+
+    private String id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String gender;
+    private Status status;
+    private LocalDate dateOfBirth;
+    private String countryOfOrigin;
+    private String cityOfOrigin;
+    private String description;
+    private String contactType;
+    private Instant registrationDate;
+    private Instant lastUpdated;
+    private List<ApartmentDto> apartments;
 }

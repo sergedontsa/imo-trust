@@ -13,7 +13,6 @@ public class TenantOnCreationValidation implements Validation<TenantResource, Te
         TenantCommonValidation ownerCommonValidation = new TenantCommonValidation();
         ownerCommonValidation.validate(resource, existingEntity);
         this.validateCountryOfOrigin(resource);
-        this.validateApartmentId(resource);
         this.validateDateOfBirth(resource);
         this.validateContactType(resource);
     }
@@ -22,11 +21,7 @@ public class TenantOnCreationValidation implements Validation<TenantResource, Te
             throw new OwnerValidException("Date of birth is mandatory");
         }
     }
-    private void validateApartmentId(TenantResource resource){
-        if (resource.getApartmentId() == null){
-            throw new OwnerValidException("Apartment id is mandatory");
-        }
-    }
+
     private void validateCountryOfOrigin(TenantResource resource){
         if (resource.getCountryOfOrigin() == null){
             throw new OwnerValidException("Country of origin is mandatory");

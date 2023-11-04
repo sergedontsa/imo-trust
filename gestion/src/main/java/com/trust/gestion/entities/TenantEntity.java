@@ -42,7 +42,6 @@ public class TenantEntity {
     private String firstName;
 
     @Size(max = 20)
-    @NotNull
     @Column(name = "middle_name", nullable = false, length = 20)
     private String middleName;
 
@@ -78,7 +77,6 @@ public class TenantEntity {
     private String cityOfOrigin;
 
     @Size(max = 250)
-    @NotNull
     @Column(name = "description", nullable = false, length = 250)
     private String description;
 

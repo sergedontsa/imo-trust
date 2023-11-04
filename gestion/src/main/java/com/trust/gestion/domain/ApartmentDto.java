@@ -18,6 +18,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * DTO for {@link ApartmentEntity}
@@ -43,5 +44,6 @@ public class ApartmentDto implements Serializable {
     @NotNull
     private Instant lastUpdated;
     private Status status;
+    private List<TenantDto> tenants;
 
 }

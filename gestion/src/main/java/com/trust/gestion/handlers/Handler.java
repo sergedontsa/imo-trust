@@ -3,10 +3,6 @@ package com.trust.gestion.handlers;
 import com.trust.gestion.domain.OwnerContactInformationDto;
 import com.trust.gestion.domain.OwnerIdentificationDto;
 import com.trust.gestion.domain.OwnerInformationDto;
-import com.trust.gestion.resources.ApartmentResource;
-import com.trust.gestion.resources.OwnerContactInformationRessource;
-import com.trust.gestion.resources.OwnerIdentificationRessource;
-import com.trust.gestion.resources.OwnerInformationResource;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.OwnerAddressEntity;
@@ -14,10 +10,12 @@ import com.trust.gestion.entities.OwnerContactInformationEntity;
 import com.trust.gestion.entities.OwnerEntity;
 import com.trust.gestion.entities.OwnerIdentificationEntity;
 import com.trust.gestion.entities.OwnerInformationEntity;
-import com.trust.gestion.entities.TenantEntity;
+import com.trust.gestion.resources.ApartmentResource;
 import com.trust.gestion.resources.OwnerAddressResource;
+import com.trust.gestion.resources.OwnerContactInformationRessource;
+import com.trust.gestion.resources.OwnerIdentificationRessource;
+import com.trust.gestion.resources.OwnerInformationResource;
 import com.trust.gestion.resources.OwnerResource;
-import com.trust.gestion.resources.TenantResource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -46,13 +44,6 @@ public class Handler {
     public OwnerIdentificationEntity ownerIdentificationHandler(OwnerIdentificationRessource resource, Optional<OwnerIdentificationEntity> optionalEntity) {
         return optionalEntity.isPresent() ? this.updateOwnerIdentification(resource, optionalEntity.get()) : this.createOwnerIdentification(resource);
     }
-
-
-    public TenantEntity tenantHandler(TenantResource resource, Optional<TenantEntity> optionalEntity) {
-        return optionalEntity.isPresent() ? this.updateTenant(resource, optionalEntity.get()) : this.createTenant(resource);
-    }
-
-
 
     private ApartmentResource findApartmentResource(String id, List<ApartmentResource> resources) {
         return resources.stream()
@@ -127,13 +118,5 @@ public class Handler {
         return null;
     }
     //TENANT
-    private TenantEntity createTenant(TenantResource resource) {
-        return null;
 
-    }
-
-    private TenantEntity updateTenant(TenantResource resource, TenantEntity entity) {
-       return null;
-
-    }
 }

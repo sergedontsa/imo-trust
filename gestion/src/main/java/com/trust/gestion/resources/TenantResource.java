@@ -54,6 +54,4 @@ public class TenantResource {
     private Instant registrationDate;
     @NotNull
     private Instant lastUpdated;
-    @NotNull
-    private String apartmentId;
 }

@@ -1,29 +1,32 @@
 package com.trust.gestion.utilities;
 
 import com.trust.gestion.entities.BuildingEntity;
-import com.trust.gestion.resources.ApartmentResource;
+import com.trust.gestion.enums.BuildingStatus;
+import com.trust.gestion.exception.TrustImoException;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
+@Slf4j
 public class BuildingUtils {
     private BuildingUtils() {
     }
     public static void validateBuildingOwner(BuildingEntity entity){
         if (entity.getAssigned() == Boolean.FALSE) {
-            throw new RuntimeException("Building owner is not assigned");
+            log.error("Building owner is not assigned");
+            throw new TrustImoException("Building owner is not assigned");
         }
     }
-    public static void validateListOfApartment(BuildingEntity building, List<ApartmentResource> resources) {
-        resources.forEach(resource -> validateApartmentNumber(building, resource.getApartmentNumber()));
-    }
-    public static void validateApartmentNumber(BuildingEntity building, String apartmentNumber){
-        if (building.getApartments().stream().anyMatch(apartment -> apartment.getApartmentNumber().equals(apartmentNumber))) {
-            throw new RuntimeException("Apartment number already exist");
-        }
-    }
+
     public static void validateNumberOfUnit(BuildingEntity building) {
         if (building.getNumberOfUnits() == building.getApartments().size()) {
-            throw new RuntimeException("Building is full");
+            log.error("Building is full");
+            throw new TrustImoException("Building is full");
         }
     }
+    public static void validateBuildingStatusOnAddTenant(BuildingEntity building) {
+        if (building.getStatus() == BuildingStatus.OPEN) {
+            log.error("Building is closed");
+            throw new TrustImoException("Building is closed");
+        }
+    }
+
 }

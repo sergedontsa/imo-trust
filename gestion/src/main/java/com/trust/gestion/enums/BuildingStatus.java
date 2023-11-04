@@ -10,7 +10,8 @@ public enum BuildingStatus {
     CLOSED("CLOSED"),
     REJECTED("REJECTED"),
     EVALUATION("EVALUATION"),
-    PENDING("PENDING");
+    PENDING("PENDING"),
+    FULL("FULL");
 
     private final String value;
 

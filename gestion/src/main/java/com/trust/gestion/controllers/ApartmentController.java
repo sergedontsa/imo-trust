@@ -1,12 +1,12 @@
 package com.trust.gestion.controllers;
 
 
-import com.trust.gestion.services.ApartmentServices;
-import com.trust.gestion.services.StatusChangeService;
-import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.ApartmentResource;
 import com.trust.gestion.resources.StatusChangeRequestResource;
+import com.trust.gestion.resources.reponse.ApartmentResponse;
+import com.trust.gestion.services.ApartmentServices;
+import com.trust.gestion.services.StatusChangeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class ApartmentController {
      */
 
     @GetMapping( value = "/{id}", produces = "application/json")
-    public ResponseEntity<PageResponse<ApartmentDto>> getById(@PathVariable String id) {
+    public ResponseEntity<PageResponse<ApartmentResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(this.service.getById(id));
     }
 
@@ -42,7 +42,7 @@ public class ApartmentController {
      */
 
     @GetMapping( value = "/page", produces = "application/json")
-    public ResponseEntity<PageResponse<ApartmentDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public ResponseEntity<PageResponse<ApartmentResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(service.getAll(page, size));
     }

@@ -8,6 +8,7 @@ package com.trust.gestion.mappers;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.resources.TenantResource;
+import com.trust.gestion.resources.reponse.TenantResponse;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -26,4 +27,6 @@ public interface TenantMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     TenantEntity partialUpdate(TenantDto tenantDto, @MappingTarget TenantEntity tenantEntity);
+
+    TenantResponse toResponse(TenantEntity entity);
 }

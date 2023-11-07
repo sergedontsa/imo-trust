@@ -8,6 +8,7 @@ package com.trust.gestion.mappers;
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.resources.ApartmentResource;
 import com.trust.gestion.entities.ApartmentEntity;
+import com.trust.gestion.resources.reponse.ApartmentResponse;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -29,4 +30,8 @@ public interface ApartmentMapper {
 //    @Mapping(target = "registrationDate", ignore = true)
 //    @Mapping(target = "lastUpdated", ignore = true)
     ApartmentDto fromResourceToDto(ApartmentResource resource);
+
+    ApartmentResponse toApartmentResponse(ApartmentEntity entity);
+
+    ApartmentResponse toResponse(ApartmentEntity entity);
 }

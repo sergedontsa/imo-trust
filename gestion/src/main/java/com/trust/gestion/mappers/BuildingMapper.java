@@ -8,6 +8,7 @@ package com.trust.gestion.mappers;
 import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.resources.BuildingResource;
+import com.trust.gestion.resources.reponse.BuildingResponse;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -36,4 +37,5 @@ public interface BuildingMapper {
     @Mapping(target = "apartments", ignore = true)
     BuildingEntity partialUpdate(BuildingDto buildingDto, @MappingTarget BuildingEntity buildingEntity);
 
+    BuildingResponse toResponse(BuildingEntity entity);
 }

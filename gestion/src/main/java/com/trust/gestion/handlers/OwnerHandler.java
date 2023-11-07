@@ -15,20 +15,16 @@ import java.util.Optional;
 @Slf4j
 public class OwnerHandler {
     public OwnerEntity ownerHandler(OwnerResource resource, Optional<OwnerEntity> optionalEntity) {
-        return optionalEntity.isPresent() ? updateOwner(resource, optionalEntity.get()) : createOwner(resource);
+        return optionalEntity.isPresent() ? updateOwner(resource, optionalEntity.get()) : createOwner();
     }
 
     private OwnerEntity updateOwner(OwnerResource resource, OwnerEntity entity) {
         return null;
     }
 
-    private OwnerEntity createOwner(OwnerResource resource) {
+    private OwnerEntity createOwner() {
         return OwnerEntity.builder()
                 .id(Utilities.getEmployeeId())
-                .firstName(resource.getFirstName())
-                .middleName(resource.getMiddleName())
-                .lastName(resource.getLastName())
-                .gender(resource.getGender())
                 .registrationDate(Instant.now())
                 .lastUpdated(Instant.now())
                 .build();

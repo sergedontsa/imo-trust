@@ -1,11 +1,11 @@
 package com.trust.gestion.controllers;
 
-import com.trust.gestion.services.OwnerService;
-import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.pages.OwnerLinkResponse;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.OwnerLinkResource;
 import com.trust.gestion.resources.OwnerResource;
+import com.trust.gestion.resources.reponse.OwnerResponse;
+import com.trust.gestion.services.OwnerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +26,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/v1/owners")
 @AllArgsConstructor
 @Slf4j
-public class OwnerController implements Contract<OwnerDto, OwnerResource> {
+public class OwnerController implements Contract<OwnerResponse, OwnerResource> {
     private final OwnerService service;
     @Override
     @GetMapping( value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<OwnerDto>> getById(@PathVariable String id) {
+    public ResponseEntity<PageResponse<OwnerResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(this.service.getById(id));
     }
 
     @Override
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<OwnerDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public ResponseEntity<PageResponse<OwnerResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                          @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(service.getAll(page, size));
     }

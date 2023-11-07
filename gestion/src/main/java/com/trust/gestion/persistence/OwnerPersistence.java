@@ -4,6 +4,7 @@
 
 package com.trust.gestion.persistence;
 
+import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.enums.ActionTitle;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.mappers.OwnerAddressMapperImpl;
@@ -24,6 +25,7 @@ import com.trust.gestion.repositories.OwnerAddressRepository;
 import com.trust.gestion.repositories.OwnerIdentificationRepository;
 import com.trust.gestion.repositories.OwnerInformationRepository;
 import com.trust.gestion.repositories.OwnerRepository;
+import com.trust.gestion.repositories.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,16 +44,19 @@ public class OwnerPersistence {
     private final OwnerInformationRepository informationRepository;
     private final OwnerContactInformationRepository contactInformationRepository;
     private final OwnerIdentificationRepository identificationRepository;
+    private final PersonRepository personRepository;
     private final ActionPersistence actionPersistence;
     private final OwnerAddressPersistence addressPersistence;
     private final OwnerInformationPersistence informationPersistence;
     private final OwnerContactInformationPersistence contactInformationPersistence;
     private final OwnerIdentificationPersistence identificationPersistence;
-    public void saved(OwnerEntity entity) {
-        this.saveOwnerInBd(ActionTitle.OWNER_CREATE, entity);
+    public void saved(OwnerEntity entity, PersonEntity person) {
+        this.saveOwnerInBd(ActionTitle.OWNER_CREATE, entity, person);
+
     }
-    private void saveOwnerInBd(ActionTitle actionTitle, OwnerEntity entity) {
+    private void saveOwnerInBd(ActionTitle actionTitle, OwnerEntity entity, PersonEntity person) {
         this.repository.save(entity);
+        this.personRepository.save(person);
         this.actionPersistence.createAction(actionTitle);
     }
     private void saveOwnerAddress(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){

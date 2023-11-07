@@ -38,7 +38,6 @@ public class ApartmentDto implements Serializable {
     @Size(max = 250)
     private String description;
     private Integer occupant;
-
     @NotNull
     private Instant registrationDate;
     @NotNull

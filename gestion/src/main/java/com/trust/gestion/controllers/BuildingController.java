@@ -1,9 +1,9 @@
 package com.trust.gestion.controllers;
 
-import com.trust.gestion.services.BuildingService;
-import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.BuildingResource;
+import com.trust.gestion.resources.reponse.BuildingResponse;
+import com.trust.gestion.services.BuildingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,14 +21,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor
-public class BuildingController implements Contract<BuildingDto, BuildingResource> {
+public class BuildingController implements Contract<BuildingResponse, BuildingResource> {
     private final BuildingService service;
     /**
      * @return dto from bd
      */
     @Override
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<BuildingDto>> getById(@PathVariable String id) {
+    public ResponseEntity<PageResponse<BuildingResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.getById(id));
     }
 
@@ -37,7 +37,7 @@ public class BuildingController implements Contract<BuildingDto, BuildingResourc
      */
     @Override
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<BuildingDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public ResponseEntity<PageResponse<BuildingResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                             @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(this.service.getAll(page, size));
     }

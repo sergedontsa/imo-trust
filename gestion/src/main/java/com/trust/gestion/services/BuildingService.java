@@ -4,13 +4,14 @@
 
 package com.trust.gestion.services;
 
-import com.trust.gestion.domain.BuildingDto;
-import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.BuildingOwnerEntity;
+import com.trust.gestion.entities.OwnerEntity;
+import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.BuildingHandler;
+import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.mappers.OwnerMapper;
@@ -19,7 +20,11 @@ import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.BuildingPersistence;
 import com.trust.gestion.repositories.BuildingOwnerRepository;
 import com.trust.gestion.repositories.BuildingRepository;
+import com.trust.gestion.repositories.PersonRepository;
 import com.trust.gestion.resources.BuildingResource;
+import com.trust.gestion.resources.reponse.ApartmentResponse;
+import com.trust.gestion.resources.reponse.BuildingResponse;
+import com.trust.gestion.resources.reponse.OwnerResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,37 +45,45 @@ public class BuildingService {
     private final BuildingRepository repository;
     private final BuildingPersistence persistence;
     private final BuildingOwnerRepository buildingOwnerRepository;
+    private final PersonRepository personRepository;
 
-    public PageResponse<BuildingDto> getById(String id) throws TrustImoException {
+    public PageResponse<BuildingResponse> getById(String id) throws TrustImoException {
         BuildingMapper mapper = new BuildingMapperImpl();
 
         BuildingEntity entity = this.findById(id);
-        List<OwnerDto> owners = this.getBuildingOwner(entity);
-
-        BuildingDto dto = mapper.toDto(entity);
-        dto.setOwners(owners);
-
-        PageResponse<BuildingDto> pageResponse = new PageResponse<>();
+        List<OwnerResponse> owners = this.getBuildingOwner(entity);
+        BuildingResponse response = mapper.toResponse(entity).toBuilder().owners(owners)
+                .apartments(this.getApartmentResponse(entity)).build();
+        PageResponse<BuildingResponse> pageResponse = new PageResponse<>();
         return pageResponse
                 .toBuilder()
-                .content(Collections.singletonList(dto))
+                .content(Collections.singletonList(response))
                 .build();
     }
-    public PageResponse<BuildingDto> getAll(Integer page, Integer size) {
-
+    public PageResponse<BuildingResponse> getAll(Integer page, Integer size) {
+        BuildingMapper mapper = new BuildingMapperImpl();
         Page<BuildingEntity> entities = this.repository.findAll(PageRequest.of(page, size));
-
         List<BuildingEntity> buildings = entities.getContent();
-        List<BuildingDto> content = this.linkOwnerToBuildingDto(buildings);
+        List<BuildingResponse> content = buildings.stream()
+                .map(building -> mapper.toResponse(building).toBuilder()
+                        .owners(this.getBuildingOwner(building))
+                        .apartments(this.getApartmentResponse(building))
+                        .build())
+                .toList();
 
-        PageResponse<BuildingDto> contents = new PageResponse<>();
-        return contents.toBuilder()
+       return (new PageResponse<BuildingResponse>()).toBuilder()
                 .content(content)
                 .totalPages(entities.getTotalPages())
                 .totalElements(entities.getTotalElements())
                 .size(entities.getSize())
                 .number(entities.getNumber())
                 .build();
+    }
+    private List<ApartmentResponse> getApartmentResponse(BuildingEntity entity) {
+        return entity.getApartments()
+                .stream()
+                .map(apartment -> (new ApartmentMapperImpl()).toApartmentResponse(apartment))
+                .toList();
     }
 
     public void create(BuildingResource resource) {
@@ -83,44 +96,25 @@ public class BuildingService {
         BuildingEntity entity = handler.buildingHandler(resource, Optional.of(entityInBd));
         persistence.save(entity);
     }
-    private List<BuildingDto> linkOwnerToBuildingDto(List<BuildingEntity> buildingEntities) {
-        BuildingMapper mapper = new BuildingMapperImpl();
-        OwnerMapper ownerMapper = new OwnerMapperImpl();
-        return buildingEntities.stream()
-                .collect(Collectors.toMap(buildingEntity -> buildingEntity,
-                        buildingEntity -> this.buildingOwnerRepository.findByBuilding(buildingEntity)
-                                .stream()
-                                .map(BuildingOwnerEntity::getOwner)
-                                .toList()))
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(entry -> mapper.toDto(entry.getKey()),
-                        entry -> entry.getValue()
-                                .stream()
-                                .map(ownerMapper::toDto)
-                                .toList()))
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    List<OwnerDto> owners = entry.getValue();
-                    BuildingDto buildingDto = entry.getKey();
-                    buildingDto.setOwners(owners);
-                    return buildingDto;
-                }).toList();
-    }
-
 
     private BuildingEntity findById(String id) {
         return this.repository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Building not found"));
     }
-    private List<OwnerDto> getBuildingOwner(BuildingEntity entity) {
+    private List<OwnerResponse> getBuildingOwner(BuildingEntity entity) {
         OwnerMapper ownerMapper = new OwnerMapperImpl();
-        return this.buildingOwnerRepository.findByBuilding(entity)
+        List<OwnerEntity> owners = this.buildingOwnerRepository.findByBuilding(entity)
                 .stream()
                 .map(BuildingOwnerEntity::getOwner)
-                .toList()
-                .stream()
-                .map(ownerMapper::toDto)
                 .toList();
+        return owners.stream()
+                .collect(Collectors.toMap(ownerEntity -> ownerEntity,
+                        ownerEntity -> this.getPersonEntity(ownerEntity.getId())))
+                .entrySet()
+                .stream()
+                .map(entry -> ownerMapper.toResponse(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+    private PersonEntity getPersonEntity(String id) {
+        return this.personRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Person not found"));
     }
 }

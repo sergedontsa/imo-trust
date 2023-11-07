@@ -1,7 +1,5 @@
 package com.trust.gestion.services;
 
-import com.trust.gestion.domain.ApartmentDto;
-import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.TenantApartmentEntity;
@@ -16,6 +14,8 @@ import com.trust.gestion.repositories.ApartmentRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.TenantApartmentRepository;
 import com.trust.gestion.resources.ApartmentResource;
+import com.trust.gestion.resources.reponse.ApartmentResponse;
+import com.trust.gestion.resources.reponse.TenantResponse;
 import com.trust.gestion.utilities.ApartmentUtils;
 import com.trust.gestion.utilities.BuildingUtils;
 import jakarta.transaction.Transactional;
@@ -40,11 +40,11 @@ public class ApartmentServices  {
     private final BuildingRepository buildingRepository;
     private final TenantApartmentRepository tenantApartmentRepository;
 
-    public PageResponse<ApartmentDto> getAll(Integer page, Integer size){
+    public PageResponse<ApartmentResponse> getAll(Integer page, Integer size){
         ApartmentMapper mapper = new ApartmentMapperImpl();
         Page<ApartmentEntity> entities = this.repository.findAll(PageRequest.of(page, size));
-        return (new PageResponse<ApartmentDto>()).toBuilder()
-                .content(entities.getContent().stream().map(mapper::toDto).toList())
+        return (new PageResponse<ApartmentResponse>()).toBuilder()
+                .content(entities.getContent().stream().map(mapper::toResponse).toList())
                 .totalPages(entities.getTotalPages())
                 .totalElements(entities.getTotalElements())
                 .size(entities.getSize())
@@ -52,25 +52,25 @@ public class ApartmentServices  {
                 .build();
     }
 
-    public PageResponse<ApartmentDto> getById(String id) {
+    public PageResponse<ApartmentResponse> getById(String id) {
         ApartmentEntity entity = this.findById(id);
         List<TenantApartmentEntity> tenantApartmentEntities = this.tenantApartmentRepository.findByApartment(entity);
-        List<TenantDto> tenants = new ArrayList<>();
+        List<TenantResponse> tenants = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(tenantApartmentEntities)){
             tenants = tenantApartmentEntities.stream()
                     .map(TenantApartmentEntity::getTenant)
                     .toList()
                     .stream()
-                    .map(tenant -> (new TenantMapperImpl()).toDto(tenant))
+                    .map(tenant -> (new TenantMapperImpl()).toResponse(tenant))
                     .toList();
 
         }
-        ApartmentDto apartmentDto = (new ApartmentMapperImpl()).toDto(entity);
-        apartmentDto.setTenants(tenants);
+        ApartmentResponse response = (new ApartmentMapperImpl()).toResponse(entity);
+        response.setTenants(tenants);
 
-        return (new PageResponse<ApartmentDto>())
+        return (new PageResponse<ApartmentResponse>())
                 .toBuilder()
-                .content(Collections.singletonList(apartmentDto))
+                .content(Collections.singletonList(response))
                 .build();
 
     }

@@ -5,11 +5,8 @@
 package com.trust.gestion.entities;
 
 
-import com.trust.gestion.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -39,26 +36,6 @@ public class OwnerEntity {
     @Size(max = 20)
     @Column(name = "id", nullable = false, length = 20)
     private String id;
-
-    @Size(max = 20)
-    @NotNull
-    @Column(name = "first_name", nullable = false, length = 20)
-    private String firstName;
-
-    @Size(max = 20)
-    @Column(name = "middle_name", length = 20)
-    private String middleName;
-
-    @Size(max = 20)
-    @NotNull
-    @Column(name = "last_name", nullable = false, length = 20)
-    private String lastName;
-
-    @Size(max = 10)
-    @NotNull
-    @Column(name = "gender", nullable = false, length = 10)
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     @NotNull
     @Column(name = "registration_date", nullable = false)

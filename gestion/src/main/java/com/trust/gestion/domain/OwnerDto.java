@@ -5,7 +5,6 @@
 package com.trust.gestion.domain;
 
 
-import com.trust.gestion.enums.Gender;
 import com.trust.gestion.entities.OwnerEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,10 +29,6 @@ import java.util.List;
 public class OwnerDto implements Serializable {
 
     private String id;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private Gender gender;
     private Instant registrationDate;
     private Instant lastUpdated;
     private List<OwnerAddressDto> address = new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.trust.gestion.resources.reponse;
+package com.trust.gestion.resources;
 
 import com.trust.gestion.enums.AddressType;
 import lombok.AllArgsConstructor;
@@ -9,11 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressResponse {
-    private String id;
+@Builder(toBuilder = true)
+public class AddressResource {
     private String civicNumber;
     private String streetName;
     private String aptNumber;

@@ -7,7 +7,7 @@ public enum AddressType {
     BILLING("BILLING"),
     MAILING_BILLING("MAILING_BILLING");
 
-    private String name;
+    private final String name;
 
     AddressType(String name) {
         this.name = name;

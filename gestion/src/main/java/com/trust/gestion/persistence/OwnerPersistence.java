@@ -4,35 +4,21 @@
 
 package com.trust.gestion.persistence;
 
+import com.trust.gestion.entities.AddressEntity;
+import com.trust.gestion.entities.OwnerEntity;
 import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.enums.ActionTitle;
-import com.trust.gestion.domain.OwnerDto;
-import com.trust.gestion.mappers.OwnerAddressMapperImpl;
-import com.trust.gestion.mappers.OwnerContactInformationMapper;
-import com.trust.gestion.mappers.OwnerContactInformationMapperImpl;
-import com.trust.gestion.mappers.OwnerIdentificationMapperImpl;
-import com.trust.gestion.mappers.OwnerInformationMapper;
-import com.trust.gestion.mappers.OwnerInformationMapperImpl;
-import com.trust.gestion.repositories.OwnerContactInformationRepository;
-import com.trust.gestion.entities.OwnerAddressEntity;
-import com.trust.gestion.entities.OwnerContactInformationEntity;
-import com.trust.gestion.entities.OwnerEntity;
-import com.trust.gestion.entities.OwnerIdentificationEntity;
-import com.trust.gestion.entities.OwnerInformationEntity;
-import com.trust.gestion.mappers.OwnerAddressMapper;
-import com.trust.gestion.mappers.OwnerIdentificationMapper;
-import com.trust.gestion.repositories.OwnerAddressRepository;
-import com.trust.gestion.repositories.OwnerIdentificationRepository;
-import com.trust.gestion.repositories.OwnerInformationRepository;
+import com.trust.gestion.exception.NoSuchElementFoundException;
+import com.trust.gestion.mappers.OwnerMapper;
+import com.trust.gestion.mappers.OwnerMapperImpl;
 import com.trust.gestion.repositories.OwnerRepository;
-import com.trust.gestion.repositories.PersonRepository;
+import com.trust.gestion.resources.reponse.AddressResponse;
+import com.trust.gestion.resources.reponse.OwnerResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Component
@@ -40,75 +26,37 @@ import java.util.Optional;
 public class OwnerPersistence {
 
     private final OwnerRepository repository;
-    private final OwnerAddressRepository addressRepository;
-    private final OwnerInformationRepository informationRepository;
-    private final OwnerContactInformationRepository contactInformationRepository;
-    private final OwnerIdentificationRepository identificationRepository;
-    private final PersonRepository personRepository;
+    private final PersonPersistence personPersistence;
+    private final AddressPersistence addressPersistence;
     private final ActionPersistence actionPersistence;
-    private final OwnerAddressPersistence addressPersistence;
-    private final OwnerInformationPersistence informationPersistence;
-    private final OwnerContactInformationPersistence contactInformationPersistence;
-    private final OwnerIdentificationPersistence identificationPersistence;
     public void saved(OwnerEntity entity, PersonEntity person) {
-        this.saveOwnerInBd(ActionTitle.OWNER_CREATE, entity, person);
+        this.saveOwnerInBd(entity, person);
 
     }
-    private void saveOwnerInBd(ActionTitle actionTitle, OwnerEntity entity, PersonEntity person) {
+    public void saveAddress(List<AddressEntity> address){
+        this.addressPersistence.saveAll(address);
+    }
+    private void saveOwnerInBd(OwnerEntity entity, PersonEntity person) {
         this.repository.save(entity);
-        this.personRepository.save(person);
-        this.actionPersistence.createAction(actionTitle);
+        this.personPersistence.save(person);
+        this.actionPersistence.createAction(ActionTitle.OWNER_CREATE);
     }
-    private void saveOwnerAddress(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
-        OwnerAddressMapper mapper = new OwnerAddressMapperImpl();
-        if (CollectionUtils.isNotEmpty(dto.getAddress())) {
-            List<OwnerAddressEntity> addressEntities = dto.getAddress()
-                    .stream().map(mapper::toEntity).toList();
-            addressEntities.forEach(addressEntity -> addressEntity.setOwner(entity));
-           this.addressRepository.saveAll(addressEntities);
-            actionPersistence.createAction(actionTitle);
-        }else {
-            log.warn("Owner address is empty");
-        }
+    public OwnerResponse getOne(String ownerId){
+        OwnerEntity entity = this.findById(ownerId);
+        OwnerMapper mapper = new OwnerMapperImpl();
+        PersonEntity person = this.getPersonEntity(ownerId);
+        List<AddressResponse> addressResponses = this.addressPersistence.findByEntity(ownerId);
+        return mapper.toResponse(entity, person)
+                .toBuilder()
+                .address(addressResponses)
+                .build();
     }
-    private void saveOwnerInformation(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
-        OwnerInformationMapper informationMapper = new OwnerInformationMapperImpl();
-        if (CollectionUtils.isNotEmpty(dto.getInformation())) {
-            List<OwnerInformationEntity> informationEntities = dto.getInformation()
-                    .stream().map(informationMapper::toEntity).toList();
-            informationEntities.forEach(informationEntity -> informationEntity.setOwner(entity));
-            this.informationRepository.saveAll(informationEntities);
-            actionPersistence.createAction(actionTitle);
-        }else {
-            log.warn("Owner information is empty");
-        }
+    private OwnerEntity findById(String id) {
+        return this.repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementFoundException("Owner not found"));
     }
-    private void saveContactInformation(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
-        OwnerContactInformationMapper contactInformationMapper = new OwnerContactInformationMapperImpl();
-        if (CollectionUtils.isNotEmpty(dto.getContacts())) {
-            List<OwnerContactInformationEntity> contactInformationEntities = dto.getContacts()
-                    .stream().map(contactInformationMapper::toEntity).toList();
-            contactInformationEntities.forEach(contactInformationEntity -> contactInformationEntity.setOwner(entity));
-            contactInformationRepository.saveAll(contactInformationEntities);
-            actionPersistence.createAction(actionTitle);
-        }else {
-            log.warn("Owner contact information is empty");
-        }
+    private PersonEntity getPersonEntity(String id) {
+        return this.personPersistence.findById(id);
     }
-    private void saveOwnerIdentification(ActionTitle actionTitle, OwnerDto dto, OwnerEntity entity){
-        if (CollectionUtils.isNotEmpty(dto.getIdentifications())) {
-            OwnerIdentificationMapper identificationMapper = new OwnerIdentificationMapperImpl();
 
-            List<OwnerIdentificationEntity> identificationEntities = dto.getIdentifications()
-                    .stream().map(identificationMapper::toEntity).toList();
-            identificationEntities.forEach(identificationEntity -> identificationEntity.setOwner(entity));
-            identificationRepository.saveAll(identificationEntities);
-            actionPersistence.createAction(actionTitle);
-        }else {
-            log.warn("Owner identification is empty");
-        }
-    }
-    private Optional<OwnerEntity> findById(String id) {
-        return this.repository.findById(id);
-    }
 }

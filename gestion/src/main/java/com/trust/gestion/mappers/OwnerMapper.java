@@ -6,8 +6,8 @@ package com.trust.gestion.mappers;
 
 
 import com.trust.gestion.domain.OwnerDto;
+import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.entities.OwnerEntity;
-import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.resources.OwnerResource;
 import com.trust.gestion.resources.reponse.OwnerResponse;
 import org.mapstruct.BeanMapping;
@@ -28,14 +28,18 @@ public interface OwnerMapper {
     OwnerDto fromResourceToDto(OwnerResource resource);
 
     OwnerEntity toEntity(OwnerDto ownerDto);
+
     OwnerDto toDto(OwnerEntity ownerEntity);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     OwnerEntity update(OwnerDto ownerDto, @MappingTarget OwnerEntity ownerEntity);
+
     @Mapping(target = "id", source = "entity.id")
-    OwnerResponse toResponse(OwnerEntity entity, PersonEntity person);
+    @Mapping(target = "registrationDate", ignore = true)
+    @Mapping(target = "lastUpdated", ignore = true)
+    OwnerDto toDto(OwnerEntity entity, PersonDto personDto);
 
-
-
+    OwnerResponse toResponse(OwnerDto dto);
 
 
 }

@@ -5,6 +5,7 @@
 package com.trust.gestion.services;
 
 import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.TenantApartmentEntity;
@@ -18,6 +19,9 @@ import com.trust.gestion.handlers.TenantHandler;
 import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.persistence.ApartmentPersistence;
+import com.trust.gestion.persistence.TelephonePersistence;
+import com.trust.gestion.persistence.TenantApartmentPersistence;
 import com.trust.gestion.persistence.TenantPersistence;
 import com.trust.gestion.repositories.ApartmentRepository;
 import com.trust.gestion.repositories.TenantApartmentRepository;
@@ -25,6 +29,7 @@ import com.trust.gestion.repositories.TenantBillPaidRepository;
 import com.trust.gestion.repositories.TenantBillingRepository;
 import com.trust.gestion.repositories.TenantRepository;
 import com.trust.gestion.resources.BillPayResource;
+import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
 import com.trust.gestion.utilities.ApartmentUtils;
 import com.trust.gestion.utilities.Utilities;
@@ -54,6 +59,9 @@ public class TenantService {
     private final TenantApartmentRepository tenantApartmentRepository;
     private final TenantBillingRepository billingRepository;
     private final TenantBillPaidRepository billPaidRepository;
+    private final TelephonePersistence telephonePersistence;
+    private final ApartmentPersistence apartmentPersistence;
+    private final TenantApartmentPersistence tenantApartmentPersistence;
 
 
     public void create(List<TenantResource> resources, String apartmentId) throws TrustImoException {
@@ -61,29 +69,29 @@ public class TenantService {
             log.error("Tenant resources cannot be empty");
             throw new NoSuchElementFoundException("Tenant resources cannot be empty");
         }
-        ApartmentEntity apartmentEntity = this.findApartment(apartmentId);
-        ApartmentUtils.validateApartmentStatusOnCreateTenant(apartmentEntity);
-        List<TenantEntity> entities = this.getEntities(resources);
-        apartmentEntity.setStatus(Status.RESERVED);
-        apartmentEntity.setOccupant(apartmentEntity.getOccupant() + entities.size());
-        List<TenantApartmentEntity> tenantApartmentEntities = this.getTenantApartment(entities, apartmentEntity);
+        ApartmentDto apartmentDto = this.apartmentPersistence.findApartment(apartmentId);
+        ApartmentUtils.validateApartmentStatusOnCreateTenant(apartmentDto);
+        List<TenantDto> dtos = this.getEntities(resources);
+        apartmentDto.setStatus(Status.RESERVED);
+        apartmentDto.setOccupant(apartmentDto.getOccupant() + dtos.size());
+        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartmentDto);
 
-        this.apartmentRepository.save(apartmentEntity);
-        entities.forEach(this.persistence::create);
-        tenantApartmentRepository.saveAll(tenantApartmentEntities);
+        this.apartmentPersistence.save(apartmentDto);
+        dtos.forEach(this.persistence::create);
+        tenantApartmentPersistence.saveAll(tenantApartmentEntities);
 
     }
     public void update(TenantResource resource, String id) {
     }
     public void addTenantToApartment(List<TenantResource> resources, String apartmentId) {
-        ApartmentEntity apartmentEntity = this.findApartment(apartmentId);
-        List<TenantEntity> entities = this.getEntities(resources);
-        List<TenantApartmentEntity> tenantApartmentEntities = this.getTenantApartment(entities, apartmentEntity);
-        apartmentEntity.setOccupant(apartmentEntity.getOccupant() + entities.size());
-        apartmentEntity.setStatus(Status.RESERVED);
-        this.apartmentRepository.save(apartmentEntity);
-        entities.forEach(this.persistence::create);
-        tenantApartmentRepository.saveAll(tenantApartmentEntities);
+        ApartmentDto apartment = this.apartmentPersistence.findApartment(apartmentId);
+        List<TenantDto> dtos = this.getEntities(resources);
+        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartment);
+        apartment.setOccupant(apartment.getOccupant() + dtos.size());
+        apartment.setStatus(Status.RESERVED);
+        this.apartmentPersistence.save(apartment);
+        dtos.forEach(this.persistence::create);
+        tenantApartmentPersistence.saveAll(tenantApartmentEntities);
     }
 
 
@@ -110,6 +118,10 @@ public class TenantService {
     }
 
     public void payBill(BillPayResource resource) {
+        //TODO add validation to check if the amount paid is equal to the rent amount
+        //TODO add validation to check if the amount paid is equal to the billing amount
+        //TODO add validation to check if the billing is not paid
+        //TODO refactor this method
         TenantEntity tenantEntity = this.repository.findById(resource.getTenantId())
                 .orElseThrow(() -> new NoSuchElementFoundException("Tenant with id " + resource.getTenantId() + " not found"));
         ApartmentEntity apartmentEntity = this.apartmentRepository.findById(resource.getApartmentId())
@@ -157,7 +169,7 @@ public class TenantService {
         return this.apartmentRepository.findById(apartmentId)
                 .orElseThrow(() -> new NoSuchElementFoundException("Apartment with id " + apartmentId + " not found"));
     }
-    private List<TenantEntity> getEntities(List<TenantResource> resources){
+    private List<TenantDto> getEntities(List<TenantResource> resources){
         return resources.stream()
                 .map(resource -> (new TenantHandler()).tenantHandler(resource, empty()))
                 .toList();
@@ -166,16 +178,15 @@ public class TenantService {
         return this.repository.findById(id).orElseThrow(()->
                 new NoSuchElementFoundException("Tenant with id " + id + " not found"));
     }
-    private List<TenantApartmentEntity> getTenantApartment(List<TenantEntity> entities, ApartmentEntity apartmentEntity){
-        return entities.stream()
-                .map(tenant -> TenantApartmentEntity.builder()
-                        .apartment(apartmentEntity)
-                        .tenant(tenant)
-                        .registrationDate(Instant.now())
-                        .lastUpdated(Instant.now())
-                        .build())
-                .toList();
+
+
+
+    public void addTelephone(List<TelephoneResource> resources, String tenantId) {
+        this.persistence.findById(tenantId);
+        TenantHandler handler = new TenantHandler();
+        resources.forEach(resource -> resource.setEntityId(tenantId));
+        this.telephonePersistence.saveAll(resources.stream()
+                .map(resource -> handler.telephoneHandler(resource, empty()))
+                .toList());
     }
-
-
 }

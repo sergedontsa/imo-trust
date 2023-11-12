@@ -1,15 +1,18 @@
 package com.trust.gestion.services;
 
+import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.entities.ApartmentEntity;
-import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.TenantApartmentEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.handlers.ApartmentHandler;
 import com.trust.gestion.mappers.ApartmentMapper;
 import com.trust.gestion.mappers.ApartmentMapperImpl;
+import com.trust.gestion.mappers.TenantMapper;
 import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
+import com.trust.gestion.persistence.BuildingPersistence;
 import com.trust.gestion.repositories.ApartmentRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.TenantApartmentRepository;
@@ -39,6 +42,7 @@ public class ApartmentServices  {
     private final ApartmentPersistence persistence;
     private final BuildingRepository buildingRepository;
     private final TenantApartmentRepository tenantApartmentRepository;
+    private final BuildingPersistence buildingPersistence;
 
     public PageResponse<ApartmentResponse> getAll(Integer page, Integer size){
         ApartmentMapper mapper = new ApartmentMapperImpl();
@@ -56,12 +60,13 @@ public class ApartmentServices  {
         ApartmentEntity entity = this.findById(id);
         List<TenantApartmentEntity> tenantApartmentEntities = this.tenantApartmentRepository.findByApartment(entity);
         List<TenantResponse> tenants = new ArrayList<>();
+        TenantMapper tenantMapper = new TenantMapperImpl();
         if (CollectionUtils.isNotEmpty(tenantApartmentEntities)){
             tenants = tenantApartmentEntities.stream()
                     .map(TenantApartmentEntity::getTenant)
                     .toList()
                     .stream()
-                    .map(tenant -> (new TenantMapperImpl()).toResponse(tenant))
+                    .map(tenantMapper::toResponse)
                     .toList();
 
         }
@@ -75,7 +80,7 @@ public class ApartmentServices  {
 
     }
     public void create(List<ApartmentResource> resources, String buildingId) {
-        BuildingEntity building = this.findBuildingById(buildingId);
+        BuildingDto building = this.buildingPersistence.findBuildingById(buildingId);
 
         BuildingUtils.validateBuildingOwner(building);
         BuildingUtils.validateNumberOfUnit(building);
@@ -83,15 +88,11 @@ public class ApartmentServices  {
         ApartmentUtils.validateListOfApartment(building, resources);
 
         ApartmentHandler handler = new ApartmentHandler();
-        List<ApartmentEntity> entity = resources.stream()
+
+        List<ApartmentDto> dtos = resources.stream()
                 .map(resource -> handler.apartmentHandle(resource, empty()))
                 .toList();
-
-        entity.forEach(apartment -> apartment.setBuilding(building));
-        entity.forEach(this.persistence::save);
-    }
-    private BuildingEntity findBuildingById(String id) {
-        return this.buildingRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("No such element found"));
+        this.persistence.save(dtos, building);
     }
 
     public void update(String id, ApartmentResource resource) {

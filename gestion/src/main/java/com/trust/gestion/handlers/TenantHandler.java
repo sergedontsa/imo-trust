@@ -1,7 +1,11 @@
 package com.trust.gestion.handlers;
 
+import com.trust.gestion.domain.TelephoneDto;
+import com.trust.gestion.domain.TenantDto;
+import com.trust.gestion.entities.TelephoneEntity;
 import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.enums.Status;
+import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
 import com.trust.gestion.utilities.Utilities;
 
@@ -9,11 +13,11 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class TenantHandler {
-    public TenantEntity tenantHandler(TenantResource resource, Optional<TenantEntity> optionalEntity) {
+    public TenantDto tenantHandler(TenantResource resource, Optional<TenantEntity> optionalEntity) {
         return optionalEntity.isPresent() ? this.updateTenant(resource, optionalEntity.get()) : this.createTenant(resource);
     }
-    private TenantEntity createTenant(TenantResource resource) {
-        return TenantEntity.builder()
+    private TenantDto createTenant(TenantResource resource) {
+        return TenantDto.builder()
                 .id(Utilities.getTenantId())
                 .firstName(resource.getFirstName())
                 .lastName(resource.getLastName())
@@ -31,8 +35,27 @@ public class TenantHandler {
 
     }
 
-    private TenantEntity updateTenant(TenantResource resource, TenantEntity entity) {
+    private TenantDto updateTenant(TenantResource resource, TenantEntity entity) {
         return null;
 
+    }
+
+    public TelephoneDto telephoneHandler(TelephoneResource resource, Optional<TelephoneEntity> optionalTelephoneEntity) {
+        return optionalTelephoneEntity.isPresent() ? this.updateTelephone(resource, optionalTelephoneEntity.get()) : this.createTelephone(resource);
+    }
+
+    private TelephoneDto createTelephone(TelephoneResource resource) {
+        return TelephoneDto.builder()
+                .areaCode(resource.getAreaCode())
+                .number(resource.getNumber())
+                .carrier(resource.getCarrier())
+                .country(resource.getCountry())
+                .registrationDate(Instant.now())
+                .lastUpdated(Instant.now())
+                .build();
+    }
+
+    private TelephoneDto updateTelephone(TelephoneResource resource, TelephoneEntity telephoneEntity) {
+        return null;
     }
 }

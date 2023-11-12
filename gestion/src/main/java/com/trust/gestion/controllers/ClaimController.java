@@ -20,11 +20,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/api/v1/claims")
 @AllArgsConstructor
-public class ClaimController implements Contract<ClaimDto, ClaimResource> {
+public class ClaimController {
     /**
      * @return
      */
-    @Override
+
     @GetMapping( value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<ClaimDto>> getById(@PathVariable String id) {
         return null;
@@ -33,7 +33,7 @@ public class ClaimController implements Contract<ClaimDto, ClaimResource> {
     /**
      * @return
      */
-    @Override
+
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<ClaimDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                          @RequestParam(required = false, defaultValue = "10") Integer size) {
@@ -43,7 +43,7 @@ public class ClaimController implements Contract<ClaimDto, ClaimResource> {
     /**
      * @return
      */
-    @Override
+
     @PostMapping( value = "", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(ClaimResource resource) {
         return null;
@@ -52,7 +52,7 @@ public class ClaimController implements Contract<ClaimDto, ClaimResource> {
     /**
      * @return
      */
-    @Override
+
     @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(@PathVariable String id, ClaimResource resource) {
         return null;
@@ -61,7 +61,7 @@ public class ClaimController implements Contract<ClaimDto, ClaimResource> {
     /**
      * @return
      */
-    @Override
+
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable String id) {
         return null;

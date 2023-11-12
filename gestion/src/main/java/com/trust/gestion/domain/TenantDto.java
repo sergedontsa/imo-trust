@@ -6,6 +6,7 @@ package com.trust.gestion.domain;
 
 
 import com.trust.gestion.entities.TenantEntity;
+import com.trust.gestion.enums.Gender;
 import com.trust.gestion.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class TenantDto implements Serializable {
     private String firstName;
     private String middleName;
     private String lastName;
-    private String gender;
+    private Gender gender;
     private Status status;
     private LocalDate dateOfBirth;
     private String countryOfOrigin;

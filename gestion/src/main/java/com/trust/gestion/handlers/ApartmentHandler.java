@@ -1,9 +1,8 @@
 package com.trust.gestion.handlers;
 
-import com.trust.gestion.entities.ApartmentEntity;
-import com.trust.gestion.entities.BuildingEntity;
-import com.trust.gestion.enums.Status;
 import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.entities.ApartmentEntity;
+import com.trust.gestion.enums.Status;
 import com.trust.gestion.resources.ApartmentResource;
 import com.trust.gestion.utilities.Utilities;
 import lombok.AllArgsConstructor;
@@ -11,19 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Component
 @AllArgsConstructor
 @Slf4j
 public class ApartmentHandler {
-    public ApartmentEntity apartmentHandle(ApartmentResource resource, Optional<ApartmentEntity> optionalEntity) {
+    public ApartmentDto apartmentHandle(ApartmentResource resource, Optional<ApartmentEntity> optionalEntity) {
         return optionalEntity.isPresent() ? this.updateApartment(resource, optionalEntity.get()) : this.createApartment(resource);
     }
-    private ApartmentEntity createApartment(ApartmentResource resource) {
-        return ApartmentEntity.builder()
+    private ApartmentDto createApartment(ApartmentResource resource) {
+        return ApartmentDto.builder()
                 .id(Utilities.getApartmentID())
                 .apartmentNumber(resource.getApartmentNumber())
                 .numBedrooms(resource.getNumBedrooms())
@@ -37,11 +34,8 @@ public class ApartmentHandler {
                 .build();
 
     }
-    private ApartmentEntity updateApartment(ApartmentResource resource, ApartmentEntity entity) {
+    private ApartmentDto updateApartment(ApartmentResource resource, ApartmentEntity entity) {
         return null;
     }
-    private List<ApartmentDto> updateApartments(List<ApartmentResource> resources, BuildingEntity entity) {
 
-        return Collections.emptyList();
-    }
 }

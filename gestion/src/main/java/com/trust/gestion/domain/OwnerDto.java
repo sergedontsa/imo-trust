@@ -31,8 +31,6 @@ public class OwnerDto implements Serializable {
     private String id;
     private Instant registrationDate;
     private Instant lastUpdated;
-    private List<OwnerAddressDto> address = new ArrayList<>();
-    private List<OwnerContactInformationDto> contacts = new ArrayList<>();
-    private List<OwnerInformationDto> information = new ArrayList<>();
-    private List<OwnerIdentificationDto> identifications = new ArrayList<>();
+    private List<AddressDto> address = new ArrayList<>();
+    private List<TelephoneDto> telephones = new ArrayList<>();
 }

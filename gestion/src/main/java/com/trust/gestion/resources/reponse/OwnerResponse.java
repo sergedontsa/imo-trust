@@ -20,5 +20,6 @@ public class OwnerResponse {
     private String middleName;
     private String gender;
     private List<AddressResponse> address;
+    private List<TelephoneResponse> telephones;
 
 }

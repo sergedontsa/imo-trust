@@ -21,12 +21,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/api/v1/buildings")
 @RequiredArgsConstructor
-public class BuildingController implements Contract<BuildingResponse, BuildingResource> {
+public class BuildingController {
     private final BuildingService service;
     /**
      * @return dto from bd
      */
-    @Override
+
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<BuildingResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.getById(id));
@@ -35,7 +35,7 @@ public class BuildingController implements Contract<BuildingResponse, BuildingRe
     /**
      * @return void
      */
-    @Override
+
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<BuildingResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                             @RequestParam(required = false, defaultValue = "10") Integer size) {
@@ -45,7 +45,7 @@ public class BuildingController implements Contract<BuildingResponse, BuildingRe
     /**
      * @return void
      */
-    @Override
+
     @PostMapping( value = "", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody BuildingResource resource) {
         this.service.create(resource);
@@ -55,7 +55,7 @@ public class BuildingController implements Contract<BuildingResponse, BuildingRe
     /**
      * @return void
      */
-    @Override
+
     @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody BuildingResource resource) {
         this.service.update(resource, id);
@@ -65,7 +65,7 @@ public class BuildingController implements Contract<BuildingResponse, BuildingRe
     /**
      * @return void
      */
-    @Override
+
     @DeleteMapping(value = "/owners/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         return null;

@@ -1,5 +1,6 @@
 package com.trust.gestion.controllers;
 
+import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.services.StatusChangeService;
 import com.trust.gestion.services.TenantService;
 import com.trust.gestion.domain.TenantDto;
@@ -92,6 +93,11 @@ public class TenantController{
     @PatchMapping(value = "/status", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateStatus(@Valid @RequestBody StatusChangeRequestResource resource) {
         this.statusChangeService.updateStatus(resource);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/telephone/{tenantId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addTelephone(@RequestBody List<TelephoneResource> resources, @PathVariable String tenantId){
+        service.addTelephone(resources, tenantId);
         return ResponseEntity.ok().build();
     }
 }

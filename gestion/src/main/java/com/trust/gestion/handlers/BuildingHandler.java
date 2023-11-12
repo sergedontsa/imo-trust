@@ -1,10 +1,8 @@
 package com.trust.gestion.handlers;
 
+import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.enums.BuildingStatus;
-import com.trust.gestion.domain.BuildingDto;
-import com.trust.gestion.mappers.BuildingMapper;
-import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.resources.BuildingResource;
 import com.trust.gestion.utilities.Utilities;
 import lombok.AllArgsConstructor;
@@ -18,12 +16,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @Slf4j
 public class BuildingHandler {
-    public BuildingEntity buildingHandler(BuildingResource resource, Optional<BuildingEntity> optionalEntity) {
+    public BuildingDto buildingHandler(BuildingResource resource, Optional<BuildingEntity> optionalEntity) {
         return optionalEntity.isPresent() ? this.updateBuilding(resource, optionalEntity.get()) : this.createBuilding(resource);
     }
-    private BuildingEntity updateBuilding(BuildingResource resource, BuildingEntity entity) {
-        BuildingMapper mapper = new BuildingMapperImpl();
-        BuildingDto dto = BuildingDto.builder()
+    private BuildingDto updateBuilding(BuildingResource resource, BuildingEntity entity) {
+        return BuildingDto.builder()
                 .designation(resource.getDesignation())
                 .description(resource.getDescription())
                 .category(resource.getCategory())
@@ -32,16 +29,10 @@ public class BuildingHandler {
                 .numberOfFloors(resource.getNumberOfFloors())
                 .build();
 
-        return mapper.partialUpdate(dto, entity)
-                .toBuilder()
-                .lastUpdated(Instant.now())
-                .registrationDate(entity.getRegistrationDate())
-                .status(entity.getStatus())
-                .build();
     }
     //BUILDING
-    private BuildingEntity createBuilding(BuildingResource resource) {
-        return BuildingEntity.builder()
+    private BuildingDto createBuilding(BuildingResource resource) {
+        return BuildingDto.builder()
                 .id(Utilities.getBuildingID())
                 .description(resource.getDescription())
                 .designation(resource.getDesignation())

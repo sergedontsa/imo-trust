@@ -3,6 +3,7 @@ package com.trust.gestion.controllers;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.AddressResource;
 import com.trust.gestion.resources.OwnerResource;
+import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.reponse.OwnerResponse;
 import com.trust.gestion.services.OwnerService;
 import jakarta.validation.Valid;
@@ -50,6 +51,11 @@ public class OwnerController {
     @PostMapping(value = "/address/{id}")
     public ResponseEntity<Void> createAddress(@PathVariable String id, @RequestBody @Valid List<AddressResource> resources) {
         service.createAddress(id, resources);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/telephone/{ownerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addTelephone(@RequestBody List<TelephoneResource> resources, @PathVariable String ownerId){
+        service.addTelephone(resources, ownerId);
         return ResponseEntity.ok().build();
     }
 

@@ -32,28 +32,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class TenantController{
     private final TenantService service;
     private final StatusChangeService statusChangeService;
-    /**
-     * @return
-     */
 
     @GetMapping( value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<TenantDto>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.getById(id));
     }
-
-    /**
-     * @return
-     */
-
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PageResponse<TenantDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                           @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(this.service.getAll(page, size));
     }
-
-    /**
-     * @return
-     */
 
     @PostMapping( value = "/{apartmentId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody List<TenantResource> resources, @PathVariable String apartmentId) {
@@ -66,19 +54,11 @@ public class TenantController{
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * @return
-     */
-
     @PatchMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> update(@NotNull @PathVariable String id, @Valid  @RequestBody TenantResource resource) {
         service.update(resource, id);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * @return Void
-     */
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable String id) {

@@ -1,7 +1,6 @@
 package com.trust.gestion.persistence;
 
 import com.trust.gestion.domain.TenantDto;
-import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.mappers.TenantMapper;
 import com.trust.gestion.mappers.TenantMapperImpl;
@@ -21,8 +20,9 @@ public class TenantPersistence {
         this.repository.save(mapper.toEntity(dto));
     }
 
-    public TenantEntity findById(String id) {
-        return this.repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementFoundException("Tenant not found"));
+    public TenantDto findById(String id) {
+        TenantMapper mapper = new TenantMapperImpl();
+        return mapper.toDto(this.repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementFoundException("Tenant not found")));
     }
 }

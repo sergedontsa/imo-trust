@@ -7,32 +7,22 @@ package com.trust.gestion.services;
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
-import com.trust.gestion.entities.ApartmentEntity;
-import com.trust.gestion.entities.TenantApartmentEntity;
-import com.trust.gestion.entities.TenantBillPaidEntity;
-import com.trust.gestion.entities.TenantBillingEntity;
 import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.enums.Status;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.TenantHandler;
-import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
 import com.trust.gestion.persistence.TelephonePersistence;
 import com.trust.gestion.persistence.TenantApartmentPersistence;
 import com.trust.gestion.persistence.TenantPersistence;
-import com.trust.gestion.repositories.ApartmentRepository;
-import com.trust.gestion.repositories.TenantApartmentRepository;
-import com.trust.gestion.repositories.TenantBillPaidRepository;
-import com.trust.gestion.repositories.TenantBillingRepository;
 import com.trust.gestion.repositories.TenantRepository;
 import com.trust.gestion.resources.BillPayResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
 import com.trust.gestion.utilities.ApartmentUtils;
-import com.trust.gestion.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +31,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,11 +42,7 @@ import static java.util.Optional.empty;
 @Slf4j
 public class TenantService {
     private final TenantRepository repository;
-    private final ApartmentRepository apartmentRepository;
     private final TenantPersistence persistence;
-    private final TenantApartmentRepository tenantApartmentRepository;
-    private final TenantBillingRepository billingRepository;
-    private final TenantBillPaidRepository billPaidRepository;
     private final TelephonePersistence telephonePersistence;
     private final ApartmentPersistence apartmentPersistence;
     private final TenantApartmentPersistence tenantApartmentPersistence;
@@ -71,7 +55,10 @@ public class TenantService {
         }
         ApartmentDto apartmentDto = this.apartmentPersistence.findApartment(apartmentId);
         ApartmentUtils.validateApartmentStatusOnCreateTenant(apartmentDto);
-        List<TenantDto> dtos = this.getEntities(resources);
+        TenantHandler handler = new TenantHandler();
+        List<TenantDto> dtos = resources.stream()
+                .map(resource -> handler.tenantHandler(resource, empty()))
+                .toList();
         apartmentDto.setStatus(Status.RESERVED);
         apartmentDto.setOccupant(apartmentDto.getOccupant() + dtos.size());
         List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartmentDto);
@@ -85,7 +72,10 @@ public class TenantService {
     }
     public void addTenantToApartment(List<TenantResource> resources, String apartmentId) {
         ApartmentDto apartment = this.apartmentPersistence.findApartment(apartmentId);
-        List<TenantDto> dtos = this.getEntities(resources);
+        TenantHandler handler = new TenantHandler();
+        List<TenantDto> dtos = resources.stream()
+                .map(resource -> handler.tenantHandler(resource, empty()))
+                .toList();
         List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartment);
         apartment.setOccupant(apartment.getOccupant() + dtos.size());
         apartment.setStatus(Status.RESERVED);
@@ -96,13 +86,11 @@ public class TenantService {
 
 
     public PageResponse<TenantDto> getById(String id) {
-        TenantEntity entity = this.findById(id);
-        List<TenantApartmentEntity> tenantApartmentEntity = this.tenantApartmentRepository.findByTenant(entity);
-
-        TenantDto tenantDto = this.mapEntityToDto(entity);
-        tenantDto.setApartments(this.getApartmentDtoFromTenantApartmentEntity(tenantApartmentEntity, id));
+        TenantDto dto = persistence.findById(id);
+        List<TenantApartmentDto> tenantApartment = this.tenantApartmentPersistence.getTenantApartment(dto.getId());
+        dto.setApartments(this.getApartmentDtoFromTenantApartmentEntity(tenantApartment, id));
         return (new PageResponse<TenantDto>()).toBuilder()
-                 .content(Collections.singletonList(tenantDto))
+                 .content(Collections.singletonList(dto))
                  .build();
     }
 
@@ -118,73 +106,24 @@ public class TenantService {
     }
 
     public void payBill(BillPayResource resource) {
-        //TODO add validation to check if the amount paid is equal to the rent amount
-        //TODO add validation to check if the amount paid is equal to the billing amount
-        //TODO add validation to check if the billing is not paid
-        //TODO refactor this method
-        TenantEntity tenantEntity = this.repository.findById(resource.getTenantId())
-                .orElseThrow(() -> new NoSuchElementFoundException("Tenant with id " + resource.getTenantId() + " not found"));
-        ApartmentEntity apartmentEntity = this.apartmentRepository.findById(resource.getApartmentId())
-                .orElseThrow(() -> new NoSuchElementFoundException("Apartment with id " + resource.getApartmentId() + " not found"));
-        TenantBillingEntity billingEntity = this.billingRepository.findByApartmentAndTenantAndId(apartmentEntity, tenantEntity, resource.getBilId());
-
-
-        if (apartmentEntity.getRentAmount().equals(resource.getAmountPaid()) && billingEntity.getBillingAmount().equals(resource.getAmountPaid())){
-
-            TenantBillPaidEntity billPaidEntity = (new TenantBillPaidEntity()).toBuilder()
-                    .id(Utilities.getRecordId())
-                    .tenant(tenantEntity)
-                    .bill(billingEntity)
-                    .amountPaid(resource.getAmountPaid())
-                    .paymentDate(LocalDate.now())
-                    .paymentMethod(resource.getPaymentMethod())
-                    .description(resource.getDescription())
-                    .registrationDate(Instant.now())
-                    .lastUpdated(Instant.now())
-                    .build();
-
-            this.billPaidRepository.save(billPaidEntity);
-            this.billingRepository.save(billingEntity.toBuilder()
-                    .status(Status.PAID)
-                    .build());
-        }else {
-            log.error("Amount paid is not equal to the rent amount");
-        }
-
 
     }
-    private List<ApartmentDto> getApartmentDtoFromTenantApartmentEntity(List<TenantApartmentEntity> tenantApartmentEntities, String tenantId){
-        return tenantApartmentEntities.stream()
-                .filter(tenantApartmentEntity -> tenantApartmentEntity.getTenant().getId().equals(tenantId))
-                .map(TenantApartmentEntity::getApartment)
+    private List<ApartmentDto> getApartmentDtoFromTenantApartmentEntity(List<TenantApartmentDto> tenantApartments, String tenantId){
+        return tenantApartments.stream()
+                .filter(tenantApartment -> tenantApartment.getTenant().getId().equals(tenantId))
+                .map(TenantApartmentDto::getApartment)
                 .toList()
                 .stream()
-                .map(entity -> (new ApartmentMapperImpl()).toDto(entity))
                 .toList();
     }
     private TenantDto mapEntityToDto(TenantEntity entity) {
         return (new TenantMapperImpl()).toDto(entity);
     }
-    private ApartmentEntity findApartment(String apartmentId){
-        return this.apartmentRepository.findById(apartmentId)
-                .orElseThrow(() -> new NoSuchElementFoundException("Apartment with id " + apartmentId + " not found"));
-    }
-    private List<TenantDto> getEntities(List<TenantResource> resources){
-        return resources.stream()
-                .map(resource -> (new TenantHandler()).tenantHandler(resource, empty()))
-                .toList();
-    }
-    private TenantEntity findById(String id) {
-        return this.repository.findById(id).orElseThrow(()->
-                new NoSuchElementFoundException("Tenant with id " + id + " not found"));
-    }
-
-
 
     public void addTelephone(List<TelephoneResource> resources, String tenantId) {
-        this.persistence.findById(tenantId);
+        TenantDto dto = this.persistence.findById(tenantId);
         TenantHandler handler = new TenantHandler();
-        resources.forEach(resource -> resource.setEntityId(tenantId));
+        resources.forEach(resource -> resource.setEntityId(dto.getId()));
         this.telephonePersistence.saveAll(resources.stream()
                 .map(resource -> handler.telephoneHandler(resource, empty()))
                 .toList());

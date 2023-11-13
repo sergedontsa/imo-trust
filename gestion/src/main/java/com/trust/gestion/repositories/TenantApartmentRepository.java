@@ -16,6 +16,12 @@ public interface TenantApartmentRepository extends JpaRepository<TenantApartment
     @Query("SELECT t FROM TenantApartmentEntity t WHERE t.apartment = ?1")
     List<TenantApartmentEntity> findByApartment(ApartmentEntity apartment);
 
+    @Query("SELECT t FROM TenantApartmentEntity t WHERE t.apartment.id = :apartmentId")
+    List<TenantApartmentEntity> findByApartmentId(@Param("apartmentId") String apartmentId);
+
     @Query("SELECT t FROM TenantApartmentEntity t WHERE t.tenant = :tenant")
     List<TenantApartmentEntity> findByTenant(@Param("tenant") TenantEntity tenant);
+
+    @Query("SELECT t FROM TenantApartmentEntity t WHERE t.tenant.id = :tenantId")
+    List<TenantApartmentEntity> findByTenantId(@Param("tenantId") String tenantId);
 }

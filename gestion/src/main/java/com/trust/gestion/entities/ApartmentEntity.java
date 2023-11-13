@@ -43,7 +43,7 @@ public class ApartmentEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "building_id", nullable = false)
+    @JoinColumn(name = "building_id")
     private BuildingEntity building;
 
     @Column(name = "num_bedrooms")

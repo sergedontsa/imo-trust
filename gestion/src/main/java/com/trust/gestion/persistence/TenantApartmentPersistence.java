@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -32,4 +33,12 @@ public class TenantApartmentPersistence {
     public void saveAll(List<TenantApartmentDto> tenantApartmentEntities) {
     }
 
+    public List<TenantApartmentDto> getTenantApartment(String apartmentId) {
+//        TenantApartmentMapper mapper = new TenantApartmentMapperImpl();
+//        return this.repository.findByApartmentId(apartmentId)
+//                .stream()
+//                .map(mapper::toDto)
+//                .toList();
+        return Collections.singletonList(TenantApartmentDto.builder().build());
+    }
 }

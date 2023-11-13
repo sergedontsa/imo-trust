@@ -2,8 +2,8 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.domain.BuildingDto;
+import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.entities.ApartmentEntity;
-import com.trust.gestion.entities.TenantApartmentEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.handlers.ApartmentHandler;
 import com.trust.gestion.mappers.ApartmentMapper;
@@ -13,6 +13,7 @@ import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
 import com.trust.gestion.persistence.BuildingPersistence;
+import com.trust.gestion.persistence.TenantApartmentPersistence;
 import com.trust.gestion.repositories.ApartmentRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.TenantApartmentRepository;
@@ -42,6 +43,7 @@ public class ApartmentServices  {
     private final ApartmentPersistence persistence;
     private final BuildingRepository buildingRepository;
     private final TenantApartmentRepository tenantApartmentRepository;
+    private final TenantApartmentPersistence tenantApartmentPersistence;
     private final BuildingPersistence buildingPersistence;
 
     public PageResponse<ApartmentResponse> getAll(Integer page, Integer size){
@@ -57,20 +59,21 @@ public class ApartmentServices  {
     }
 
     public PageResponse<ApartmentResponse> getById(String id) {
-        ApartmentEntity entity = this.findById(id);
-        List<TenantApartmentEntity> tenantApartmentEntities = this.tenantApartmentRepository.findByApartment(entity);
+        ApartmentDto apartment = this.persistence.findApartment(id);
+        List<TenantApartmentDto> tenantApartment = this.tenantApartmentPersistence.getTenantApartment(apartment.getId());
         List<TenantResponse> tenants = new ArrayList<>();
         TenantMapper tenantMapper = new TenantMapperImpl();
-        if (CollectionUtils.isNotEmpty(tenantApartmentEntities)){
-            tenants = tenantApartmentEntities.stream()
-                    .map(TenantApartmentEntity::getTenant)
+        if (CollectionUtils.isNotEmpty(tenantApartment)){
+            tenants = tenantApartment.stream()
+                    .map(TenantApartmentDto::getTenant)
                     .toList()
                     .stream()
                     .map(tenantMapper::toResponse)
                     .toList();
 
         }
-        ApartmentResponse response = (new ApartmentMapperImpl()).toResponse(entity);
+        ApartmentMapper mapper = new ApartmentMapperImpl();
+        ApartmentResponse response = mapper.toResponse(apartment);
         response.setTenants(tenants);
 
         return (new PageResponse<ApartmentResponse>())

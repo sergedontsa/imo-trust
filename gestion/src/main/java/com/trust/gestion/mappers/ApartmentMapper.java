@@ -11,6 +11,7 @@ import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.resources.reponse.ApartmentResponse;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
@@ -22,16 +23,19 @@ import org.mapstruct.ReportingPolicy;
 public interface ApartmentMapper {
     ApartmentEntity toEntity(ApartmentDto apartmentDto);
 
+    @Mapping(target = "building.apartments", ignore = true)
     ApartmentDto toDto(ApartmentEntity apartmentEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ApartmentEntity partialUpdate(ApartmentDto apartmentDto, @MappingTarget ApartmentEntity apartmentEntity);
 
-//    @Mapping(target = "registrationDate", ignore = true)
-//    @Mapping(target = "lastUpdated", ignore = true)
     ApartmentDto fromResourceToDto(ApartmentResource resource);
 
-    ApartmentResponse toApartmentResponse(ApartmentEntity entity);
-
+    @Mapping(target = "building.apartments", ignore = true)
+    @Mapping(target = "building.assigned", ignore = true)
+    @Mapping(target = "building.status", ignore = true)
+    @Mapping(target = "building.owners", ignore = true)
     ApartmentResponse toResponse(ApartmentEntity entity);
+
+    ApartmentResponse toResponse(ApartmentDto dto);
 }

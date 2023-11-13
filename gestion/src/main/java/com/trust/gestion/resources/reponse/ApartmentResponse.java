@@ -23,4 +23,5 @@ public class ApartmentResponse {
     private Integer occupant;
     private Status status;
     private List<TenantResponse> tenants;
+    private BuildingResponse building;
 }

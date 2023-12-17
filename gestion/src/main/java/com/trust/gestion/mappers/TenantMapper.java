@@ -28,5 +28,5 @@ public interface TenantMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     TenantEntity partialUpdate(TenantDto tenantDto, @MappingTarget TenantEntity tenantEntity);
 
-    TenantResponse toResponse(TenantEntity entity);
+    TenantResponse toResponse(TenantDto entity);
 }

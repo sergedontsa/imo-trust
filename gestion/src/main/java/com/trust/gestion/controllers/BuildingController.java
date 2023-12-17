@@ -1,9 +1,11 @@
 package com.trust.gestion.controllers;
 
 import com.trust.gestion.pages.PageResponse;
+import com.trust.gestion.resources.AddressResource;
 import com.trust.gestion.resources.BuildingResource;
 import com.trust.gestion.resources.reponse.BuildingResponse;
 import com.trust.gestion.services.BuildingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,6 +51,12 @@ public class BuildingController {
     @PostMapping( value = "", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@RequestBody BuildingResource resource) {
         this.service.create(resource);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping( value = "/address/{buildingId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> createAddress(@RequestBody @Valid AddressResource resource, @PathVariable String buildingId) {
+        this.service.createAddress(resource, buildingId);
         return ResponseEntity.ok().build();
     }
 

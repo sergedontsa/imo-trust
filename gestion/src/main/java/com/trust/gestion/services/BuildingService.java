@@ -4,21 +4,21 @@
 
 package com.trust.gestion.services;
 
+import com.trust.gestion.domain.AddressDto;
 import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.BuildingHandler;
-import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.BuildingPersistence;
 import com.trust.gestion.repositories.BuildingRepository;
+import com.trust.gestion.resources.AddressResource;
 import com.trust.gestion.resources.BuildingResource;
 import com.trust.gestion.resources.reponse.BuildingResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -35,26 +35,17 @@ public class BuildingService {
     private final BuildingPersistence persistence;
 
     public PageResponse<BuildingResponse> getById(String id) throws TrustImoException {
-        PageResponse<BuildingResponse> pageResponse = new PageResponse<>();
-        BuildingMapper mapper = new BuildingMapperImpl();
-        BuildingResponse response = mapper.toResponse(this.persistence.getOne(id));
-        return pageResponse
-                .toBuilder()
+        BuildingResponse response = (new BuildingMapperImpl()).toResponse(this.persistence.getOne(id));
+        return PageResponse.<BuildingResponse>builder()
                 .content(Collections.singletonList(response))
                 .build();
     }
     public PageResponse<BuildingResponse> getAll(Integer page, Integer size) {
-        Page<BuildingDto> pages = this.persistence.getAll(PageRequest.of(page, size));
-        BuildingMapper mapper = new BuildingMapperImpl();
         return PageResponse.<BuildingResponse>builder()
-                .content(pages.getContent()
-                                .stream()
-                                .map(mapper::toResponse)
-                                .toList())
-                .totalElements(pages.getTotalElements())
-                .totalPages(pages.getTotalPages())
-                .size(pages.getSize())
-                .number(pages.getNumber())
+                .content(this.persistence.getAll(PageRequest.of(page, size))
+                        .stream()
+                        .map((new BuildingMapperImpl())::toResponse)
+                        .toList())
                 .build();
     }
 
@@ -77,4 +68,12 @@ public class BuildingService {
     }
 
 
+    public void createAddress(AddressResource resource, String buildingId) {
+
+        BuildingDto building = this.persistence.findBuildingById(buildingId);
+        BuildingHandler handler = new BuildingHandler();
+        AddressDto dto = handler.addressHandler(resource, empty());
+        dto.setEntityId(building.getId());
+        this.persistence.createAddress(dto);
+    }
 }

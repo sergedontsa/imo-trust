@@ -3,7 +3,6 @@ package com.trust.gestion.persistence;
 import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.mappers.PersonMapper;
 import com.trust.gestion.mappers.PersonMapperImpl;
 import com.trust.gestion.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +19,8 @@ public class PersonPersistence {
         this.repository.save(entity);
     }
 
-    public PersonDto findById(String id){
-        PersonMapper mapper = new PersonMapperImpl();
-        return mapper.toDto(this.repository.findById(id)
+    public PersonDto getById(String id){
+        return (new PersonMapperImpl()).toDto(this.repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementFoundException("Person not found")));
 
     }

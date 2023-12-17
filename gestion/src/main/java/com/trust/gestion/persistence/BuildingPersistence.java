@@ -1,5 +1,6 @@
 package com.trust.gestion.persistence;
 
+import com.trust.gestion.domain.AddressDto;
 import com.trust.gestion.domain.BuildingDto;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.domain.PersonDto;
@@ -37,17 +38,30 @@ public class BuildingPersistence {
     }
 
     public BuildingDto getOne(String buildingId) {
-        BuildingMapper mapper = new BuildingMapperImpl();
         ApartmentMapper apartmentMapper = new ApartmentMapperImpl();
         BuildingEntity entity = this.findById(buildingId);
         List<OwnerDto> owners = this.getBuildingOwner(entity);
-        return mapper.toDto(entity).toBuilder().owners(owners).apartments(entity.getApartments().stream().map(apartmentMapper::toDto).toList()).build();
+        return (new BuildingMapperImpl()).toDto(entity)
+                .toBuilder()
+                .owners(owners)
+                .apartments(entity.getApartments().stream().map(apartmentMapper::toDto).toList())
+                .build();
 
     }
 
-    public Page<BuildingDto> getAll(PageRequest pageRequest) {
+    public List<BuildingDto> getAll(PageRequest pageRequest) {
+        Page<BuildingEntity> building = this.repository.findAll(pageRequest);
         BuildingMapper mapper = new BuildingMapperImpl();
-        return this.repository.findAll(pageRequest).map(mapper::toDto);
+        return building.getContent()
+                .stream()
+                .map(mapper::toDto)
+                .toList()
+                .stream()
+                .map(dto -> dto.toBuilder()
+                        .owners(this.buildingOwnerPersistence.findByBuilding(this.findById(dto.getId())))
+                        .build())
+                .toList();
+
     }
 
     private BuildingEntity findById(String buildingId) {
@@ -57,7 +71,6 @@ public class BuildingPersistence {
     public List<OwnerDto> getBuildingOwner(BuildingEntity entity) {
         //todo refactor this
         List<OwnerDto> owners = this.buildingOwnerPersistence.findByBuilding(entity);
-
         return owners.stream()
                 .collect(Collectors.toMap(ownerEntity -> ownerEntity, ownerEntity -> this.getPersonEntity(ownerEntity.getId())))
                 .keySet()
@@ -69,7 +82,7 @@ public class BuildingPersistence {
     }
 
     private PersonDto getPersonEntity(String id) {
-        return this.personPersistence.findById(id);
+        return this.personPersistence.getById(id);
     }
 
 
@@ -78,5 +91,9 @@ public class BuildingPersistence {
         return this.repository.findById(buildingId)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new NoSuchElementFoundException("Building with id " + buildingId + " not found"));
+    }
+
+    public void createAddress(AddressDto dto) {
+        this.addressPersistence.save(dto);
     }
 }

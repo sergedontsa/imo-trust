@@ -6,8 +6,6 @@ import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.entities.BuildingOwnerEntity;
 import com.trust.gestion.mappers.BuildingOwnerMapper;
 import com.trust.gestion.mappers.BuildingOwnerMapperImpl;
-import com.trust.gestion.mappers.OwnerMapper;
-import com.trust.gestion.mappers.OwnerMapperImpl;
 import com.trust.gestion.repositories.BuildingOwnerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +18,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BuildingOwnerPersistence {
     private final BuildingOwnerRepository repository;
+    private final OwnerPersistence ownerPersistence;
 
     public List<OwnerDto> findByBuilding(BuildingEntity building){
-        OwnerMapper mapper = new OwnerMapperImpl();
-
         return this.repository.findByBuilding(building)
                 .stream()
                 .map(BuildingOwnerEntity::getOwner)
-                .map(mapper::toDto)
+                .toList()
+                .stream()
+                .map(entity -> this.ownerPersistence.getOne(entity.getId()))
                 .toList();
+
     }
     public void save(BuildingOwnerDto dto){
         BuildingOwnerMapper mapper = new BuildingOwnerMapperImpl();

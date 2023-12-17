@@ -6,6 +6,7 @@ package com.trust.gestion.domain;
 
 
 import com.trust.gestion.entities.OwnerEntity;
+import com.trust.gestion.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class OwnerDto implements Serializable {
     private String id;
     private Instant registrationDate;
     private Instant lastUpdated;
+    private String firstName;
+    private String lastName;
+    private String middleName;
+    private Gender gender;
     private List<AddressDto> address = new ArrayList<>();
     private List<TelephoneDto> telephones = new ArrayList<>();
 }

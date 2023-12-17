@@ -37,5 +37,6 @@ public interface BuildingMapper {
     @Mapping(target = "apartments", ignore = true)
     BuildingEntity partialUpdate(BuildingDto buildingDto, @MappingTarget BuildingEntity buildingEntity);
 
+    @Mapping(target = "apartments.building", ignore = true)
     BuildingResponse toResponse(BuildingDto dto);
 }

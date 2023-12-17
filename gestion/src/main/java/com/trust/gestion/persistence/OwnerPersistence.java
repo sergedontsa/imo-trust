@@ -86,7 +86,7 @@ public class OwnerPersistence {
                 .orElseThrow(() -> new NoSuchElementFoundException("Owner not found"));
     }
     private PersonDto getPersonEntity(String id) {
-        return this.personPersistence.findById(id);
+        return this.personPersistence.getById(id);
     }
 
 }

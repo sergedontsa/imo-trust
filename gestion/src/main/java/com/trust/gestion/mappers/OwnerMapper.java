@@ -39,7 +39,7 @@ public interface OwnerMapper {
     @Mapping(target = "lastUpdated", ignore = true)
     OwnerDto toDto(OwnerEntity entity, PersonDto personDto);
 
-    OwnerResponse toResponse(OwnerDto dto);
+    OwnerResponse toResponse(OwnerDto owner);
 
 
 }

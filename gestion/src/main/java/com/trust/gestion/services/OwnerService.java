@@ -8,9 +8,7 @@ import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.entities.AddressEntity;
 import com.trust.gestion.entities.BuildingEntity;
-import com.trust.gestion.entities.BuildingOwnerEntity;
 import com.trust.gestion.entities.OwnerEntity;
-import com.trust.gestion.entities.PersonEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.handlers.OwnerHandler;
 import com.trust.gestion.mappers.BuildingMapper;
@@ -19,13 +17,11 @@ import com.trust.gestion.mappers.OwnerMapper;
 import com.trust.gestion.mappers.OwnerMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.BuildingOwnerPersistence;
-import com.trust.gestion.persistence.BuildingPersistence;
 import com.trust.gestion.persistence.OwnerPersistence;
 import com.trust.gestion.persistence.TelephonePersistence;
 import com.trust.gestion.repositories.AddressRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.OwnerRepository;
-import com.trust.gestion.repositories.PersonRepository;
 import com.trust.gestion.resources.AddressResource;
 import com.trust.gestion.resources.OwnerResource;
 import com.trust.gestion.resources.TelephoneResource;
@@ -48,30 +44,29 @@ public class OwnerService {
     private final OwnerRepository repository;
     private final BuildingRepository buildingRepository;
     private final OwnerPersistence persistence;
-    private final PersonRepository personRepository;
     private final AddressRepository addressRepository;
     private final TelephonePersistence telephonePersistence;
-    private final BuildingPersistence buildingPersistence;
     private final BuildingOwnerPersistence buildingOwnerPersistence;
 
     public PageResponse<OwnerResponse> getById(String id) {
         PageResponse<OwnerResponse> pageResponse = new PageResponse<>();
-        OwnerMapper mapper = new OwnerMapperImpl();
+        OwnerDto dto = this.persistence.getOne(id);
         return pageResponse.toBuilder()
-                .content(Collections.singletonList(mapper.toResponse(this.persistence.getOne(id))))
+                .content(Collections.singletonList((new OwnerMapperImpl()).toResponse(dto)))
                 .build();
 
     }
     public PageResponse<OwnerResponse> getAll(Integer page, Integer size){
 
         OwnerMapper mapper = new OwnerMapperImpl();
+        List<OwnerDto> ownerDtos = this.persistence.getAll(page, size).getContent();
+        List<OwnerResponse> content = ownerDtos.stream()
+                .map(mapper::toResponse)
+                .toList();
+
         return (new PageResponse<OwnerResponse>())
                 .toBuilder()
-                .content(this.persistence.getAll(page, size)
-                        .getContent()
-                        .stream()
-                        .map(mapper::toResponse)
-                        .toList())
+                .content(content)
                 .build();
 
     }
@@ -116,20 +111,14 @@ public class OwnerService {
                 .lastUpdated(Instant.now())
                 .build();
     }
-    private BuildingOwnerEntity.BuildingOwnerEntityBuilder getBuildingOwnerEntity() {
-        return BuildingOwnerEntity.builder()
-                .registrationDate(Instant.now())
-                .lastUpdated(Instant.now());
-    }
+
     private BuildingEntity findBuildingById(String id) {
         return this.buildingRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Building not found"));
     }
     private OwnerEntity findById(String id) {
         return this.repository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Owner not found"));
     }
-    private PersonEntity getPersonEntity(String id){
-        return this.personRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("Person not found"));
-    }
+
     private void validateBuilding(String id) {
         this.findBuildingById(id);
 

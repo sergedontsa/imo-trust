@@ -44,6 +44,5 @@ public class ApartmentDto implements Serializable {
     private Instant lastUpdated;
     private Status status;
     private List<TenantDto> tenants;
-    private BuildingDto building;
 
 }

@@ -10,6 +10,7 @@ import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.BuildingHandler;
+import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.BuildingPersistence;
@@ -35,7 +36,9 @@ public class BuildingService {
     private final BuildingPersistence persistence;
 
     public PageResponse<BuildingResponse> getById(String id) throws TrustImoException {
-        BuildingResponse response = (new BuildingMapperImpl()).toResponse(this.persistence.getOne(id));
+        BuildingDto dto = this.persistence.getOne(id);
+        BuildingMapper mapper = new BuildingMapperImpl();
+        BuildingResponse response = mapper.toResponse(dto);
         return PageResponse.<BuildingResponse>builder()
                 .content(Collections.singletonList(response))
                 .build();

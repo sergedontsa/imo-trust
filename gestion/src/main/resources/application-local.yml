@@ -17,6 +17,10 @@ spring:
     name: imogestion
   main:
     allow-bean-definition-overriding: true
+  security:
+    user:
+      name: admin@trust.com
+      password: admin
 
   devtools:
     add-properties: 'false'

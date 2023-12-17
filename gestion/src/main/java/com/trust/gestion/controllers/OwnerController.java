@@ -48,7 +48,7 @@ public class OwnerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/address/{id}")
+    @PostMapping(value = "/address/{id}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createAddress(@PathVariable String id, @RequestBody @Valid List<AddressResource> resources) {
         service.createAddress(id, resources);
         return ResponseEntity.ok().build();

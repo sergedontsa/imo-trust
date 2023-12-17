@@ -44,11 +44,7 @@ public class OwnerPersistence {
     public void saveAddress(List<AddressDto> dtos){
         this.addressPersistence.saveAll(dtos);
     }
-    private void saveOwnerInBd(OwnerEntity entity, PersonEntity person) {
-        this.repository.save(entity);
-        this.personPersistence.save(person);
-        this.actionPersistence.createAction(ActionTitle.OWNER_CREATE);
-    }
+
     public OwnerDto getOne(String ownerId){
         OwnerEntity entity = this.findById(ownerId);
         OwnerMapper mapper = new OwnerMapperImpl();
@@ -80,6 +76,11 @@ public class OwnerPersistence {
                  .number(pages.getNumber())
                  .build();
 
+    }
+    private void saveOwnerInBd(OwnerEntity entity, PersonEntity person) {
+        this.repository.save(entity);
+        this.personPersistence.save(person);
+        this.actionPersistence.createAction(ActionTitle.OWNER_CREATE);
     }
     private OwnerEntity findById(String id) {
         return this.repository.findById(id)

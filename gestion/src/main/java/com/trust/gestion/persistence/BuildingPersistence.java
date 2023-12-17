@@ -7,8 +7,6 @@ import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.enums.ActionTitle;
 import com.trust.gestion.exception.NoSuchElementFoundException;
-import com.trust.gestion.mappers.ApartmentMapper;
-import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.mappers.BuildingMapper;
 import com.trust.gestion.mappers.BuildingMapperImpl;
 import com.trust.gestion.repositories.BuildingRepository;
@@ -38,13 +36,11 @@ public class BuildingPersistence {
     }
 
     public BuildingDto getOne(String buildingId) {
-        ApartmentMapper apartmentMapper = new ApartmentMapperImpl();
         BuildingEntity entity = this.findById(buildingId);
         List<OwnerDto> owners = this.getBuildingOwner(entity);
         return (new BuildingMapperImpl()).toDto(entity)
                 .toBuilder()
                 .owners(owners)
-                .apartments(entity.getApartments().stream().map(apartmentMapper::toDto).toList())
                 .build();
 
     }
@@ -69,7 +65,6 @@ public class BuildingPersistence {
     }
 
     public List<OwnerDto> getBuildingOwner(BuildingEntity entity) {
-        //todo refactor this
         List<OwnerDto> owners = this.buildingOwnerPersistence.findByBuilding(entity);
         return owners.stream()
                 .collect(Collectors.toMap(ownerEntity -> ownerEntity, ownerEntity -> this.getPersonEntity(ownerEntity.getId())))

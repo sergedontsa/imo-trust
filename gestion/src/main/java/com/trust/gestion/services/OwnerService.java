@@ -72,7 +72,6 @@ public class OwnerService {
     }
     public void createAddress(String ownerId, List<AddressResource> resources){
         OwnerHandler handler = new OwnerHandler();
-
         AddressUtils.validateDuplicatedAddressType(resources);
         List<AddressDto> dtos = handler.addressHandler(this.findById(ownerId).getId(), resources, empty());
         List<AddressEntity> addressInBd = this.addressRepository.findByEntityId(ownerId);

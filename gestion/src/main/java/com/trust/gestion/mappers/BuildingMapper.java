@@ -30,13 +30,13 @@ public interface BuildingMapper {
 
     @Mapping(target = "apartments", ignore = true)
     BuildingEntity toEntity(BuildingDto buildingDto);
-
+    @Mapping(target = "apartments", ignore = true)
     BuildingDto toDto(BuildingEntity buildingEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "apartments", ignore = true)
     BuildingEntity partialUpdate(BuildingDto buildingDto, @MappingTarget BuildingEntity buildingEntity);
 
-    @Mapping(target = "apartments.building", ignore = true)
+    @Mapping(target = "apartments", ignore = true)
     BuildingResponse toResponse(BuildingDto dto);
 }

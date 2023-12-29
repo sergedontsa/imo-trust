@@ -48,6 +48,7 @@ public class BuildingPersistence {
     public List<BuildingDto> getAll(PageRequest pageRequest) {
         Page<BuildingEntity> building = this.repository.findAll(pageRequest);
         BuildingMapper mapper = new BuildingMapperImpl();
+
         return building.getContent()
                 .stream()
                 .map(mapper::toDto)

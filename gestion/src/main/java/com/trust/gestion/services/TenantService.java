@@ -61,7 +61,7 @@ public class TenantService {
                 .toList();
         apartmentDto.setStatus(Status.RESERVED);
         apartmentDto.setOccupant(apartmentDto.getOccupant() + dtos.size());
-        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartmentDto);
+        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.buildTenantApartment(dtos, apartmentDto);
 
         this.apartmentPersistence.save(apartmentDto);
         dtos.forEach(this.persistence::create);
@@ -69,6 +69,7 @@ public class TenantService {
 
     }
     public void update(TenantResource resource, String id) {
+        //will work on this later
     }
     public void addTenantToApartment(List<TenantResource> resources, String apartmentId) {
         ApartmentDto apartment = this.apartmentPersistence.findApartment(apartmentId);
@@ -76,7 +77,7 @@ public class TenantService {
         List<TenantDto> dtos = resources.stream()
                 .map(resource -> handler.tenantHandler(resource, empty()))
                 .toList();
-        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.getTenantApartment(dtos, apartment);
+        List<TenantApartmentDto> tenantApartmentEntities = this.tenantApartmentPersistence.buildTenantApartment(dtos, apartment);
         apartment.setOccupant(apartment.getOccupant() + dtos.size());
         apartment.setStatus(Status.RESERVED);
         this.apartmentPersistence.save(apartment);
@@ -87,8 +88,6 @@ public class TenantService {
 
     public PageResponse<TenantDto> getById(String id) {
         TenantDto dto = persistence.findById(id);
-        List<TenantApartmentDto> tenantApartment = this.tenantApartmentPersistence.getTenantApartment(dto.getId());
-        dto.setApartments(this.getApartmentDtoFromTenantApartmentEntity(tenantApartment, id));
         return (new PageResponse<TenantDto>()).toBuilder()
                  .content(Collections.singletonList(dto))
                  .build();
@@ -106,15 +105,8 @@ public class TenantService {
     }
 
     public void payBill(BillPayResource resource) {
+        //wil work on this later
 
-    }
-    private List<ApartmentDto> getApartmentDtoFromTenantApartmentEntity(List<TenantApartmentDto> tenantApartments, String tenantId){
-        return tenantApartments.stream()
-                .filter(tenantApartment -> tenantApartment.getTenant().getId().equals(tenantId))
-                .map(TenantApartmentDto::getApartment)
-                .toList()
-                .stream()
-                .toList();
     }
     private TenantDto mapEntityToDto(TenantEntity entity) {
         return (new TenantMapperImpl()).toDto(entity);

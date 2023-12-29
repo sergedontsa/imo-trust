@@ -24,6 +24,9 @@ public interface ApartmentMapper {
     ApartmentEntity toEntity(ApartmentDto apartmentDto);
 
     @Mapping(target = "building.apartments", ignore = true)
+    @Mapping(target = "building.assigned", ignore = true)
+    @Mapping(target = "building.status", ignore = true)
+    @Mapping(target = "building.owners", ignore = true)
     ApartmentDto toDto(ApartmentEntity apartmentEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

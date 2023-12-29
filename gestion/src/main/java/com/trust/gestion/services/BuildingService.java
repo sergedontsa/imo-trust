@@ -47,9 +47,10 @@ public class BuildingService {
         return PageResponse.<BuildingResponse>builder()
                 .content(this.persistence.getAll(PageRequest.of(page, size))
                         .stream()
-                        .map((new BuildingMapperImpl())::toResponse)
+                        .map(dto -> (new BuildingMapperImpl()).toResponse(dto))
                         .toList())
                 .build();
+
     }
 
 

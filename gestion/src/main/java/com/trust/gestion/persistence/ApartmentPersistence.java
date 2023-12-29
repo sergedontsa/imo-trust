@@ -2,6 +2,8 @@ package com.trust.gestion.persistence;
 
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.domain.BuildingDto;
+import com.trust.gestion.domain.TenantApartmentDto;
+import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.BuildingEntity;
 import com.trust.gestion.enums.ActionTitle;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ApartmentPersistence {
     private final ApartmentRepository repository;
     private final ActionPersistence actionPersistence;
+    private final TenantApartmentPersistence tenantApartmentPersistence;
     private final BuildingRepository buildingRepository;
 
     public void save(List<ApartmentDto> dtos, BuildingDto building) {
@@ -43,9 +46,13 @@ public class ApartmentPersistence {
     }
 
     public ApartmentDto findApartment(String apartmentId) {
-        ApartmentMapper mapper = new ApartmentMapperImpl();
-        return this.repository.findById(apartmentId)
-                .map(mapper::toDto)
-                .orElseThrow();
+        List<TenantDto> tenants = this.tenantApartmentPersistence.getTenantApartmentByAptId(apartmentId)
+                .stream()
+                .map(TenantApartmentDto::getTenant)
+                .toList();
+        return (new ApartmentMapperImpl()).toDto(this.repository.findById(apartmentId).orElseThrow())
+                .toBuilder()
+                .tenants(tenants)
+                .build();
     }
 }

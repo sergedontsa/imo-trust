@@ -42,11 +42,6 @@ public class TenantApartmentEntity {
     @JoinColumn(name = "apartment_id", nullable = false)
     private ApartmentEntity apartment;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "building_id", nullable = false)
-    private BuildingEntity building;
-
     @Size(max = 255)
     @Column(name = "description")
     private String description;

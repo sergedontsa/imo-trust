@@ -1,5 +1,6 @@
 package com.trust.gestion.resources.reponse;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trust.gestion.enums.BuildingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @Builder(toBuilder = true)
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BuildingResponse {
     private String id;
     private String designation;

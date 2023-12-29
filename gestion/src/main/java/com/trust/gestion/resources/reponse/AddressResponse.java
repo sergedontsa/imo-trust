@@ -1,5 +1,6 @@
 package com.trust.gestion.resources.reponse;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trust.gestion.enums.AddressType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddressResponse {
     private String id;
     private String civicNumber;

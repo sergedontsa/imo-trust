@@ -7,18 +7,15 @@ package com.trust.gestion.services;
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
-import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.enums.Status;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.TenantHandler;
-import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
 import com.trust.gestion.persistence.TelephonePersistence;
 import com.trust.gestion.persistence.TenantApartmentPersistence;
 import com.trust.gestion.persistence.TenantPersistence;
-import com.trust.gestion.repositories.TenantRepository;
 import com.trust.gestion.resources.BillPayResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
@@ -27,7 +24,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +37,6 @@ import static java.util.Optional.empty;
 @Transactional
 @Slf4j
 public class TenantService {
-    private final TenantRepository repository;
     private final TenantPersistence persistence;
     private final TelephonePersistence telephonePersistence;
     private final ApartmentPersistence apartmentPersistence;
@@ -94,22 +89,18 @@ public class TenantService {
     }
 
     public PageResponse<TenantDto> getAll(Integer page, Integer size) {
-        Page<TenantEntity> entities = this.repository.findAll(PageRequest.of(page, size));
         return (new PageResponse<TenantDto>()).toBuilder()
-                .content(entities.getContent().stream().map(this::mapEntityToDto).toList())
-                .totalPages(entities.getTotalPages())
-                .totalElements(entities.getTotalElements())
-                .size(entities.getSize())
-                .number(entities.getNumber())
+                .content(this.persistence.getAll(PageRequest.of(page, size)))
+                .totalPages(0)
+                .totalElements(0)
+                .size(0)
+                .number(0)
                 .build();
     }
 
     public void payBill(BillPayResource resource) {
         //wil work on this later
 
-    }
-    private TenantDto mapEntityToDto(TenantEntity entity) {
-        return (new TenantMapperImpl()).toDto(entity);
     }
 
     public void addTelephone(List<TelephoneResource> resources, String tenantId) {

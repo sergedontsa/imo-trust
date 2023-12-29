@@ -8,6 +8,8 @@ import com.trust.gestion.mappers.ApartmentMapper;
 import com.trust.gestion.mappers.ApartmentMapperImpl;
 import com.trust.gestion.mappers.TenantApartmentMapper;
 import com.trust.gestion.mappers.TenantApartmentMapperImpl;
+import com.trust.gestion.mappers.TenantMapper;
+import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.repositories.TenantApartmentRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,19 +43,23 @@ public class TenantApartmentPersistence {
                 .toList());
     }
 
-    public List<TenantApartmentDto> getTenantApartmentByAptId(String apartmentId) {
-        TenantApartmentMapper mapper = new TenantApartmentMapperImpl();
-        return this.repository.findByApartmentId(apartmentId)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
-    }
-    public List<ApartmentDto> getTenantApartment(String tenantId){
+
+    public List<ApartmentDto> getTenantApartments(String tenantId){
         ApartmentMapper mapper = new ApartmentMapperImpl();
 
         return this.repository.findByTenantId(tenantId)
                 .stream()
                 .map(TenantApartmentEntity::getApartment)
+                .toList()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+    public List<TenantDto> getApartmentTenants(String apartmentId){
+        TenantMapper mapper = new TenantMapperImpl();
+        return this.repository.findByApartmentId(apartmentId)
+                .stream()
+                .map(TenantApartmentEntity::getTenant)
                 .toList()
                 .stream()
                 .map(mapper::toDto)

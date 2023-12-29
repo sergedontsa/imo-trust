@@ -2,7 +2,6 @@ package com.trust.gestion.persistence;
 
 import com.trust.gestion.domain.ApartmentDto;
 import com.trust.gestion.domain.BuildingDto;
-import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.ApartmentEntity;
 import com.trust.gestion.entities.BuildingEntity;
@@ -46,10 +45,7 @@ public class ApartmentPersistence {
     }
 
     public ApartmentDto findApartment(String apartmentId) {
-        List<TenantDto> tenants = this.tenantApartmentPersistence.getTenantApartmentByAptId(apartmentId)
-                .stream()
-                .map(TenantApartmentDto::getTenant)
-                .toList();
+        List<TenantDto> tenants = this.tenantApartmentPersistence.getApartmentTenants(apartmentId);
         return (new ApartmentMapperImpl()).toDto(this.repository.findById(apartmentId).orElseThrow())
                 .toBuilder()
                 .tenants(tenants)

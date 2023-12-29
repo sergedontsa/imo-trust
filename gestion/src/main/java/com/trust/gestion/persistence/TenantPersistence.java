@@ -8,6 +8,7 @@ import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.repositories.TenantRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,11 +24,15 @@ public class TenantPersistence {
         TenantMapper mapper = new TenantMapperImpl();
         this.repository.save(mapper.toEntity(dto));
     }
-    public List<TenantDto> getAll(){
+
+    public List<TenantDto> getAll(PageRequest pageRequest) {
         TenantMapper mapper = new TenantMapperImpl();
-        return this.repository.findAll()
+        return this.repository.findAll(pageRequest)
                 .stream()
                 .map(mapper::toDto)
+                .map(dto -> dto.toBuilder()
+                        .apartments(this.tenantApartmentPersistence.getTenantApartments(dto.getId()))
+                        .build())
                 .toList();
     }
 
@@ -38,7 +43,7 @@ public class TenantPersistence {
 
         return mapper.toDto(entity)
                 .toBuilder()
-                .apartments(this.tenantApartmentPersistence.getTenantApartment(id))
+                .apartments(this.tenantApartmentPersistence.getTenantApartments(id))
                 .build();
     }
 }

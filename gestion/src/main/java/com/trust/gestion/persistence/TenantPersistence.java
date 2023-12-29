@@ -1,5 +1,6 @@
 package com.trust.gestion.persistence;
 
+import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.TenantEntity;
 import com.trust.gestion.exception.NoSuchElementFoundException;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TenantPersistence {
     private final TenantRepository repository;
     private final TenantApartmentPersistence tenantApartmentPersistence;
+    private final TelephonePersistence telephonePersistence;
 
     public void create(TenantDto dto) {
         TenantMapper mapper = new TenantMapperImpl();
@@ -32,6 +34,7 @@ public class TenantPersistence {
                 .map(mapper::toDto)
                 .map(dto -> dto.toBuilder()
                         .apartments(this.tenantApartmentPersistence.getTenantApartments(dto.getId()))
+                        .telephones(this.telephonePersistence.getAllByEntityId(dto.getId()))
                         .build())
                 .toList();
     }
@@ -44,6 +47,10 @@ public class TenantPersistence {
         return mapper.toDto(entity)
                 .toBuilder()
                 .apartments(this.tenantApartmentPersistence.getTenantApartments(id))
+                .telephones(this.telephonePersistence.getAllByEntityId(id))
                 .build();
+    }
+    public void addTelephone(List<TelephoneDto> dtos){
+        this.telephonePersistence.saveAll(dtos);
     }
 }

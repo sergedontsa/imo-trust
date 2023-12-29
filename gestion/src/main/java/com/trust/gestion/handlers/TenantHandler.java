@@ -46,6 +46,7 @@ public class TenantHandler {
 
     private TelephoneDto createTelephone(TelephoneResource resource) {
         return TelephoneDto.builder()
+                .entityId(resource.getEntityId())
                 .areaCode(resource.getAreaCode())
                 .number(resource.getNumber())
                 .carrier(resource.getCarrier())

@@ -27,5 +27,6 @@ public class TenantResponse {
     private String cityOfOrigin;
     private String description;
     private String contactType;
+    private List<TelephoneResponse> telephone;
     private List<ApartmentResponse> apartments;
 }

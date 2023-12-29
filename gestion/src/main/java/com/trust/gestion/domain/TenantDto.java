@@ -40,5 +40,6 @@ public class TenantDto implements Serializable {
     private String contactType;
     private Instant registrationDate;
     private Instant lastUpdated;
+    private List<TelephoneDto> telephones;
     private List<ApartmentDto> apartments;
 }

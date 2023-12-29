@@ -5,6 +5,7 @@
 package com.trust.gestion.services;
 
 import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.enums.Status;
@@ -107,8 +108,10 @@ public class TenantService {
         TenantDto dto = this.persistence.findById(tenantId);
         TenantHandler handler = new TenantHandler();
         resources.forEach(resource -> resource.setEntityId(dto.getId()));
-        this.telephonePersistence.saveAll(resources.stream()
+        List<TelephoneDto> dtos = resources.stream()
                 .map(resource -> handler.telephoneHandler(resource, empty()))
-                .toList());
+                .toList();
+        this.persistence.addTelephone(dtos);
+
     }
 }

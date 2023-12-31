@@ -38,4 +38,5 @@ public class OwnerDto implements Serializable {
     private Gender gender;
     private List<AddressDto> address = new ArrayList<>();
     private List<TelephoneDto> telephones = new ArrayList<>();
+    private List<IdentificationDto> identifications = new ArrayList<>();
 }

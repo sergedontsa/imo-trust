@@ -1,12 +1,14 @@
 package com.trust.gestion.handlers;
 
 import com.trust.gestion.domain.AddressDto;
+import com.trust.gestion.domain.IdentificationDto;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.entities.AddressEntity;
 import com.trust.gestion.entities.OwnerEntity;
 import com.trust.gestion.entities.TelephoneEntity;
 import com.trust.gestion.resources.AddressResource;
+import com.trust.gestion.resources.IdentificationResource;
 import com.trust.gestion.resources.OwnerResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.utilities.Utilities;
@@ -77,6 +79,27 @@ public class OwnerHandler {
     }
 
     private TelephoneDto updateTelephone(TelephoneResource resource, TelephoneEntity telephoneEntity) {
+        return null;
+    }
+
+    public IdentificationDto identificationHandler(IdentificationResource resource, Optional<IdentificationResource> optional) {
+        return optional.isPresent() ? this.updateIdentification(resource, optional.get()) : this.createIdentification(resource);
+    }
+
+    private IdentificationDto createIdentification(IdentificationResource resource) {
+        return IdentificationDto.builder()
+                .entityId(resource.getEntityId())
+                .typeId("xxxx")
+                .issueCountry(resource.getIssueCountry())
+                .validFrom(resource.getValidFrom())
+                .validTo(resource.getValidTo())
+                .description(resource.getDescription())
+                .registrationDate(Instant.now())
+                .lastUpdated(Instant.now())
+                .build();
+    }
+
+    private IdentificationDto updateIdentification(IdentificationResource resource, IdentificationResource identificationResource) {
         return null;
     }
 }

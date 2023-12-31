@@ -1,5 +1,6 @@
 package com.trust.gestion.persistence;
 
+import com.trust.gestion.domain.IdentificationDto;
 import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.entities.TenantEntity;
@@ -21,6 +22,7 @@ public class TenantPersistence {
     private final TenantRepository repository;
     private final TenantApartmentPersistence tenantApartmentPersistence;
     private final TelephonePersistence telephonePersistence;
+    private final IdentificationPersistence identificationPersistence;
 
     public void create(TenantDto dto) {
         TenantMapper mapper = new TenantMapperImpl();
@@ -35,6 +37,7 @@ public class TenantPersistence {
                 .map(dto -> dto.toBuilder()
                         .apartments(this.tenantApartmentPersistence.getTenantApartments(dto.getId()))
                         .telephones(this.telephonePersistence.getAllByEntityId(dto.getId()))
+                        .identifications(this.identificationPersistence.getByEntityId(dto.getId()))
                         .build())
                 .toList();
     }
@@ -48,9 +51,14 @@ public class TenantPersistence {
                 .toBuilder()
                 .apartments(this.tenantApartmentPersistence.getTenantApartments(id))
                 .telephones(this.telephonePersistence.getAllByEntityId(id))
+                .identifications(this.identificationPersistence.getByEntityId(id))
                 .build();
     }
     public void addTelephone(List<TelephoneDto> dtos){
         this.telephonePersistence.saveAll(dtos);
+    }
+
+    public void addIdentification(List<IdentificationDto> dtos) {
+        this.identificationPersistence.saveAll(dtos);
     }
 }

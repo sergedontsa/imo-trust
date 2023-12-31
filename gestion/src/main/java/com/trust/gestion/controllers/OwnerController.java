@@ -2,6 +2,7 @@ package com.trust.gestion.controllers;
 
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.AddressResource;
+import com.trust.gestion.resources.IdentificationResource;
 import com.trust.gestion.resources.OwnerResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.reponse.OwnerResponse;
@@ -56,6 +57,11 @@ public class OwnerController {
     @PostMapping(value = "/telephone/{ownerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addTelephone(@RequestBody List<TelephoneResource> resources, @PathVariable String ownerId){
         service.addTelephone(resources, ownerId);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/identification/{ownerId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addIdentification(@RequestBody List<IdentificationResource> resources, @PathVariable String ownerId){
+        service.addIdentification(resources, ownerId);
         return ResponseEntity.ok().build();
     }
 

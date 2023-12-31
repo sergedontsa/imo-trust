@@ -29,4 +29,5 @@ public class TenantResponse {
     private String contactType;
     private List<TelephoneResponse> telephone;
     private List<ApartmentResponse> apartments;
+    private List<IdentificationResponse> identifications;
 }

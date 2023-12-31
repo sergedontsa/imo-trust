@@ -1,13 +1,14 @@
 package com.trust.gestion.controllers;
 
-import com.trust.gestion.resources.TelephoneResource;
-import com.trust.gestion.services.StatusChangeService;
-import com.trust.gestion.services.TenantService;
-import com.trust.gestion.domain.TenantDto;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.resources.BillPayResource;
+import com.trust.gestion.resources.IdentificationResource;
 import com.trust.gestion.resources.StatusChangeRequestResource;
+import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
+import com.trust.gestion.resources.reponse.TenantResponse;
+import com.trust.gestion.services.StatusChangeService;
+import com.trust.gestion.services.TenantService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -34,12 +35,12 @@ public class TenantController{
     private final StatusChangeService statusChangeService;
 
     @GetMapping( value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<TenantDto>> getById(@PathVariable String id) {
+    public ResponseEntity<PageResponse<TenantResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.getById(id));
     }
     @GetMapping( value = "/page", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<TenantDto>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                          @RequestParam(required = false, defaultValue = "10") Integer size) {
+    public ResponseEntity<PageResponse<TenantResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                               @RequestParam(required = false, defaultValue = "10") Integer size) {
         return ResponseEntity.ok().body(this.service.getAll(page, size));
     }
 
@@ -78,6 +79,11 @@ public class TenantController{
     @PostMapping(value = "/telephone/{tenantId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addTelephone(@RequestBody List<TelephoneResource> resources, @PathVariable String tenantId){
         service.addTelephone(resources, tenantId);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/identification/{tenantId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addIdentification(@RequestBody List<IdentificationResource> resources, @PathVariable String tenantId){
+        service.addIdentification(resources, tenantId);
         return ResponseEntity.ok().build();
     }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,7 +22,8 @@ public class OwnerResponse {
     private String lastName;
     private String middleName;
     private String gender;
-    private List<AddressResponse> address;
-    private List<TelephoneResponse> telephones;
+    private List<AddressResponse> address = new ArrayList<>();
+    private List<TelephoneResponse> telephones = new ArrayList<>();
+    private List<IdentificationResponse> identifications = new ArrayList<>();
 
 }

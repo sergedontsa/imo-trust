@@ -5,6 +5,7 @@
 package com.trust.gestion.persistence;
 
 import com.trust.gestion.domain.AddressDto;
+import com.trust.gestion.domain.IdentificationDto;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.entities.OwnerEntity;
@@ -35,6 +36,7 @@ public class OwnerPersistence {
     private final AddressPersistence addressPersistence;
     private final ActionPersistence actionPersistence;
     private final TelephonePersistence telephonePersistence;
+    private final IdentificationPersistence identificationPersistence;
     public void saved(OwnerDto ownerDto, PersonDto personDto) {
         PersonMapper personMapper = new PersonMapperImpl();
         OwnerMapper ownerMapper = new OwnerMapperImpl();
@@ -54,6 +56,7 @@ public class OwnerPersistence {
                 .toBuilder()
                 .address(address)
                 .telephones(this.telephonePersistence.getAllByEntityId(entity.getId()))
+                .identifications(this.identificationPersistence.getByEntityId(entity.getId()))
                 .build();
     }
     public PageResponse<OwnerDto> getAll(Integer page, Integer size){
@@ -65,6 +68,7 @@ public class OwnerPersistence {
                         .toBuilder()
                         .address(this.addressPersistence.findByEntityId(entity.getId()))
                         .telephones(this.telephonePersistence.getAllByEntityId(entity.getId()))
+                        .identifications(this.identificationPersistence.getByEntityId(entity.getId()))
                 .build())
                 .toList();
          return (new PageResponse<OwnerDto>())
@@ -88,6 +92,10 @@ public class OwnerPersistence {
     }
     private PersonDto getPersonEntity(String id) {
         return this.personPersistence.getById(id);
+    }
+
+    public void addIdentification(List<IdentificationDto> dtos){
+        this.identificationPersistence.saveAll(dtos);
     }
 
 }

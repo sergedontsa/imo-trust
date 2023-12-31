@@ -3,6 +3,7 @@ package com.trust.gestion.services;
 
 import com.trust.gestion.domain.AddressDto;
 import com.trust.gestion.domain.BuildingOwnerDto;
+import com.trust.gestion.domain.IdentificationDto;
 import com.trust.gestion.domain.OwnerDto;
 import com.trust.gestion.domain.PersonDto;
 import com.trust.gestion.domain.TelephoneDto;
@@ -23,6 +24,7 @@ import com.trust.gestion.repositories.AddressRepository;
 import com.trust.gestion.repositories.BuildingRepository;
 import com.trust.gestion.repositories.OwnerRepository;
 import com.trust.gestion.resources.AddressResource;
+import com.trust.gestion.resources.IdentificationResource;
 import com.trust.gestion.resources.OwnerResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.reponse.OwnerResponse;
@@ -133,5 +135,16 @@ public class OwnerService {
 
         this.telephonePersistence.saveAll(entities);
 
+    }
+
+    public void addIdentification(List<IdentificationResource> resources, String ownerId) {
+        this.persistence.getOne(ownerId);
+        resources.forEach(resource -> resource.setEntityId(ownerId));
+        OwnerHandler handler = new OwnerHandler();
+        List<IdentificationDto> dtos = resources.stream()
+                .map(resource -> handler.identificationHandler(resource, empty()))
+                .toList();
+
+        this.persistence.addIdentification(dtos);
     }
 }

@@ -5,6 +5,7 @@
 package com.trust.gestion.services;
 
 import com.trust.gestion.domain.ApartmentDto;
+import com.trust.gestion.domain.IdentificationDto;
 import com.trust.gestion.domain.TelephoneDto;
 import com.trust.gestion.domain.TenantApartmentDto;
 import com.trust.gestion.domain.TenantDto;
@@ -12,14 +13,18 @@ import com.trust.gestion.enums.Status;
 import com.trust.gestion.exception.NoSuchElementFoundException;
 import com.trust.gestion.exception.TrustImoException;
 import com.trust.gestion.handlers.TenantHandler;
+import com.trust.gestion.mappers.TenantMapper;
+import com.trust.gestion.mappers.TenantMapperImpl;
 import com.trust.gestion.pages.PageResponse;
 import com.trust.gestion.persistence.ApartmentPersistence;
 import com.trust.gestion.persistence.TelephonePersistence;
 import com.trust.gestion.persistence.TenantApartmentPersistence;
 import com.trust.gestion.persistence.TenantPersistence;
 import com.trust.gestion.resources.BillPayResource;
+import com.trust.gestion.resources.IdentificationResource;
 import com.trust.gestion.resources.TelephoneResource;
 import com.trust.gestion.resources.TenantResource;
+import com.trust.gestion.resources.reponse.TenantResponse;
 import com.trust.gestion.utilities.ApartmentUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -82,16 +87,22 @@ public class TenantService {
     }
 
 
-    public PageResponse<TenantDto> getById(String id) {
+    public PageResponse<TenantResponse> getById(String id) {
         TenantDto dto = persistence.findById(id);
-        return (new PageResponse<TenantDto>()).toBuilder()
-                 .content(Collections.singletonList(dto))
+        TenantMapper mapper = new TenantMapperImpl();
+        return (new PageResponse<TenantResponse>()).toBuilder()
+                 .content(Collections.singletonList(mapper.toResponse(dto)))
                  .build();
     }
 
-    public PageResponse<TenantDto> getAll(Integer page, Integer size) {
-        return (new PageResponse<TenantDto>()).toBuilder()
-                .content(this.persistence.getAll(PageRequest.of(page, size)))
+    public PageResponse<TenantResponse> getAll(Integer page, Integer size) {
+        TenantMapper mapper = new TenantMapperImpl();
+
+        return (new PageResponse<TenantResponse>()).toBuilder()
+                .content(this.persistence.getAll(PageRequest.of(page, size))
+                        .stream()
+                        .map(mapper::toResponse)
+                        .toList())
                 .totalPages(0)
                 .totalElements(0)
                 .size(0)
@@ -113,5 +124,14 @@ public class TenantService {
                 .toList();
         this.persistence.addTelephone(dtos);
 
+    }
+    public void addIdentification(List<IdentificationResource> resources, String tenantId){
+        TenantDto dto = this.persistence.findById(tenantId);
+        TenantHandler handler = new TenantHandler();
+        resources.forEach(resource -> resource.setEntityId(dto.getId()));
+        List<IdentificationDto> dtos = resources.stream()
+                .map(resource -> handler.identificationHandler(resource, empty()))
+                .toList();
+        this.persistence.addIdentification(dtos);
     }
 }

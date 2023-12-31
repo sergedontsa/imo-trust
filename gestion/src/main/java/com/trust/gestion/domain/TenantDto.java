@@ -42,4 +42,5 @@ public class TenantDto implements Serializable {
     private Instant lastUpdated;
     private List<TelephoneDto> telephones;
     private List<ApartmentDto> apartments;
+    private List<IdentificationDto> identifications;
 }
